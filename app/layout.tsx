@@ -1,8 +1,8 @@
+'use client';
 import './globals.css'
+import { SessionProvider } from "next-auth/react"
 
-export default function RootLayout({
-  children,
-}: {
+export default function RootLayout({children/* , session */}: {
   children: React.ReactNode
 }) {
   return (
@@ -12,7 +12,11 @@ export default function RootLayout({
         <meta name="description" content="dev stats ― developer stats" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>{children}</body>
+      <body>
+       <SessionProvider /* session={session} */>
+        {children}
+       </SessionProvider>
+      </body>
     </html>
   )
 }
