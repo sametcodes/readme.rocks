@@ -22,9 +22,12 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": { "@*": [ "*" ] },
   },
   "include": [
+    ".",
     "next-env.d.ts",
     "index.d.ts",
     "**/*.ts",
@@ -32,7 +35,7 @@
     ".next/types/**/*.ts",
     "pages/api/github",
     "devstats.config.ts",
-    "prisma/schema.prisma"
+    "services/prisma/schema.prisma"
   ],
   "exclude": [
     "node_modules"

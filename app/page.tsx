@@ -4,7 +4,7 @@ export default function Index() {
   return (
     <div>
       <GitHub />
-{/*       <Stackoverflow /> */}      
+      <Stackoverflow />      
       <CodeWars />
     </div>
   )
