@@ -15,6 +15,6 @@ export const getContributions = async (): Promise<ServiceResponse> => {
     const response = await request.github(query);
     if ("error" in response) return response;
 
-    return { success: true, data: response }
+    return { success: true, data: response.data }
 
 }

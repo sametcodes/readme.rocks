@@ -8,7 +8,7 @@ const GITHUB_PAT = config.github.token;
  * @throws {Error} - If the response is not JSON
  */
 export const stackoverflow = (endpoint: string) => {
-    return fetch(`https://api.stackexchange.com/2.2`)
+    return fetch(`https://api.stackexchange.com/2.2${endpoint}`)
         .then(res => {
             if (res.headers.get('content-type')?.includes('application/json')) {
                 return res.json();

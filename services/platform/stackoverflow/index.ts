@@ -13,6 +13,6 @@ export const getReputation = async (): Promise<ServiceResponse> => {
 
     return {
         success: true,
-        data: reputation
+        data: { reputation }
     }
 }
