@@ -36,3 +36,5 @@ yarn-error.log*
 next-env.d.ts
 
 devstats.config.js
+
+.env
