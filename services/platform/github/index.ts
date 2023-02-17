@@ -17,7 +17,7 @@ export const getContributions = async (): Promise<ServiceResponse> => {
 
     const response = await request.github(query);
     if ("error" in response) return response;
-    return { success: true, data: response.data }
+    return { success: true, data: response.data, platform: "github" }
 }
 
 export const getPopularContributions = async (): Promise<ServiceResponse> => {
@@ -37,7 +37,7 @@ export const getPopularContributions = async (): Promise<ServiceResponse> => {
 
     const response = await request.github(query);
     if ("error" in response) return response;
-    return { success: true, data: response.data }
+    return { success: true, data: response.data, platform: "github" }
 }
 
 export const getContributionsSummary = async (): Promise<ServiceResponse> => {
@@ -53,5 +53,6 @@ export const getContributionsSummary = async (): Promise<ServiceResponse> => {
 
     const response = await request.github(query);
     if ("error" in response) return response;
-    return { success: true, data: response.data }
+    return { success: true, data: response.data, platform: "github" }
 }
+

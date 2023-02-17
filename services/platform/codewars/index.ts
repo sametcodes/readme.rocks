@@ -9,5 +9,5 @@ export const getUser = async (): Promise<ServiceResponse> => {
     if ("error" in response) return response;
 
     const challanges = response.data;
-    return { success: true, data: challanges }
+    return { success: true, data: challanges, platform: "codewars" }
 }

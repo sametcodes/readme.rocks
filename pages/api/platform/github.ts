@@ -1,19 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import * as github from '@services/platform/github'
 
-type Method = "getContributions" | "getPopularContributions" | "getContributionsSummary";
+import * as services from '@services/platform/github'
+import * as templates from '@components/github'
+import { prepareSVGResponse } from '@services/platform/response'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req.query;
-  if (method === undefined || typeof method !== 'string') return res.status(400).json({ message: 'Bad Request' });
+  const result = await prepareSVGResponse(req.query, services, templates);
+  if (result.success === false) return res.status(result.status).json({ message: result.error })
 
-  if (Object.keys(github).includes(method)) {
-    const response = await github[method as Method]();
-
-    if (response.success === false) return res.status(500).json(response.error);
-    return res.status(200).json(response.data);
-  }
-
-  return res.status(404).json({ error: true, message: 'Method not found' })
-
+  res.setHeader('Content-Type', result.contentType || "image/svg+xml")
+  return res.status(result.status).send(result.data);
 }
