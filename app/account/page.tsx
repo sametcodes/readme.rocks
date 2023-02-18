@@ -15,7 +15,6 @@ export default function Account() {
     console.log("form submitted")
   }
 
-  console.log(form)
   if (session) {
     return (
       <>
