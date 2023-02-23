@@ -1,4 +1,4 @@
-export const prepareSVGResponse = async (query: any, services: any, templates: any) => {
+export const getPlatformResponse = async (query: any, services: any, templates: any) => {
     const { method, returnType } = query;
     if (method === undefined || typeof method !== 'string') return { success: false, status: 400, error: 'Bad Request: missing method parameter' }
     if (returnType && Array.isArray(returnType)) return { success: false, status: 400, error: 'Bad Request: returnType must be a string' }
@@ -28,7 +28,6 @@ export const prepareSVGResponse = async (query: any, services: any, templates: a
     return {
         success: true, status: 200, data: trimChars(template(response.data, response.platform)), contentType: "image/svg+xml"
     };
-
 }
 
 const trimChars = (body: string) => {

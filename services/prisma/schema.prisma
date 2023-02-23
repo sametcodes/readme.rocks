@@ -12,7 +12,8 @@ generator client {
 
 model Platform {
     id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-    name                String?
+    name                String
+    code                String   @unique
     raw_configuration   Json?
     Config              Config[]
 }
@@ -20,10 +21,10 @@ model Platform {
 model Config {
     id                  String    @id @default(auto()) @map("_id") @db.ObjectId
     value               Json
-    platform            Platform? @relation(fields: [platformId], references: [id])
-    User                User?     @relation(fields: [userId], references: [id])
-    userId              String?   @db.ObjectId
-    platformId          String?   @db.ObjectId
+    platform            Platform @relation(fields: [platformId], references: [id])
+    User                User     @relation(fields: [userId], references: [id])
+    userId              String   @db.ObjectId
+    platformId          String   @db.ObjectId
 }
 
 model User {
