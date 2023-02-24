@@ -10,7 +10,8 @@
     "lint": "next lint --max-warnings=0",
     "lint:fix": "next lint --fix",
     "prettier": "prettier --check .",
-    "prettier:fix": "prettier --write ."
+    "prettier:fix": "prettier --write .",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -27,6 +28,7 @@
   "devDependencies": {
     "eslint": "8.34.0",
     "eslint-config-next": "13.2.0",
+    "husky": "^8.0.3",
     "prettier": "^2.8.4",
     "prisma": "^4.9.0"
   }
