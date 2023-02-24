@@ -1,6 +1,6 @@
 ## devstats
 
-*WIP*.
+_WIP_.
 
 ## Supported platforms
 
@@ -29,5 +29,7 @@ Create a new personal access token on [here](https://github.com/settings/tokens/
 > TODO: mention definition of environment variables for username
 
 ### StackOverflow
+
 dc
+
 > TODO: mention definition of environment variables for `user_id`

@@ -1,3 +1,3 @@
-export * from './config';
-export * from './user';
-export * from './platform';
+export * from "./config";
+export * from "./user";
+export * from "./platform";

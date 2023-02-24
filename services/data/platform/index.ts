@@ -1,6 +1,6 @@
-import prisma from "@services/prisma"
+import prisma from "@services/prisma";
 import { DataAPIPayload } from "@services/data/types";
 
 export const getPlatforms = ({ payload, session }: DataAPIPayload) => {
-    return prisma.platform.findMany();
-}
+  return prisma.platform.findMany();
+};

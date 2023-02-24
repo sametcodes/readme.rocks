@@ -1,6 +1,5 @@
-
 export const getUser = (result: any, platform: any) => {
-    return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350" height="210">
+  return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="350" height="210">
     <title>Github Total Contributions</title>
     <g>
         <title>Layer 1</title>
@@ -18,5 +17,5 @@ export const getUser = (result: any, platform: any) => {
             ${0}
         </text>
     </g>
-    </svg>`.replace(/\t/g, "")
-}
+    </svg>`.replace(/\t/g, "");
+};

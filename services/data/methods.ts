@@ -1,4 +1,4 @@
 export default {
-    "POST": ["createConfig", "editConfig"],
-    "GET": ["getUserConfigs", "getPlatforms", "getUserConfigs", "getUser"]
-}
+  POST: ["createConfig", "editConfig"],
+  GET: ["getUserConfigs", "getPlatforms", "getUser"],
+};

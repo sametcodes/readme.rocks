@@ -1,8 +1,3 @@
-
 export default function Index() {
-  return (
-    <div>
-      Devstats
-    </div>
-  )
+  return <div>Devstats</div>;
 }
