@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { getPlatformResponse } from "@services/platform/response";
-import { getUserConfigs } from "@services/data/config";
+import prisma from "@services/prisma";
 
 type PlatformAPIHandler = {
   (platformCode: string, services: any, templates: any): NextApiHandler;
@@ -25,13 +25,9 @@ const handlePlatformAPI: PlatformAPIHandler = (
       return res.status(404).json({ message: "Platform not found" });
 
     const userConfig = await prisma.config.findFirst({
-      select: {
-        value: true,
-        platform: { select: { name: true } },
-      },
+      select: { value: true, platform: { select: { name: true } } },
       where: { userId: uid, platformId: platform.id },
     });
-
     if (!userConfig) return res.status(404).json({ message: "No user config" });
 
     const result = await getPlatformResponse(
