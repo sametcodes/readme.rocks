@@ -1,13 +1,21 @@
-import config from "@config/devstats.config";
 import { ServiceResponse } from "@services/platform/types";
 import * as request from "@services/platform/request";
+import { StackoverflowUserConfig } from "@services/platform/types";
 
-const USER_ID = config.stackoverflow.user_id;
-const SITE_NAME = "stackoverflow";
+export const getReputation = async (
+  userConfig: StackoverflowUserConfig
+): Promise<ServiceResponse> => {
+  if (!userConfig.userId)
+    return {
+      success: false,
+      error: {
+        message: "User ID is missing in the user configuration",
+        code: 400,
+      },
+    };
 
-export const getReputation = async (): Promise<ServiceResponse> => {
   const response = await request.stackoverflow(
-    `/users/${USER_ID}/reputation?site=${SITE_NAME}`
+    `/users/${userConfig.userId}/reputation?site=stackoverflow`
   );
   if ("error" in response) return response;
 

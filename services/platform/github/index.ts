@@ -1,27 +1,29 @@
-import config from "@config/devstats.config";
 import { ServiceResponse } from "@services/platform/types";
 import * as request from "@services/platform/request";
-
-const GITHUB_USERNAME = config.github.username;
+import { GithubUserConfig } from "@services/platform/types";
 
 // Github GraphQL API Explorer can be used to discover
 // https://docs.github.com/en/graphql/overview/explorer
 
-export const getContributions = async (): Promise<ServiceResponse> => {
-  const query = `{ user(login: "${GITHUB_USERNAME}") {
+export const getContributions = async (
+  userConfig: GithubUserConfig
+): Promise<ServiceResponse> => {
+  const query = `{ user(login: "${userConfig.username}") {
         contributionsCollection {
           contributionCalendar { totalContributions }
         }
       }
     }`;
 
-  const response = await request.github(query);
+  const response = await request.github(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
 
-export const getPopularContributions = async (): Promise<ServiceResponse> => {
-  const query = `{ user(login: "${GITHUB_USERNAME}") {
+export const getPopularContributions = async (
+  userConfig: GithubUserConfig
+): Promise<ServiceResponse> => {
+  const query = `{ user(login: "${userConfig.username}") {
       contributionsCollection{
           popularIssueContribution{
             isRestricted
@@ -35,13 +37,15 @@ export const getPopularContributions = async (): Promise<ServiceResponse> => {
       }
     }`;
 
-  const response = await request.github(query);
+  const response = await request.github(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
 
-export const getContributionsSummary = async (): Promise<ServiceResponse> => {
-  const query = `{user(login: "${GITHUB_USERNAME}") {
+export const getContributionsSummary = async (
+  userConfig: GithubUserConfig
+): Promise<ServiceResponse> => {
+  const query = `{user(login: "${userConfig.username}") {
       contributionsCollection{
         totalRepositoryContributions
         totalRepositoriesWithContributedCommits
@@ -51,7 +55,7 @@ export const getContributionsSummary = async (): Promise<ServiceResponse> => {
     }
   }`;
 
-  const response = await request.github(query);
+  const response = await request.github(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };

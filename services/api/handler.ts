@@ -1,13 +1,16 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { getPlatformResponse } from "@services/platform/response";
 import { getUserConfigs } from "@services/data/config";
-import { NextResponse } from "next/server";
 
 type PlatformAPIHandler = {
-  (services: any, templates: any): NextApiHandler;
+  (platformCode: string, services: any, templates: any): NextApiHandler;
 };
 
-const handlePlatformAPI: PlatformAPIHandler = (services, templates) => {
+const handlePlatformAPI: PlatformAPIHandler = (
+  platformCode,
+  services,
+  templates
+) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     const uid = req.query.uid as string;
     if (!uid)
@@ -15,17 +18,27 @@ const handlePlatformAPI: PlatformAPIHandler = (services, templates) => {
         .status(400)
         .json({ message: "Bad request: uid parameter is missing" });
 
-    const userConfigs = await getUserConfigs({
-      session: { user: { id: uid } },
+    const platform = await prisma.platform.findFirst({
+      where: { code: platformCode },
     });
-    if (!userConfigs)
-      return res.status(404).json({ message: "No user config" });
+    if (!platform)
+      return res.status(404).json({ message: "Platform not found" });
+
+    const userConfig = await prisma.config.findFirst({
+      select: {
+        value: true,
+        platform: { select: { name: true } },
+      },
+      where: { userId: uid, platformId: platform.id },
+    });
+
+    if (!userConfig) return res.status(404).json({ message: "No user config" });
 
     const result = await getPlatformResponse(
       req.query,
       services,
       templates,
-      userConfigs
+      userConfig.value
     );
     if (result.success === false)
       return res.status(result.status).json({ message: result.error });

@@ -31,7 +31,8 @@
     ".next/types/**/*.ts",
     "pages/api/github",
     "devstats.config.ts",
-    "services/prisma/schema.prisma"
-, ".lintstagedrc.js"  ],
+    "services/prisma/schema.prisma",
+    ".lintstagedrc.js"
+  ],
   "exclude": ["node_modules"]
 }

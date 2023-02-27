@@ -9,3 +9,16 @@ export type ServiceResponse = {
     code: number;
   };
 };
+
+export type GithubUserConfig = {
+  username: string;
+  token: string;
+};
+
+export type StackoverflowUserConfig = {
+  userId: string;
+};
+
+export type CodewarsUserConfig = {
+  username: string;
+};

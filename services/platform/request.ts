@@ -1,7 +1,3 @@
-import config from "@config/devstats.config";
-
-const GITHUB_PAT = config.github.token;
-
 /**
  * @param {string} endpoint - The endpoint to send the request to
  * @returns {Promise<any>} - The response from the StackOverflow API
@@ -42,11 +38,11 @@ export const stackoverflow = (endpoint: string) => {
  * @throws {Error} - If the response is not a 2xx status code
  */
 
-export const github = async (query: string) => {
+export const github = (query: string, token: string) => {
   return fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${GITHUB_PAT}`,
+      Authorization: `Bearer ${token}`,
       Accept: "application/vnd.github.v4.idl",
       "Content-Type": "application/json",
     },
@@ -97,7 +93,7 @@ export const github = async (query: string) => {
  * @throws {Error} - If the response is an error
  */
 
-export const codewars = async (path: string) => {
+export const codewars = (path: string) => {
   return fetch(`https://www.codewars.com/api/v1${path}`)
     .then((res) => {
       if (res.headers.get("content-type")?.includes("application/json")) {

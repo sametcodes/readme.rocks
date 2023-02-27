@@ -1,5 +1,4 @@
 import { Session } from "next-auth";
-import Prisma from "@prisma/client";
 
 export type DataAPIPayload = {
   session: Session;
