@@ -30,7 +30,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "pages/api/github",
-    "devstats.config.ts",
     "services/prisma/schema.prisma",
     ".lintstagedrc.js"
   ],
