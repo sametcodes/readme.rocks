@@ -5,7 +5,7 @@ import { GithubUserConfig } from "@services/platform/types";
 // Github GraphQL API Explorer can be used to discover
 // https://docs.github.com/en/graphql/overview/explorer
 
-export const getContributions = async (
+export const getCurrentYearContributions = async (
   userConfig: GithubUserConfig
 ): Promise<ServiceResponse> => {
   const query = `{ user(login: "${userConfig.username}") {

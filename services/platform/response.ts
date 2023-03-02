@@ -1,3 +1,6 @@
+import JSXRender from "@utils/render";
+import { trimChars } from "@utils";
+
 export const getPlatformResponse = async (
   query: any,
   services: any,
@@ -62,11 +65,7 @@ export const getPlatformResponse = async (
   return {
     success: true,
     status: 200,
-    data: trimChars(templateOutput),
+    data: trimChars(JSXRender(templateOutput)),
     contentType: "image/svg+xml",
   };
-};
-
-const trimChars = (body: string) => {
-  return body.replace(/[\t|\n]/g, "").replace(/  /g, "");
 };
