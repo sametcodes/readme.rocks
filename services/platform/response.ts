@@ -1,3 +1,6 @@
+import JSXRender from "@utils/render";
+import { trimChars } from "@utils";
+
 export const getPlatformResponse = async (
   query: any,
   services: any,
@@ -55,14 +58,14 @@ export const getPlatformResponse = async (
     };
   }
 
+  const templateOutput = template(response.data, response.platform);
+  if (!templateOutput)
+    return { success: false, status: 500, error: "Template output is empty" };
+
   return {
     success: true,
     status: 200,
-    data: trimChars(template(response.data, response.platform)),
+    data: trimChars(JSXRender(templateOutput)),
     contentType: "image/svg+xml",
   };
-};
-
-const trimChars = (body: string) => {
-  return body.replace(/[\t|\n]/g, "").replace(/  /g, "");
 };

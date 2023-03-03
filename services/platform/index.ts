@@ -1,5 +1,5 @@
 export type {
-  getContributions,
+  getCurrentYearContributions,
   getPopularContributions,
   getContributionsSummary,
 } from "@services/platform/github";
