@@ -2,6 +2,11 @@ import { ServiceResponse } from "@services/platform/types";
 import * as request from "@services/platform/request";
 import { StackoverflowUserConfig } from "@services/platform/types";
 
+/*
+ * @name getReputation
+ * @title Get reputation
+ * @description Get the total reputation of the user
+ */
 export const getReputation = async (
   userConfig: StackoverflowUserConfig
 ): Promise<ServiceResponse> => {
