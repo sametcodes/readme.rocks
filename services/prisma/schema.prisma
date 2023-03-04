@@ -18,7 +18,6 @@ model Platform {
     methods           Json
 
     config            Config[]
-    connection        Connection[]
 }
 
 model User {
@@ -76,7 +75,6 @@ model Connection {
     scope             String?
 
     user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-    platform          Platform             @relation(fields: [platformId], references: [id], onDelete: Cascade)
     profile           ConnectionProfile?
 }
 
