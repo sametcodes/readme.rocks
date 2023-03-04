@@ -12,6 +12,7 @@
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "prepare": "husky install",
+    "jsdoc:explain": "jsdoc -X $1",
     "migrate:methods": "ts-node -r tsconfig-paths/register scripts/migrates/methods.ts"
   },
   "dependencies": {
@@ -33,9 +34,9 @@
     "eslint": "8.34.0",
     "eslint-config-next": "13.2.0",
     "husky": "^8.0.0",
+    "jsdoc": "^4.0.2",
     "prettier": "^2.8.4",
     "prisma": "^4.11.0",
-    "jsdoc": "^4.0.2",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.14.2",
     "typescript": "4.8.4"

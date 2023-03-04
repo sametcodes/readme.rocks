@@ -1,4 +1,4 @@
-type Platform = "github" | "stackoverflow" | "codewars";
+type Platform = "github" | "stackoverflow" | "codewars" | "wakatime";
 
 export type ServiceResponse = {
   success: boolean;
@@ -11,6 +11,11 @@ export type ServiceResponse = {
 };
 
 export type GithubUserConfig = {
+  username: string;
+  token: string;
+};
+
+export type WakatimeUserConfig = {
   username: string;
   token: string;
 };

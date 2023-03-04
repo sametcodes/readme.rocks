@@ -46,7 +46,7 @@ const compileTs = (files: File[], cb: (files: File[]) => void) => {
       cb(files);
       clearInterval(tm);
     }
-  }, 100);
+  }, 1000);
 };
 
 const migrate = async ({
@@ -79,7 +79,7 @@ const explainJSDoc = async (files: File[]): Promise<void> => {
     (file) =>
       new Promise<{ docs: JSDocMinified[]; code: string }>(
         (resolve, reject) => {
-          const jsdoc = spawn("jsdoc", ["-X", file.js]);
+          const jsdoc = spawn(`npm run jsdoc:explain ${file.js}`);
 
           var stdout = "";
           let stderr = "";
@@ -88,6 +88,7 @@ const explainJSDoc = async (files: File[]): Promise<void> => {
 
           jsdoc.on("error", (err) => {
             console.error(`Error running jsdoc: ${err}`);
+            fs.unlinkSync(file.js);
           });
 
           jsdoc.on("exit", (code) => {
@@ -108,7 +109,7 @@ const explainJSDoc = async (files: File[]): Promise<void> => {
   );
 
   const docs = await Promise.all(docs_promise);
-  files.forEach((file) => fs.unlinkSync(file.js));
+  // files.forEach((file) => fs.unlinkSync(file.js));
   Promise.all(docs.map(migrate)).then(() =>
     console.log("All the methods are migrated")
   );
