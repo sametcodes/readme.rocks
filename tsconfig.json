@@ -20,7 +20,9 @@
       }
     ],
     "baseUrl": ".",
-    "paths": { "@*": ["*"] }
+    "paths": {
+      "@*": ["*"]
+    }
   },
   "include": [
     ".",
@@ -33,5 +35,11 @@
     "services/prisma/schema.prisma",
     ".lintstagedrc.js"
   ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "compilerOptions": {
+      "module": "commonjs"
+    },
+    "typeRoots": ["./scripts/index.d.ts", "./node_modules/@types"]
+  }
 }

@@ -15,6 +15,7 @@ model Platform {
     name              String
     code              String   @unique
     raw_configuration Json?
+    methods           Json
 
     config            Config[]
     connection        Connection[]
