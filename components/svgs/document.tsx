@@ -20,6 +20,9 @@ export const getDocumentStyle = () => {
         @keyframes rankAnimation { from { stroke-dashoffset: 251.32741228718345; } to { stroke-dashoffset: 127.57536535528702; } }
         @keyframes scaleInAnimation { from { transform: translate(-5px, 5px) scale(0); } to { transform: translate(-5px, 5px) scale(1); } }
         @keyframes fadeInAnimation { from { opacity: 0; } to { opacity: 1; } }
+
+        /* Media */
+        @media (prefers-color-scheme: dark) { svg { background-color: #141d26 } }
      </style>`;
 };
 

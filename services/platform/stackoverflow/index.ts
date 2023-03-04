@@ -1,7 +1,12 @@
 import { ServiceResponse } from "@services/platform/types";
-import * as request from "@services/platform/request";
+import request from "@services/platform/stackoverflow/request";
 import { StackoverflowUserConfig } from "@services/platform/types";
 
+/**
+ * @name getReputation
+ * @title Get reputation
+ * @description Get the total reputation of the user
+ */
 export const getReputation = async (
   userConfig: StackoverflowUserConfig
 ): Promise<ServiceResponse> => {
@@ -14,7 +19,7 @@ export const getReputation = async (
       },
     };
 
-  const response = await request.stackoverflow(
+  const response = await request(
     `/users/${userConfig.userId}/reputation?site=stackoverflow`
   );
   if ("error" in response) return response;
