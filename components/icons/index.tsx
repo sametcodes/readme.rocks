@@ -81,3 +81,9 @@ export const CodeIcon = () => (
     <path d="M5.1 12.4L0 8l5.1-4.4 0.8 1L2 8l3.9 3.4-0.8 1z m5.8 0l-0.8-1L14 8 10.1 4.6l0.8-1L16 8 10.9 12.4zM6.9 13.8L5.7 13.4 9.1 2.2 10.3 2.6 6.9 13.8z" />
   </svg>
 );
+
+export const TimeIcon = () => (
+  <svg viewBox="0 0 16 16" width="16" height="16" className="icon">
+    <path d="M8.2 1.3c-3.7 0-6.7 3-6.7 6.7s3 6.7 6.7 6.7 6.7-3 6.6-6.7-3-6.7-6.6-6.7zM12 8.7h-4.5V4h1.3v3.3H12v1.4z" />
+  </svg>
+);

@@ -11,64 +11,99 @@ generator client {
 }
 
 model Platform {
-    id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-    name                String
-    code                String   @unique
-    methods             Json
-    raw_configuration   Json?
-    Config              Config[]
-}
+    id                String   @id @default(auto()) @map("_id") @db.ObjectId
+    name              String
+    code              String   @unique
+    raw_configuration Json?
+    methods           Json
 
-model Config {
-    id                  String    @id @default(auto()) @map("_id") @db.ObjectId
-    value               Json
-    platform            Platform @relation(fields: [platformId], references: [id])
-    User                User     @relation(fields: [userId], references: [id])
-    userId              String   @db.ObjectId
-    platformId          String   @db.ObjectId
+    config            Config[]
 }
 
 model User {
-    id                      String @id @default(auto()) @map("_id") @db.ObjectId
-    name                    String
-    email                   String @unique
-    image                   String?
-    emailVerified           Boolean? @default(true)
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    uid           String?   @db.String
+    name          String?
+    email         String?   @unique
+    emailVerified DateTime?
+    image         String?
 
-    configs Config[]
-    Account Account[]
-    Session Session[]
+    accounts      Account[]
+    sessions      Session[]
+    config        Config[]
+    connections   Connection[]
+    profiles      ConnectionProfile[]
+}
+
+model Config {
+    id         String   @id @default(auto()) @map("_id") @db.ObjectId
+    value      Json
+    platform   Platform @relation(fields: [platformId], references: [id])
+    User       User     @relation(fields: [userId], references: [id])
+    userId     String   @db.ObjectId
+    platformId String   @db.ObjectId
 }
 
 model Account {
-    id                  String @id @default(auto()) @map("_id") @db.ObjectId
-    type                String
-    provider            String
-    providerAccountId   String
-    refresh_token       String? @db.String
-    access_token        String? @db.String
-    expires_at          Int?
-    token_type          String?
-    scope               String?
-    id_token            String? @db.String
-    session_state       String?
-    userId              String @db.ObjectId
-    user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String @db.ObjectId 
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.String
+    access_token      String? @db.String
+    expires_at        Int?
+    token_type        String?
+    scope             String?
+    id_token          String? @db.String
+    session_state     String?
+    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
 
+model Connection {
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String @db.ObjectId 
+    platformId        String @db.ObjectId
+
+    refresh_token     String? @db.String
+    access_token      String? @db.String
+    expires_at        Int?
+    type              String
+    token_type        String?
+    scope             String?
+
+    user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+    profile           ConnectionProfile?
+}
+
+model ConnectionProfile {
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String @db.ObjectId 
+    platformId        String @db.ObjectId 
+    connectionId      String @db.ObjectId @unique
+
+    name              String
+    email             String
+    image             String
+
+    user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+    connection        Connection    @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+}
+
 model Session {
-    id                  String   @id @default(auto()) @map("_id") @db.ObjectId
-    sessionToken        String   @unique
-    userId              String   @db.ObjectId
-    expires             DateTime
-    user                User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id           String   @id @default(auto()) @map("_id") @db.ObjectId
+    sessionToken String   @unique
+    userId       String   @db.ObjectId
+    expires      DateTime
+    user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model VerificationToken {
-  identifier            String   @id @default(auto()) @map("_id") @db.ObjectId
-  token                 String   @unique
-  expires               DateTime
-  @@unique([identifier, token])
+    identifier String   @id @default(auto()) @map("_id") @db.ObjectId
+    token      String   @unique
+    expires    DateTime
+
+    @@unique([identifier, token])
 }

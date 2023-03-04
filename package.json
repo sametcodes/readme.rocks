@@ -12,15 +12,17 @@
     "prettier": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "prepare": "husky install",
+    "jsdoc:explain": "jsdoc -X $1",
     "migrate:methods": "ts-node -r tsconfig-paths/register scripts/migrates/methods.ts"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
-    "@prisma/client": "^4.9.0",
+    "@prisma/client": "^4.11.0",
     "next": "13.0.1",
     "next-auth": "^4.19.0",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "simple-oauth2": "^5.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.4.4",
@@ -28,12 +30,15 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
+    "@types/simple-oauth2": "^5.0.2",
+    "chalk": "^4.1.0",
     "eslint": "8.34.0",
     "eslint-config-next": "13.2.0",
     "husky": "^8.0.0",
-    "prettier": "^2.8.4",
-    "prisma": "^4.9.0",
     "jsdoc": "^4.0.2",
+    "jsdoc-api": "^8.0.0",
+    "prettier": "^2.8.4",
+    "prisma": "^4.11.0",
     "ts-node": "^10.9.1",
     "tsconfig-paths": "^3.14.2",
     "typescript": "4.8.4"

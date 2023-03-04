@@ -1,7 +1,9 @@
 import * as ts from "typescript";
 import fs from "fs";
-import { spawn } from "child_process";
 import prisma from "@services/prisma";
+
+// @ts-ignore
+import jsdoc from "jsdoc-api";
 
 type File = {
   directory: string;
@@ -34,6 +36,8 @@ const compileTs = (files: File[], cb: (files: File[]) => void) => {
     esModuleInterop: true,
     allowSyntheticDefaultImports: true,
   };
+
+  console.log(`― Compiling TS files to JS`);
 
   const program = ts.createProgram(
     files.map((file) => file.ts),
@@ -68,51 +72,35 @@ const migrate = async ({
     }))
     .filter((doc) => Boolean(doc.title));
 
+  methods.forEach((method) => {
+    console.log(`― Migrating ${code}:${method.name}`);
+  });
+
   await prisma.platform.update({
     where: { id: platform.id },
     data: { methods },
   });
 };
 
-const explainJSDoc = async (files: File[]): Promise<void> => {
-  const docs_promise = files.map(
-    (file) =>
-      new Promise<{ docs: JSDocMinified[]; code: string }>(
-        (resolve, reject) => {
-          const jsdoc = spawn("jsdoc", ["-X", file.js]);
-
-          var stdout = "";
-          let stderr = "";
-          jsdoc.stdout.on("data", (data) => (stdout += data));
-          jsdoc.stderr.on("data", (data) => (stderr += data));
-
-          jsdoc.on("error", (err) => {
-            console.error(`Error running jsdoc: ${err}`);
-          });
-
-          jsdoc.on("exit", (code) => {
-            if (code === 0) {
-              const docs = JSON.parse(stdout).filter(
-                (doc: any) =>
-                  !doc?.undocumented &&
-                  doc.kind === "member" &&
-                  doc.scope === "global"
-              );
-              return resolve({ docs, code: file.directory });
-            } else {
-              reject(new Error(`jsdoc exited with code ${code}: ${stderr}`));
-            }
-          });
-        }
-      )
-  );
+const explainAndMigrateJSDoc = async (files: File[]): Promise<void> => {
+  console.log(`― Extracting JSDocs as JSON`);
+  const docs_promise = files.map((file) => {
+    const docs = jsdoc.explainSync({ files: file.js });
+    return {
+      docs: docs.filter(
+        (doc: any) =>
+          !doc?.undocumented && doc.kind === "member" && doc.scope === "global"
+      ),
+      code: file.directory,
+    };
+  });
 
   const docs = await Promise.all(docs_promise);
   files.forEach((file) => fs.unlinkSync(file.js));
   Promise.all(docs.map(migrate)).then(() =>
-    console.log("All the methods are migrated")
+    console.log("All the methods are migrated.")
   );
 };
 
 const files = getFiles("services/platform");
-compileTs(files, explainJSDoc);
+compileTs(files, explainAndMigrateJSDoc);
