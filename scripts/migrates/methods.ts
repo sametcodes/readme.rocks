@@ -37,6 +37,8 @@ const compileTs = (files: File[], cb: (files: File[]) => void) => {
     allowSyntheticDefaultImports: true,
   };
 
+  console.log(`― Compiling TS files to JS`);
+
   const program = ts.createProgram(
     files.map((file) => file.ts),
     options
@@ -48,7 +50,7 @@ const compileTs = (files: File[], cb: (files: File[]) => void) => {
       cb(files);
       clearInterval(tm);
     }
-  }, 1000);
+  }, 100);
 };
 
 const migrate = async ({
@@ -70,6 +72,10 @@ const migrate = async ({
     }))
     .filter((doc) => Boolean(doc.title));
 
+  methods.forEach((method) => {
+    console.log(`― Migrating ${code}:${method.name}`);
+  });
+
   await prisma.platform.update({
     where: { id: platform.id },
     data: { methods },
@@ -77,6 +83,7 @@ const migrate = async ({
 };
 
 const explainAndMigrateJSDoc = async (files: File[]): Promise<void> => {
+  console.log(`― Extracting JSDocs as JSON`);
   const docs_promise = files.map((file) => {
     const docs = jsdoc.explainSync({ files: file.js });
     return {
@@ -91,7 +98,7 @@ const explainAndMigrateJSDoc = async (files: File[]): Promise<void> => {
   const docs = await Promise.all(docs_promise);
   files.forEach((file) => fs.unlinkSync(file.js));
   Promise.all(docs.map(migrate)).then(() =>
-    console.log("All the methods are migrated")
+    console.log("All the methods are migrated.")
   );
 };
 

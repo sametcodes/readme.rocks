@@ -31,6 +31,7 @@
     "@types/react": "18.0.24",
     "@types/react-dom": "18.0.8",
     "@types/simple-oauth2": "^5.0.2",
+    "chalk": "^4.1.0",
     "eslint": "8.34.0",
     "eslint-config-next": "13.2.0",
     "husky": "^8.0.0",
