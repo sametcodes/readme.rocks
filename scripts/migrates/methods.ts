@@ -1,7 +1,9 @@
 import * as ts from "typescript";
 import fs from "fs";
-import { spawn } from "child_process";
 import prisma from "@services/prisma";
+
+// @ts-ignore
+import jsdoc from "jsdoc-api";
 
 type File = {
   directory: string;
@@ -74,46 +76,24 @@ const migrate = async ({
   });
 };
 
-const explainJSDoc = async (files: File[]): Promise<void> => {
-  const docs_promise = files.map(
-    (file) =>
-      new Promise<{ docs: JSDocMinified[]; code: string }>(
-        (resolve, reject) => {
-          const jsdoc = spawn(`npm run jsdoc:explain ${file.js}`);
-
-          var stdout = "";
-          let stderr = "";
-          jsdoc.stdout.on("data", (data) => (stdout += data));
-          jsdoc.stderr.on("data", (data) => (stderr += data));
-
-          jsdoc.on("error", (err) => {
-            console.error(`Error running jsdoc: ${err}`);
-            fs.unlinkSync(file.js);
-          });
-
-          jsdoc.on("exit", (code) => {
-            if (code === 0) {
-              const docs = JSON.parse(stdout).filter(
-                (doc: any) =>
-                  !doc?.undocumented &&
-                  doc.kind === "member" &&
-                  doc.scope === "global"
-              );
-              return resolve({ docs, code: file.directory });
-            } else {
-              reject(new Error(`jsdoc exited with code ${code}: ${stderr}`));
-            }
-          });
-        }
-      )
-  );
+const explainAndMigrateJSDoc = async (files: File[]): Promise<void> => {
+  const docs_promise = files.map((file) => {
+    const docs = jsdoc.explainSync({ files: file.js });
+    return {
+      docs: docs.filter(
+        (doc: any) =>
+          !doc?.undocumented && doc.kind === "member" && doc.scope === "global"
+      ),
+      code: file.directory,
+    };
+  });
 
   const docs = await Promise.all(docs_promise);
-  // files.forEach((file) => fs.unlinkSync(file.js));
+  files.forEach((file) => fs.unlinkSync(file.js));
   Promise.all(docs.map(migrate)).then(() =>
     console.log("All the methods are migrated")
   );
 };
 
 const files = getFiles("services/platform");
-compileTs(files, explainJSDoc);
+compileTs(files, explainAndMigrateJSDoc);

@@ -40,6 +40,6 @@
     "compilerOptions": {
       "module": "commonjs"
     },
-    "typeRoots": ["./scripts/index.d.ts", "./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"]
   }
 }
