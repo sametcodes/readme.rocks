@@ -28,13 +28,18 @@ const handlePlatformAPI: PlatformAPIHandler = (
       select: { value: true, platform: { select: { name: true } } },
       where: { userId: uid, platformId: platform.id },
     });
-    if (!userConfig) return res.status(404).json({ message: "No user config" });
+    const connection = await prisma.connection.findFirst({
+      where: { userId: uid, platformId: platform.id },
+    });
+    if (!connection)
+      return res.status(404).json({ message: "No user config or connection" });
 
     const result = await getPlatformResponse(
       req.query,
       services,
       templates,
-      userConfig.value
+      userConfig?.value,
+      connection
     );
     if (result.success === false)
       return res.status(result.status).json({ message: result.error });

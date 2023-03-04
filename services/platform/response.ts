@@ -5,7 +5,8 @@ export const getPlatformResponse = async (
   query: any,
   services: any,
   templates: any,
-  userConfig: any
+  userConfig: any | undefined,
+  connection: any
 ) => {
   const { method, returnType } = query;
   if (method === undefined || typeof method !== "string")
@@ -43,7 +44,7 @@ export const getPlatformResponse = async (
   if (!template)
     return { success: false, status: 500, error: "Template not found" };
 
-  const response = await service(userConfig);
+  const response = await service(userConfig, connection);
 
   if (response.success === false) {
     return { success: false, status: 500, error: response.error };
