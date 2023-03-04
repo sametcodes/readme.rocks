@@ -1,5 +1,5 @@
 import { ServiceResponse } from "@services/platform/types";
-import * as request from "@services/platform/request";
+import request from "@services/platform/github/request";
 import { GithubUserConfig } from "@services/platform/types";
 
 // Github GraphQL API Explorer can be used to discover
@@ -20,7 +20,7 @@ export const getCurrentYearContributions = async (
       }
     }`;
 
-  const response = await request.github(query, userConfig.token);
+  const response = await request(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
@@ -47,7 +47,7 @@ export const getPopularContributions = async (
       }
     }`;
 
-  const response = await request.github(query, userConfig.token);
+  const response = await request(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
@@ -70,7 +70,7 @@ export const getContributionsSummary = async (
     }
   }`;
 
-  const response = await request.github(query, userConfig.token);
+  const response = await request(query, userConfig.token);
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
