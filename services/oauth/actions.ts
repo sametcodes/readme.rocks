@@ -75,12 +75,17 @@ const actions = {
       },
     });
   },
-  getConnections: ({ session, platform }: IGetConnection) => {
+  getConnections: async ({ session, platform }: IGetConnection) => {
+    const _platform = await prisma.platform.findFirst({
+      where: { code: platform },
+    });
+    if (!_platform) throw new Error(`Platform not found`);
+
     return prisma.connection.findFirst({
       where: {
         userId: session.user.id as string,
         type: "oauth",
-        platform: { code: platform },
+        platformId: _platform.id,
       },
       select: {
         expires_at: true,

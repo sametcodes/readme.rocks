@@ -54,11 +54,11 @@ export default async function handler(
       const connection = await actions.getConnections({ session, platform });
       return res.json(connection);
     } catch (err) {
-      if (err instanceof Error)
-        console.error(
-          `Error getting connections from ${platform}: ${err.message}`
-        );
-      return res.redirect("/login");
+      if (err instanceof Error) {
+        return res.status(404).send(err.message);
+      }
+
+      return res.status(500).send("Internal Server Error");
     }
   }
 
