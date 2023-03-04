@@ -1,6 +1,10 @@
-import { AuthorizationCode } from "simple-oauth2";
+import { AuthorizationCode, AccessToken, Token } from "simple-oauth2";
 
-const { WAKATIME_CLIENT_ID, WAKATIME_SECRET } = process.env;
+export type ConnectionProfile = {
+  name: string;
+  email: string;
+  image: string;
+};
 
 export type Provider = {
   code: string;
@@ -9,7 +13,17 @@ export type Provider = {
     secret: string;
   };
   authorization: AuthorizationCode;
-  getTokenParam: (provider: any, params: any) => any;
+  getTokenParam: (
+    provider: any,
+    params: any
+  ) => {
+    code: string;
+    grant_type: string;
+    client_secret: string;
+    client_id: string;
+    redirect_uri: string;
+  };
+  getProfile: (token: Token) => Promise<ConnectionProfile | undefined>;
   redirect_uri: string;
   scope: string;
 };
@@ -32,7 +46,7 @@ const providers: { [key: string]: Provider } = {
         authorizePath: "/oauth/authorize",
       },
     }),
-    getTokenParam: (provider: any, params: any) => {
+    getTokenParam: (provider, params) => {
       return {
         code: params.code as string,
         grant_type: "authorization_code",
@@ -40,6 +54,26 @@ const providers: { [key: string]: Provider } = {
         client_id: provider.client.id,
         redirect_uri: provider.redirect_uri,
       };
+    },
+    getProfile: async (token) => {
+      try {
+        const response = await fetch(
+          "https://wakatime.com/api/v1/users/current",
+          {
+            headers: { Authorization: `Bearer ${token.access_token}` },
+          }
+        );
+        const { data } = await response.json();
+
+        return {
+          name: data.full_name || data.display_name,
+          email: data.email,
+          image: data.photo,
+        };
+      } catch (err) {
+        if (err instanceof Error)
+          console.error(`Error getting profile from wakatime: ${err.message}`);
+      }
     },
     redirect_uri: `${process.env.AUTH_URL}/api/oauth/callback/wakatime`,
     scope: "email,read_stats,read_logged_time",

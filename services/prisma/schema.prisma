@@ -32,6 +32,7 @@ model User {
     sessions      Session[]
     config        Config[]
     connections   Connection[]
+    profiles      ConnectionProfile[]
 }
 
 model Config {
@@ -64,7 +65,8 @@ model Account {
 model Connection {
     id                String @id @default(auto()) @map("_id") @db.ObjectId
     userId            String @db.ObjectId 
-    platformId        String @db.ObjectId 
+    platformId        String @db.ObjectId
+
     refresh_token     String? @db.String
     access_token      String? @db.String
     expires_at        Int?
@@ -72,8 +74,23 @@ model Connection {
     token_type        String?
     scope             String?
 
+    user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+    platform          Platform             @relation(fields: [platformId], references: [id], onDelete: Cascade)
+    profile           ConnectionProfile?
+}
+
+model ConnectionProfile {
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String @db.ObjectId 
+    platformId        String @db.ObjectId 
+    connectionId      String @db.ObjectId @unique
+
+    name              String
+    email             String
+    image             String
+
     user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-    platform          Platform      @relation(fields: [platformId], references: [id], onDelete: Cascade)
+    connection        Connection    @relation(fields: [connectionId], references: [id], onDelete: Cascade)
 }
 
 model Session {

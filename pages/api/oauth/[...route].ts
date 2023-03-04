@@ -15,14 +15,21 @@ export default async function handler(
 
   const [action, platform]: string[] = req.query.route as string[];
 
+  if (req.method !== "GET") return res.status(405).end();
+  if (Object.keys(Providers).indexOf(platform) === -1)
+    return res.status(404).send("Not Found");
+
   if (action === "callback") {
     const provider = Providers[platform];
     const params = provider.getTokenParam(provider, req.query);
 
     try {
       const accessToken = await provider.authorization.getToken(params);
-      actions.signin({ accessToken, session, provider });
 
+      const profile = await provider.getProfile(accessToken.token);
+      if (!profile) return res.redirect("/login");
+
+      await actions.signin({ accessToken, session, provider, profile });
       return res.redirect("/login");
     } catch (error) {
       if (error instanceof Error) {
@@ -32,7 +39,7 @@ export default async function handler(
     }
   }
 
-  if (action === "signin") {
+  if (action === "connect") {
     const provider = Providers[platform];
     const redirect_uri = provider.authorization.authorizeURL({
       redirect_uri: provider.redirect_uri,
@@ -40,6 +47,19 @@ export default async function handler(
       state: generateRandomString(),
     });
     return res.redirect(redirect_uri);
+  }
+
+  if (action === "session") {
+    try {
+      const connection = await actions.getConnections({ session, platform });
+      return res.json(connection);
+    } catch (err) {
+      if (err instanceof Error)
+        console.error(
+          `Error getting connections from ${platform}: ${err.message}`
+        );
+      return res.redirect("/login");
+    }
   }
 
   return res.status(404).send("Not Found");
