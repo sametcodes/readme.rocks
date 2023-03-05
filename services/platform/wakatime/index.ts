@@ -9,8 +9,8 @@ import { Connection } from "@prisma/client";
  * @description Get overall time since today
  */
 export const getAllTimeSinceToday = async (
-  userConfig: WakatimeUserConfig,
-  connection: Connection
+  connection: Connection,
+  userConfig: WakatimeUserConfig
 ): Promise<ServiceResponse> => {
   const response = await request(
     "/users/current/all_time_since_today",

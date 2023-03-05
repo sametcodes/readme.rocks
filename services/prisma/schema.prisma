@@ -67,11 +67,11 @@ model Connection {
     userId            String @db.ObjectId 
     platformId        String @db.ObjectId
 
-    refresh_token     String? @db.String
-    access_token      String? @db.String
-    expires_at        Int?
+    refresh_token     String @db.String
+    access_token      String @db.String
+    expires_at        Int
     type              String
-    token_type        String?
+    token_type        String
     scope             String?
 
     user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)

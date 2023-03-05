@@ -1,14 +1,15 @@
+import { Connection } from "@prisma/client";
 /**
  * @param {string} query - The GraphQL query to send to the GitHub API
  * @returns {Promise<any>} - The response from the GitHub API
  * @throws {Error} - If the response is not a 2xx status code
  */
 
-export default function request(query: string, token: string) {
+export default function request(query: string, connection: Connection) {
   return fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${connection.access_token}`,
       Accept: "application/vnd.github.v4.idl",
       "Content-Type": "application/json",
     },

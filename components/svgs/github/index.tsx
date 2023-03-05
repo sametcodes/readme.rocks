@@ -8,7 +8,7 @@ import {
 
 export const getCurrentYearContributions = (result: any, platform: any) => {
   const { totalContributions } =
-    result.data.user.contributionsCollection.contributionCalendar;
+    result.data.viewer.contributionsCollection.contributionCalendar;
 
   return (
     <Document width={305} height={100}>
@@ -25,7 +25,7 @@ export const getCurrentYearContributions = (result: any, platform: any) => {
 };
 
 export const getPopularContributions = (result: any) => {
-  const popularContributions = result.data.user.contributionsCollection;
+  const popularContributions = result.data.viewer.contributionsCollection;
   const [popularIssue, popularPullrequest] = [
     popularContributions.popularIssueContribution.issue,
     popularContributions.popularPullRequestContribution.pullRequest,
@@ -58,7 +58,7 @@ export const getContributionsSummary = (result: any) => {
     totalRepositoriesWithContributedCommits,
     totalRepositoriesWithContributedPullRequests,
     totalRepositoriesWithContributedIssues,
-  } = result.data.user.contributionsCollection;
+  } = result.data.viewer.contributionsCollection;
 
   return (
     <Document width={410} height={170}>
