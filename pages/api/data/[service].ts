@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session, unstable_getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
-import * as services from "@services/data";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import * as services from "@/services/data";
 
-import methods from "@services/data/methods";
-import type * as methodTypes from "@services/data";
+import methods from "@/services/data/methods";
+import type * as methodTypes from "@/services/data";
 
 export default async function handler(
   req: NextApiRequest,

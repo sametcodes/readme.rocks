@@ -1,5 +1,5 @@
 import { AuthorizationCode } from "simple-oauth2";
-import { Provider } from "@services/oauth";
+import { Provider } from "@/services/oauth";
 
 const config: Provider = {
   code: "stackoverflow",

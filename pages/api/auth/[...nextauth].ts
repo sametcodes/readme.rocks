@@ -1,7 +1,7 @@
 import NextAuth from "next-auth";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import prisma from "@services/prisma";
-import callbacks from "@services/nextauth/callbacks";
+import prisma from "@/services/prisma";
+import callbacks from "@/services/nextauth/callbacks";
 
 import GithubProvider from "next-auth/providers/github";
 const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = process.env;

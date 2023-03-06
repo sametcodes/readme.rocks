@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -21,7 +25,9 @@
     ],
     "baseUrl": ".",
     "paths": {
-      "@*": ["*"]
+      "@/*": [
+        "*"
+      ]
     }
   },
   "include": [
@@ -30,16 +36,20 @@
     "index.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
     "pages/api/github",
     "services/prisma/schema.prisma",
-    ".lintstagedrc.js"
+    ".lintstagedrc.js",
+    "/Users/samet/Documents/GitHub/devstats/.next/types/**/*.ts"
   ],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "ts-node": {
     "compilerOptions": {
       "module": "commonjs"
     },
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": [
+      "./node_modules/@types"
+    ]
   }
 }

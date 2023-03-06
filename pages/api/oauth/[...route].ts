@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { unstable_getServerSession } from "next-auth";
-import { generateRandomString } from "@utils";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { generateRandomString } from "@/utils";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import { providers } from "@services/oauth";
-import actions from "@services/oauth/actions";
+import { providers } from "@/services/oauth";
+import actions from "@/services/oauth/actions";
 
 export default async function handler(
   req: NextApiRequest,

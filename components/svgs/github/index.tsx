@@ -1,10 +1,10 @@
-import * as Icons from "@components/icons";
+import * as Icons from "@/components/icons";
 import {
   Document,
   DocumentTitle,
   List,
   ListItem,
-} from "@components/svgs/document";
+} from "@/components/svgs/document";
 
 export const getCurrentYearContributions = (result: any, platform: any) => {
   const { totalContributions } =

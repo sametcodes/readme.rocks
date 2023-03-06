@@ -1,4 +1,4 @@
-import prisma from "@services/prisma";
+import prisma from "@/services/prisma";
 import { AccessToken } from "simple-oauth2";
 import { Session } from "next-auth";
 import { Provider, ConnectionProfile } from ".";
