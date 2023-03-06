@@ -12,7 +12,7 @@ Make sure you install the dependencies first.
 npm install
 ```
 
-You need the `.env.local` file that have environment variables. You can get it from the [Vercel](https://vercel.com) project settings, or just by running `vercel env pull .env.local` command if you have the access to the vercel project. If you don't have, ask admin to get it.
+You need the `.env` file that have environment variables. You can get it from the [Vercel](https://vercel.com) project settings, or just by running `vercel env pull .env` command if you have the access to the vercel project. If you don't have, ask admin to get it.
 
 Before running, you need to generate the database schema and prepare `husky` hooks.
 

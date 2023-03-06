@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run prisma:generate && next build",
+    "build:staging": "env-cmd -f .env.staging npm run build && env-cmd -f .env.staging npm run start",
     "start": "next start",
     "prisma:generate": "prisma generate --schema=./services/prisma/schema.prisma",
     "lint": "next lint --max-warnings=0",
