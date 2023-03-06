@@ -11,13 +11,13 @@ generator client {
 }
 
 model Platform {
-    id                String   @id @default(auto()) @map("_id") @db.ObjectId
+    id                String @id @default(auto()) @map("_id") @db.ObjectId
     name              String
-    code              String   @unique
+    code              String @unique
     raw_configuration Json?
     methods           Json
 
-    config            Config[]
+    config Config[]
 }
 
 model User {
@@ -28,11 +28,11 @@ model User {
     emailVerified DateTime?
     image         String?
 
-    accounts      Account[]
-    sessions      Session[]
-    config        Config[]
-    connections   Connection[]
-    profiles      ConnectionProfile[]
+    accounts    Account[]
+    sessions    Session[]
+    config      Config[]
+    connections Connection[]
+    profiles    ConnectionProfile[]
 }
 
 model Config {
@@ -45,51 +45,52 @@ model Config {
 }
 
 model Account {
-    id                String @id @default(auto()) @map("_id") @db.ObjectId
-    userId            String @db.ObjectId 
-    type              String
-    provider          String
-    providerAccountId String
-    refresh_token     String? @db.String
-    access_token      String? @db.String
-    expires_at        Int?
-    token_type        String?
-    scope             String?
-    id_token          String? @db.String
-    session_state     String?
-    user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+    id                       String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId                   String  @db.ObjectId
+    type                     String
+    provider                 String
+    providerAccountId        String
+    refresh_token            String? @db.String
+    access_token             String? @db.String
+    expires_at               Int?
+    token_type               String?
+    scope                    String?
+    id_token                 String? @db.String
+    session_state            String?
+    refresh_token_expires_in Int?
+    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
 
 model Connection {
-    id                String @id @default(auto()) @map("_id") @db.ObjectId
-    userId            String @db.ObjectId 
-    platformId        String @db.ObjectId
+    id         String @id @default(auto()) @map("_id") @db.ObjectId
+    userId     String @db.ObjectId
+    platformId String @db.ObjectId
 
-    refresh_token     String @db.String
-    access_token      String @db.String
-    expires_at        Int
-    type              String
-    token_type        String
-    scope             String?
+    refresh_token String  @db.String
+    access_token  String  @db.String
+    expires_at    Int
+    type          String
+    token_type    String
+    scope         String?
 
-    user              User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
-    profile           ConnectionProfile?
+    user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    profile ConnectionProfile?
 }
 
 model ConnectionProfile {
-    id                String @id @default(auto()) @map("_id") @db.ObjectId
-    userId            String @db.ObjectId 
-    platformId        String @db.ObjectId 
-    connectionId      String @db.ObjectId @unique
+    id           String @id @default(auto()) @map("_id") @db.ObjectId
+    userId       String @db.ObjectId
+    platformId   String @db.ObjectId
+    connectionId String @unique @db.ObjectId
 
-    name              String
-    email             String
-    image             String
+    name  String
+    email String
+    image String
 
-    user              User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-    connection        Connection    @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+    user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+    connection Connection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
 }
 
 model Session {
