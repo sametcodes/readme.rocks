@@ -55,7 +55,7 @@ This project uses [Husky](https://typicode.github.io/husky/#/) to run the lintin
 The metric methods require name and descriptions on the database records, and they are provided on as JSDoc comments on the methods. You can run the following command to migrate metric methods to the related database records.
 
 ```bash
-npm run migrate:methods
+npm run migrate:platform
 ```
 
 ## Versions and changelogs
