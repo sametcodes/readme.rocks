@@ -41,6 +41,10 @@ export default async function handler(
 
   if (action === "connect") {
     const provider = providers[platform];
+    if (provider.connect_url) {
+      return res.redirect(provider.connect_url);
+    }
+
     const redirect_uri = provider.authorization.authorizeURL({
       redirect_uri: provider.redirect_uri,
       scope: provider.scope,

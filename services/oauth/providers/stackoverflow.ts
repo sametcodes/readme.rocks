@@ -33,7 +33,7 @@ const config: Provider = {
       image: "",
     });
   },
-  redirect_uri: `${process.env.AUTH_URL}/api/oauth/callback/stackoverflow`,
+  redirect_uri: `${process.env.NEXTAUTH_URL}/api/oauth/callback/stackoverflow`,
   scope: "private_info",
 };
 

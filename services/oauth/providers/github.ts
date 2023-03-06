@@ -4,13 +4,13 @@ import { Provider } from "@services/oauth";
 const config: Provider = {
   code: "github",
   client: {
-    id: process.env.GITHUB_CONNECTOR_ID as string,
-    secret: process.env.GITHUB_CONNECTOR_SECRET as string,
+    id: process.env.GITHUB_CLIENT_ID as string,
+    secret: process.env.GITHUB_CLIENT_SECRET as string,
   },
   authorization: new AuthorizationCode({
     client: {
-      id: process.env.GITHUB_CONNECTOR_ID as string,
-      secret: process.env.GITHUB_CONNECTOR_SECRET as string,
+      id: process.env.GITHUB_CLIENT_ID as string,
+      secret: process.env.GITHUB_CLIENT_SECRET as string,
     },
     auth: {
       tokenHost: "https://github.com",
@@ -45,8 +45,8 @@ const config: Provider = {
         console.error(`Error getting profile from github: ${err.message}`);
     }
   },
-  connect_url: process.env.GITHUB_CONNECTOR_INSTALL_URL,
-  redirect_uri: `${process.env.AUTH_URL}/api/oauth/callback/github`,
+  connect_url: process.env.GITHUB_CLIENT_INSTALL_URL,
+  redirect_uri: `${process.env.NEXTAUTH_URL}/api/oauth/callback/github`,
   scope: "read:user user:email repo",
 };
 

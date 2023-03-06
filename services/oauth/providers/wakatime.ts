@@ -46,7 +46,7 @@ const config: Provider = {
         console.error(`Error getting profile from wakatime: ${err.message}`);
     }
   },
-  redirect_uri: `${process.env.AUTH_URL}/api/oauth/callback/wakatime`,
+  redirect_uri: `${process.env.NEXTAUTH_URL}/api/oauth/callback/wakatime`,
   scope: "email,read_stats,read_logged_time",
 };
 
