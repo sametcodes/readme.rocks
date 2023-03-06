@@ -3,7 +3,7 @@ import { unstable_getServerSession } from "next-auth";
 import { generateRandomString } from "@utils";
 import { authOptions } from "@pages/api/auth/[...nextauth]";
 
-import Providers from "@services/oauth/providers";
+import { providers } from "@services/oauth";
 import actions from "@services/oauth/actions";
 
 export default async function handler(
@@ -16,11 +16,11 @@ export default async function handler(
   const [action, platform]: string[] = req.query.route as string[];
 
   if (req.method !== "GET") return res.status(405).end();
-  if (Object.keys(Providers).indexOf(platform) === -1)
+  if (Object.keys(providers).indexOf(platform) === -1)
     return res.status(404).send("Not Found");
 
   if (action === "callback") {
-    const provider = Providers[platform];
+    const provider = providers[platform];
     const params = provider.getTokenParam(provider, req.query);
 
     try {
@@ -40,7 +40,11 @@ export default async function handler(
   }
 
   if (action === "connect") {
-    const provider = Providers[platform];
+    const provider = providers[platform];
+    if (provider.connect_url) {
+      return res.redirect(provider.connect_url);
+    }
+
     const redirect_uri = provider.authorization.authorizeURL({
       redirect_uri: provider.redirect_uri,
       scope: provider.scope,

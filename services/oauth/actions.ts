@@ -1,7 +1,7 @@
 import prisma from "@services/prisma";
 import { AccessToken } from "simple-oauth2";
 import { Session } from "next-auth";
-import { Provider, ConnectionProfile } from "./providers";
+import { Provider, ConnectionProfile } from ".";
 
 type ISignIn = {
   accessToken: AccessToken;

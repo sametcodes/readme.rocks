@@ -1,12 +1,13 @@
 import JSXRender from "@utils/render";
 import { trimChars } from "@utils";
+import { Connection } from "@prisma/client";
 
 export const getPlatformResponse = async (
   query: any,
   services: any,
   templates: any,
-  userConfig: any | undefined,
-  connection: any
+  connection: Connection,
+  userConfig: any | undefined
 ) => {
   const { method, returnType } = query;
   if (method === undefined || typeof method !== "string")
@@ -44,7 +45,7 @@ export const getPlatformResponse = async (
   if (!template)
     return { success: false, status: 500, error: "Template not found" };
 
-  const response = await service(userConfig, connection);
+  const response = await service(connection, userConfig);
 
   if (response.success === false) {
     return { success: false, status: 500, error: response.error };

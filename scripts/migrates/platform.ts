@@ -60,9 +60,16 @@ const migrate = async ({
   docs: JSDocMinified[];
   code: string;
 }): Promise<void> => {
-  const platform = await prisma.platform.findUnique({ where: { code } });
+  let platform = await prisma.platform.findUnique({ where: { code } });
 
-  if (!platform) return console.error(`Platform ${code} not found`);
+  if (!platform) {
+    const name = Array.from(code)
+      .map((letter, i) => (i === 0 ? letter.toUpperCase() : letter))
+      .join("");
+    platform = await prisma.platform.create({
+      data: { code, name, methods: [] },
+    });
+  }
 
   const methods = docs
     .map((doc) => ({

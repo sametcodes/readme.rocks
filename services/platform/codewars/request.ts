@@ -5,7 +5,7 @@
  * @throws {Error} - If the response is an error
  */
 
-export default function request(path: string) {
+export default function request(path: string): Promise<any> {
   return fetch(`https://www.codewars.com/api/v1${path}`)
     .then((res) => {
       if (res.headers.get("content-type")?.includes("application/json")) {

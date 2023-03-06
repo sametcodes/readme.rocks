@@ -18,6 +18,9 @@ const handlePlatformAPI: PlatformAPIHandler = (
         .status(400)
         .json({ message: "Bad request: uid parameter is missing" });
 
+    const user = await prisma.user.findFirst({ where: { id: uid } });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
     const platform = await prisma.platform.findFirst({
       where: { code: platformCode },
     });
@@ -28,18 +31,21 @@ const handlePlatformAPI: PlatformAPIHandler = (
       select: { value: true, platform: { select: { name: true } } },
       where: { userId: uid, platformId: platform.id },
     });
+
     const connection = await prisma.connection.findFirst({
       where: { userId: uid, platformId: platform.id },
     });
     if (!connection)
-      return res.status(404).json({ message: "No user config or connection" });
+      return res
+        .status(404)
+        .json({ message: "User has no connection on this platform" });
 
     const result = await getPlatformResponse(
       req.query,
       services,
       templates,
-      userConfig?.value,
-      connection
+      connection,
+      userConfig
     );
     if (result.success === false)
       return res.status(result.status).json({ message: result.error });
