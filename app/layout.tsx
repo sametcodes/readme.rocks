@@ -1,6 +1,7 @@
 "use client";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children /* , session */,
@@ -16,6 +17,7 @@ export default function RootLayout({
       </head>
       <body>
         <SessionProvider /* session={session} */>{children}</SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
