@@ -1,4 +1,4 @@
-import prisma from "@services/prisma";
+import prisma from "@/services/prisma";
 import { CallbacksOptions } from "next-auth";
 
 const session: CallbacksOptions["session"] = async ({ session }) => {

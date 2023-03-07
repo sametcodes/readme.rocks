@@ -3,8 +3,8 @@ import {
   DocumentTitle,
   List,
   ListItem,
-} from "@components/svgs/document";
-import * as Icons from "@components/icons";
+} from "@/components/svgs/document";
+import * as Icons from "@/components/icons";
 
 export const getReputation = (result: any, platform: any) => {
   return (

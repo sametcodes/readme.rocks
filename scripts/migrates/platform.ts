@@ -1,6 +1,6 @@
 import * as ts from "typescript";
 import fs from "fs";
-import prisma from "@services/prisma";
+import prisma from "@/services/prisma";
 
 // @ts-ignore
 import jsdoc from "jsdoc-api";

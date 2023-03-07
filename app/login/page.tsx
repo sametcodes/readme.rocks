@@ -1,5 +1,6 @@
 "use client";
 import { useSession, signIn, signOut } from "next-auth/react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const { data: session } = useSession();
@@ -8,7 +9,7 @@ export default function LoginPage() {
     return (
       <>
         <p>Welcome, {session?.user?.name}</p>
-        <img src={session?.user?.image || ""} alt="photo" width={60} />
+        <Image src={session?.user?.image || ""} alt="photo" width={60} />
         <p>
           Signed in as {session?.user?.email} <br />
         </p>

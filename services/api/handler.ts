@@ -1,6 +1,6 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { getPlatformResponse } from "@services/platform/response";
-import prisma from "@services/prisma";
+import { getPlatformResponse } from "@/services/platform/response";
+import prisma from "@/services/prisma";
 
 import { requestNewAccessToken } from "passport-oauth2-refresh";
 import actions from "@services/oauth/actions";

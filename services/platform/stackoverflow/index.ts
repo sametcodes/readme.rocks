@@ -1,5 +1,5 @@
-import { ServiceResponse } from "@services/platform/types";
-import request from "@services/platform/stackoverflow/request";
+import { ServiceResponse } from "@/services/platform/types";
+import request from "@/services/platform/stackoverflow/request";
 import { Connection } from "@prisma/client";
 
 /**

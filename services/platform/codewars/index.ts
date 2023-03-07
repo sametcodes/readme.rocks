@@ -1,6 +1,6 @@
-import { ServiceResponse } from "@services/platform/types";
-import request from "@services/platform/codewars/request";
-import { CodewarsUserConfig } from "@services/platform/types";
+import { ServiceResponse } from "@/services/platform/types";
+import request from "@/services/platform/codewars/request";
+import { CodewarsUserConfig } from "@/services/platform/types";
 import { Connection } from "@prisma/client";
 
 /**
