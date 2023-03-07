@@ -3,7 +3,7 @@ export const trimChars = (body: string) => {
 };
 
 type ValueOf<T> = T[keyof T];
-type Entries<T> = [keyof T, ValueOf<T>][];
+type Entries<T> = Array<[keyof T, ValueOf<T>]>;
 
 export function ObjectEntries<T extends object>(obj: T): Entries<T> {
   return Object.entries(obj) as Entries<T>;

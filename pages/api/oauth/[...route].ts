@@ -1,20 +1,20 @@
 import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import actions from "@services/oauth/actions";
+import actions from "@/services/oauth/actions";
 import passport from "passport";
 import nextConnect from "next-connect";
 
-import StackOverflowProvider from "@services/oauth/providers/stackoverflow";
-import GithubProvider from "@services/oauth/providers/github";
-import WakatimeProvider from "@services/oauth/providers/wakatime";
+import StackOverflowProvider from "@/services/oauth/providers/stackoverflow";
+import GithubProvider from "@/services/oauth/providers/github";
+import WakatimeProvider from "@/services/oauth/providers/wakatime";
 
 async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.redirect("/login");
 
-  const [action, platform]: string[] = req.query.route as string[];
+  const [action, platform]: Array<string> = req.query.route as Array<string>;
 
   if (req.method !== "GET") return res.status(405).end();
 

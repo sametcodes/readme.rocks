@@ -1,14 +1,17 @@
 import prisma from "@/services/prisma";
-import { CallbacksOptions } from "next-auth";
+import { Awaitable, CallbacksOptions, Session } from "next-auth";
 
-const session: CallbacksOptions["session"] = async ({ session }) => {
+const session: CallbacksOptions["session"] = ({
+  session,
+}): Awaitable<Session> => {
   if (!session) return Promise.resolve(session);
   if (!session?.user?.email) return Promise.resolve(session);
 
-  const user = await prisma.user.findUnique({
-    where: { email: session.user.email },
-  });
-  return Promise.resolve(Object.assign({}, session, { user }));
+  return prisma.user
+    .findUnique({
+      where: { email: session.user.email },
+    })
+    .then((user) => ({ ...session, user })) as Awaitable<Session>;
 };
 
 const callbacks = {

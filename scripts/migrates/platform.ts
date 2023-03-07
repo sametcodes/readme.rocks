@@ -13,11 +13,11 @@ type File = {
 
 export interface JSDocMinified {
   name: string;
-  tags: { title: string; text: string }[];
+  tags: Array<{ title: string; text: string }>;
   description: string;
 }
 
-const getFiles = (path: string): File[] => {
+const getFiles = (path: string): Array<File> => {
   return fs
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
@@ -28,7 +28,7 @@ const getFiles = (path: string): File[] => {
     }));
 };
 
-const compileTs = (files: File[], cb: (files: File[]) => void) => {
+const compileTs = (files: Array<File>, cb: (files: Array<File>) => void) => {
   const options: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2017,
     module: ts.ModuleKind.CommonJS,
@@ -57,7 +57,7 @@ const migrate = async ({
   docs,
   code,
 }: {
-  docs: JSDocMinified[];
+  docs: Array<JSDocMinified>;
   code: string;
 }): Promise<void> => {
   let platform = await prisma.platform.findUnique({ where: { code } });
@@ -89,7 +89,7 @@ const migrate = async ({
   });
 };
 
-const explainAndMigrateJSDoc = async (files: File[]): Promise<void> => {
+const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
   console.log(`― Extracting JSDocs as JSON`);
   const docs_promise = files.map((file) => {
     const docs = jsdoc.explainSync({ files: file.js });

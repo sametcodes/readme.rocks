@@ -1,5 +1,6 @@
-import { Connection, User } from "@/prisma/client";
+import { Connection, User } from "@prisma/client";
 import prisma from "@/services/prisma";
+
 import { Session } from "next-auth";
 
 type ISignIn = {

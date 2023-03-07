@@ -1,7 +1,6 @@
 "use client";
 import { useSession, signOut } from "next-auth/react";
-import { useState } from "react";
-import { FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent } from "react";
 
 export default function Account() {
   const { data: session } = useSession({ required: true });

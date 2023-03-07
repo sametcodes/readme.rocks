@@ -3,12 +3,14 @@ import { getPlatformResponse } from "@/services/platform/response";
 import prisma from "@/services/prisma";
 
 import { requestNewAccessToken } from "passport-oauth2-refresh";
-import actions from "@services/oauth/actions";
+import actions from "@/services/oauth/actions";
 import { Connection } from "@prisma/client";
 
-type PlatformAPIHandler = {
-  (platformCode: string, services: any, templates: any): NextApiHandler;
-};
+type PlatformAPIHandler = (
+  platformCode: string,
+  services: any,
+  templates: any
+) => NextApiHandler;
 
 const handlePlatformAPI: PlatformAPIHandler = (
   platformCode,
@@ -36,7 +38,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
       where: { userId: uid, platformId: platform.id },
     });
 
-    var connection = await prisma.connection.findFirst({
+    let connection = await prisma.connection.findFirst({
       where: { userId: uid, platformId: platform.id },
     });
 
