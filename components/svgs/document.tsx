@@ -26,29 +26,19 @@ export const getDocumentStyle = () => {
      </style>`;
 };
 
-type IDocument = {
-  (props: {
-    width: number;
-    height: number;
-    children: JSX.Element | JSX.Element[];
-  }): JSX.Element;
-};
+type IDocument = (props: {
+  width: number;
+  height: number;
+  children: JSX.Element | Array<JSX.Element>;
+}) => JSX.Element;
 
-type IDocumentHeader = {
-  (props: { title: string; desc: string }): JSX.Element;
-};
+type IDocumentHeader = (props: { title: string; desc: string }) => JSX.Element;
 
-type IDocumentTitle = {
-  (props: { children: string }): JSX.Element;
-};
+type IDocumentTitle = (props: { children: string }) => JSX.Element;
 
-type IList = {
-  (props: { children: any }): JSX.Element;
-};
+type IList = (props: { children: any }) => JSX.Element;
 
-export type IListItem = {
-  (props: IItem): JSX.Element;
-};
+export type IListItem = (props: IItem) => JSX.Element;
 
 type IItem = {
   icon: JSX.Element;
@@ -133,7 +123,7 @@ export const List: IList = ({ children }) => {
     };
   };
 
-  const calculateGap = (elements: ReactElement<IItem, IListItem>[]) => {
+  const calculateGap = (elements: Array<ReactElement<IItem, IListItem>>) => {
     if (!children) {
       return [];
     }
@@ -143,7 +133,7 @@ export const List: IList = ({ children }) => {
         .reduce((a, b) => Math.max(a, b), 0) + 45;
     return elements.map((child, index) => ({
       ...child,
-      props: { ...child.props, index, gap: gap },
+      props: { ...child.props, index, gap },
     }));
   };
 

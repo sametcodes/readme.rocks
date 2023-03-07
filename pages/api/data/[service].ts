@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Session, unstable_getServerSession } from "next-auth";
-import { authOptions } from "@pages/api/auth/[...nextauth]";
-import * as services from "@services/data";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import * as services from "@/services/data";
 
-import methods from "@services/data/methods";
-import type * as methodTypes from "@services/data";
+import methods from "@/services/data/methods";
+import type * as methodTypes from "@/services/data";
 
 export default async function handler(
   req: NextApiRequest,
@@ -33,7 +33,7 @@ export default async function handler(
       .json({ message: "Bad request: unknown data API service" });
 
   try {
-    const result = await dataService({ session: session, payload: req.body });
+    const result = await dataService({ session, payload: req.body });
     return res.status(200).json({ success: true, data: result });
   } catch (err) {
     if (err instanceof Error) {

@@ -1,11 +1,11 @@
-import * as Icons from "@components/icons";
+import * as Icons from "@/components/icons";
 import {
   Document,
   DocumentTitle,
   List,
   ListItem,
-} from "@components/svgs/document";
-import { ObjectEntries } from "@utils";
+} from "@/components/svgs/document";
+import { ObjectEntries } from "@/utils";
 
 export const getUser = (result: any, platform: any) => {
   const langs = ObjectEntries(result.ranks.languages).map(([key, value]) => ({
