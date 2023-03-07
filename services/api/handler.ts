@@ -2,6 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { getPlatformResponse } from "@/services/platform/response";
 import prisma from "@/services/prisma";
 
+import { availableOAuthProviders } from "@/services/oauth/providers";
 import { requestNewAccessToken } from "passport-oauth2-refresh";
 import actions from "@/services/oauth/actions";
 import { Connection } from "@prisma/client";
@@ -38,55 +39,58 @@ const handlePlatformAPI: PlatformAPIHandler = (
       where: { userId: uid, platformId: platform.id },
     });
 
-    let connection = await prisma.connection.findFirst({
-      where: { userId: uid, platformId: platform.id },
-    });
+    var connection: Connection | null = null;
+    if (availableOAuthProviders.includes(platformCode)) {
+      connection = await prisma.connection.findFirst({
+        where: { userId: uid, platformId: platform.id },
+      });
 
-    if (!connection)
-      return res
-        .status(404)
-        .json({ message: "User has no connection on this platform" });
+      if (!connection)
+        return res
+          .status(404)
+          .json({ message: "User has no connection on this platform" });
 
-    // Refreshing access token
-    // TODO: refactor this
-    // it should work on the network request level, not on the API layers
-    if (connection.expires_at && Date.now() > connection.expires_at) {
-      const updated_connection = await new Promise<Connection | Error>(
-        (resolve, reject) => {
-          if (!connection) return reject("No connection found");
-          requestNewAccessToken(
-            platformCode,
-            connection.refresh_token,
-            async (
-              err: { statusCode: number; data?: any },
-              access_token: string,
-              refresh_token: string,
-              result: any
-            ) => {
-              if (err) {
-                console.log(err);
-                res.status(err.statusCode).json({ message: err.data });
-                throw new Error(err.data);
+      // Refreshing access token
+      // TODO: refactor this
+      // it should work on the network request level, not on the API layers
+      if (connection.expires_at && Date.now() > connection.expires_at) {
+        const updated_connection = await new Promise<Connection | Error>(
+          (resolve, reject) => {
+            if (!connection) return reject("No connection found");
+            requestNewAccessToken(
+              platformCode,
+              connection.refresh_token,
+              async (
+                err: { statusCode: number; data?: any },
+                access_token: string,
+                refresh_token: string,
+                result: any
+              ) => {
+                if (err) {
+                  console.log(err);
+                  res.status(err.statusCode).json({ message: err.data });
+                  throw new Error(err.data);
+                }
+
+                if (!connection) return reject("No connection found");
+
+                return actions
+                  .updateConnection({
+                    connection,
+                    data: {
+                      access_token,
+                      expires_at: Date.now() + Number(result.expires_in) * 1000,
+                    },
+                  })
+                  .then(resolve);
               }
+            );
+          }
+        );
 
-              if (!connection) return reject("No connection found");
-
-              return actions
-                .updateConnection({
-                  connection,
-                  data: {
-                    access_token,
-                    expires_at: Date.now() + Number(result.expires_in) * 1000,
-                  },
-                })
-                .then(resolve);
-            }
-          );
-        }
-      );
-
-      if (updated_connection instanceof Error) return;
-      connection = updated_connection;
+        if (updated_connection instanceof Error) return;
+        connection = updated_connection;
+      }
     }
 
     const result = await getPlatformResponse(

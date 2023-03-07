@@ -6,7 +6,7 @@ export const getPlatformResponse = async (
   query: any,
   services: any,
   templates: any,
-  connection: Connection,
+  connection: Connection | null,
   userConfig: any | undefined
 ) => {
   const { method, returnType } = query;

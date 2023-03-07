@@ -66,4 +66,5 @@ const strategy = new OAuth2Strategy(
   }
 );
 
+strategy.name = "wakatime";
 export default strategy;

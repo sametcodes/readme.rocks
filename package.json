@@ -15,7 +15,7 @@
     "prepare": "husky install",
     "prisma:generate": "prisma generate --schema=./services/prisma/schema.prisma",
     "migrate:platform": "ts-node -r tsconfig-paths/register scripts/migrates/platform.ts",
-    "test:platform-api": "jest --coverage --config jest.config.js",
+    "test:platform-api": "jest --config jest.config.js",
     "lint:ts": "tslint --fix -c tslint.json --project ./"
   },
   "dependencies": {

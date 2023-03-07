@@ -2,13 +2,10 @@ import { NextApiRequest, NextApiResponse, NextApiHandler } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
-import actions from "@/services/oauth/actions";
 import passport from "passport";
 import nextConnect from "next-connect";
-
-import StackOverflowProvider from "@/services/oauth/providers/stackoverflow";
-import GithubProvider from "@/services/oauth/providers/github";
-import WakatimeProvider from "@/services/oauth/providers/wakatime";
+import OAuthProviders from "@/services/oauth/providers";
+import actions from "@/services/oauth/actions";
 
 async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);
@@ -78,9 +75,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   return res.status(404).send("Not Found");
 }
 
-passport.use("stackoverflow", StackOverflowProvider);
-passport.use("github", GithubProvider);
-passport.use("wakatime", WakatimeProvider);
+passport.use("stackoverflow", OAuthProviders.StackOverflow);
+passport.use("github", OAuthProviders.Github);
+passport.use("wakatime", OAuthProviders.Wakatime);
 
 export default nextConnect()
   .use(passport.initialize())

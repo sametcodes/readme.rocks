@@ -34,4 +34,5 @@ const strategy = new Strategy(
   }
 );
 
+strategy.name = "stackoverflow";
 export default strategy;

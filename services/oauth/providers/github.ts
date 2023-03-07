@@ -33,4 +33,5 @@ const strategy = new Strategy(
   }
 );
 
+strategy.name = "github";
 export default strategy;
