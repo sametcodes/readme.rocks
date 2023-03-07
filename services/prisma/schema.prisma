@@ -45,20 +45,22 @@ model Config {
 }
 
 model Account {
-    id                       String  @id @default(auto()) @map("_id") @db.ObjectId
-    userId                   String  @db.ObjectId
-    type                     String
-    provider                 String
-    providerAccountId        String
-    refresh_token            String? @db.String
-    access_token             String? @db.String
+    id                String  @id @default(auto()) @map("_id") @db.ObjectId
+    userId            String  @db.ObjectId
+    type              String
+    provider          String
+    providerAccountId String
+    refresh_token     String? @db.String
+    access_token      String? @db.String
+    token_type        String?
+    scope             String?
+    id_token          String? @db.String
+    session_state     String?
+
     expires_at               Int?
-    token_type               String?
-    scope                    String?
-    id_token                 String? @db.String
-    session_state            String?
     refresh_token_expires_in Int?
-    user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
     @@unique([provider, providerAccountId])
 }
@@ -68,12 +70,13 @@ model Connection {
     userId     String @db.ObjectId
     platformId String @db.ObjectId
 
-    refresh_token String  @db.String
-    access_token  String  @db.String
-    expires_at    Int
-    type          String
-    token_type    String
-    scope         String?
+    refresh_token            String  @db.String
+    access_token             String  @db.String
+    expires_at               Int
+    refresh_token_expires_at Int?
+    type                     String
+    token_type               String
+    scope                    String?
 
     user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
     profile ConnectionProfile?

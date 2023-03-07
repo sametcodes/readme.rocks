@@ -1,53 +1,36 @@
-import { AuthorizationCode } from "simple-oauth2";
-import { Provider } from "@services/oauth";
+import { Strategy } from "passport-github2";
 
-const config: Provider = {
-  code: "github",
-  client: {
-    id: process.env.GITHUB_CLIENT_ID as string,
-    secret: process.env.GITHUB_CLIENT_SECRET as string,
+const strategy = new Strategy(
+  {
+    clientID: process.env.GITHUB_CLIENT_ID as string,
+    clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    callbackURL: `${process.env.NEXTAUTH_URL}/api/oauth/callback/github`,
+    scope: ["read:user", "user:email", "repo"],
   },
-  authorization: new AuthorizationCode({
-    client: {
-      id: process.env.GITHUB_CLIENT_ID as string,
-      secret: process.env.GITHUB_CLIENT_SECRET as string,
-    },
-    auth: {
-      tokenHost: "https://github.com",
-      authorizePath: "/login/oauth/authorize",
-      tokenPath: "/login/oauth/access_token",
-    },
-  }),
-  getTokenParam: (provider, params) => {
-    return {
-      code: params.code as string,
-      grant_type: "authorization_code",
-      client_secret: provider.client.secret,
-      state: params.state as string,
-      client_id: provider.client.id,
-      redirect_uri: provider.redirect_uri,
-    };
-  },
-  getProfile: async (token) => {
-    try {
-      const response = await fetch("https://api.github.com/user", {
-        headers: { Authorization: `token ${token.access_token}` },
-      });
-      const data = await response.json();
+  (
+    accessToken: string,
+    refreshToken: string,
+    params: any,
+    profile: any,
+    cb: (error: null, profile: any) => void
+  ) => {
+    return cb(null, {
+      token: {
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        expires_at: Date.now() + Number(params.expires_in) * 1000,
+        refresh_token_expires_at:
+          Date.now() + Number(params.refresh_token_expires_in) * 1000,
+        scope: params.scope,
+        token_type: params.token_type,
+      },
+      profile: {
+        name: profile.displayName,
+        email: profile.emails[0].value,
+        image: profile.photos[0].value,
+      },
+    });
+  }
+);
 
-      return {
-        name: data.name || data.login,
-        email: data.email,
-        image: data.avatar_url,
-      };
-    } catch (err) {
-      if (err instanceof Error)
-        console.error(`Error getting profile from github: ${err.message}`);
-    }
-  },
-  connect_url: process.env.GITHUB_CLIENT_INSTALL_URL,
-  redirect_uri: `${process.env.NEXTAUTH_URL}/api/oauth/callback/github`,
-  scope: "read:user user:email repo",
-};
-
-export default config;
+export default strategy;

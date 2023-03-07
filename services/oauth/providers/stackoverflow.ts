@@ -1,40 +1,37 @@
-import { AuthorizationCode } from "simple-oauth2";
-import { Provider } from "@services/oauth";
+// @ts-ignore
+import { Strategy } from "passport-stack-exchange";
 
-const config: Provider = {
-  code: "stackoverflow",
-  client: {
-    id: process.env.STACKAPPS_CLIENT_ID as string,
-    secret: process.env.STACKAPPS_SECRET as string,
+const strategy = new Strategy(
+  {
+    clientID: process.env.STACKAPPS_CLIENT_ID as string,
+    clientSecret: process.env.STACKAPPS_SECRET as string,
+    callbackURL: `${process.env.NEXTAUTH_URL}/api/oauth/callback/stackoverflow`,
+    stackAppsKey: process.env.STACKAPPS_KEY as string,
+    site: "stackoverflow",
+    scope: "no_expiry,private_info",
   },
-  authorization: new AuthorizationCode({
-    client: {
-      id: process.env.STACKAPPS_CLIENT_ID as string,
-      secret: process.env.STACKAPPS_SECRET as string,
-    },
-    auth: {
-      tokenHost: "https://stackoverflow.com/",
-      authorizePath: "/oauth",
-      tokenPath: "/oauth/access_token",
-    },
-  }),
-  getTokenParam: (provider, params) => {
-    return {
-      client_id: provider.client.id,
-      client_secret: provider.client.secret,
-      code: params.code,
-      redirect_uri: provider.redirect_uri,
-    };
-  },
-  getProfile: async (token) => {
-    return Promise.resolve({
-      name: "test",
-      email: "",
-      image: "",
+  (
+    accessToken: string,
+    refreshToken: string,
+    params: any,
+    profile: any,
+    cb: (error: null, profile: any) => void
+  ) => {
+    return cb(null, {
+      token: {
+        access_token: accessToken,
+        refresh_token: accessToken,
+        expires_at: Date.now() + Number(params.expires || 9999999999) * 1000,
+        scope: "",
+        token_type: "bearer",
+      },
+      profile: {
+        name: profile.displayName,
+        email: "",
+        image: profile.photos[0],
+      },
     });
-  },
-  redirect_uri: `${process.env.NEXTAUTH_URL}/api/oauth/callback/stackoverflow`,
-  scope: "private_info",
-};
+  }
+);
 
-export default config;
+export default strategy;
