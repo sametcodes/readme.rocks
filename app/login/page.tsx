@@ -9,7 +9,12 @@ export default function LoginPage() {
     return (
       <>
         <p>Welcome, {session?.user?.name}</p>
-        <Image src={session?.user?.image || ""} alt="photo" width={60} />
+        <Image
+          src={session?.user?.image || ""}
+          alt="photo"
+          width={60}
+          height={60}
+        />
         <p>
           Signed in as {session?.user?.email} <br />
         </p>
