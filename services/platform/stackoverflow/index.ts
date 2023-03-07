@@ -1,5 +1,5 @@
-import { ServiceResponse } from "@services/platform/types";
-import request from "@services/platform/stackoverflow/request";
+import { ServiceResponse } from "@/services/platform/types";
+import request from "@/services/platform/stackoverflow/request";
 import { Connection } from "@prisma/client";
 
 /**
@@ -10,7 +10,13 @@ import { Connection } from "@prisma/client";
 export const getReputation = async (
   connection: Connection
 ): Promise<ServiceResponse> => {
-  const response = await request("/2.3/me");
+  const params = {
+    site: "stackoverflow",
+    order: "desc",
+    sort: "reputation",
+    filter: "default",
+  };
+  const response = await request("/me", connection, params);
   if ("error" in response) return response;
 
   return {

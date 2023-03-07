@@ -1,10 +1,23 @@
+import { Connection } from "@prisma/client";
+import qs from "qs";
+
 /**
  * @param {string} endpoint - The endpoint to send the request to
  * @returns {Promise<any>} - The response from the StackOverflow API
  * @throws {Error} - If the response is not JSON
  */
-export default function request(endpoint: string) {
-  return fetch(`https://api.stackexchange.com/2.2${endpoint}`)
+export default function request(
+  endpoint: string,
+  connection: Connection,
+  params: any = {}
+) {
+  const query = qs.stringify({
+    key: process.env.STACKAPPS_KEY,
+    access_token: connection.access_token,
+    ...params,
+  });
+
+  return fetch(`https://api.stackexchange.com/2.3${endpoint}?${query}`)
     .then((res) => {
       if (res.headers.get("content-type")?.includes("application/json")) {
         return res.json();

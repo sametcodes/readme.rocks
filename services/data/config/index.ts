@@ -1,5 +1,5 @@
-import prisma from "@services/prisma";
-import { DataAPIMethod } from "@services/data/types";
+import prisma from "@/services/prisma";
+import { DataAPIMethod } from "@/services/data/types";
 
 export const getUserConfigs: DataAPIMethod = ({ session }) => {
   return prisma.config.findMany({

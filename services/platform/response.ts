@@ -1,12 +1,12 @@
-import JSXRender from "@utils/render";
-import { trimChars } from "@utils";
+import JSXRender from "@/utils/render";
+import { trimChars } from "@/utils";
 import { Connection } from "@prisma/client";
 
 export const getPlatformResponse = async (
   query: any,
   services: any,
   templates: any,
-  connection: Connection,
+  connection: Connection | null,
   userConfig: any | undefined
 ) => {
   const { method, returnType } = query;
