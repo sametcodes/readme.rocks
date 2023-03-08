@@ -30,7 +30,7 @@ export const getPlatformResponse = async (
     return { success: false, status: 500, error: response.error };
   }
 
-  const templateOutput = template(response.data, response.platform);
+  const templateOutput = template(response.data, config);
   if (!templateOutput)
     return { success: false, status: 500, error: "Template output is empty" };
 
