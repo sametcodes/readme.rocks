@@ -97,10 +97,12 @@ const handlePlatformAPI: PlatformAPIHandler = (
       config
     );
 
-    if (result.success === false)
+    if (result.success === false) {
       return res.status(result.status).json({ message: result.error });
+    }
 
     res.setHeader("Content-Type", result.contentType || "image/svg+xml");
+    res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate=59");
     return res.status(result.status).send(result.data);
   };
 };
