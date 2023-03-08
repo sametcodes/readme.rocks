@@ -1,7 +1,6 @@
 import { ServiceResponse } from "@/services/platform/types";
 import request from "@/services/platform/github/request";
-import { GithubUserConfig } from "@/services/platform/types";
-import { Connection } from "@prisma/client";
+import { Connection, PlatformQueryConfig } from "@prisma/client";
 
 /**
  * @name getCurrentYearContributions
@@ -79,8 +78,11 @@ export const getContributionsSummary = async (
  * @description Get a summary of your language usage in your contributions on repositories
  */
 export const getLanguageUsageSummary = async (
-  connection: Connection
+  connection: Connection,
+  config: PlatformQueryConfig
 ): Promise<ServiceResponse> => {
+  const { queryConfig } = config;
+
   const query = `{ 
     viewer { 
       repositories(ownerAffiliations: [OWNER], first: 100, orderBy: {

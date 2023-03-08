@@ -95,6 +95,8 @@ export const getLanguageUsageSummary = (
   result: any,
   config: PlatformQueryConfig
 ) => {
+  const viewConfig = config.viewConfig as any;
+
   const resolveLanguages = (response: any) => {
     let languages: any = {};
     let total = 0;
@@ -120,7 +122,7 @@ export const getLanguageUsageSummary = (
         return language;
       })
       .sort((a: any, b: any) => b.value - a.value)
-      .slice(0, 5);
+      .slice(0, viewConfig.first_n);
   };
   const languages = resolveLanguages(result);
 
