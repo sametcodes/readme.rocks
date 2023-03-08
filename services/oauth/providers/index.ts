@@ -11,4 +11,18 @@ const OAuthProviders = {
 export const availableOAuthProviders = Object.values(OAuthProviders).map(
   (provider) => provider.name
 );
+
+export const getProvider = (provider: string) => {
+  switch (provider) {
+    case "github":
+      return Github;
+    case "stackoverflow":
+      return StackOverflow;
+    case "wakatime":
+      return Wakatime;
+    default:
+      return null;
+  }
+};
+
 export default OAuthProviders;

@@ -1,26 +1,33 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Session, unstable_getServerSession } from "next-auth";
+import {
+  getServerSession,
+  Session,
+  unstable_getServerSession,
+} from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import * as services from "@/services/data";
 
 import methods from "@/services/data/methods";
-import type * as methodTypes from "@/services/data";
+
+type ServiceParams = [keyof typeof services, ...string[]];
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const session = await unstable_getServerSession(req, res, authOptions);
+  const session = await getServerSession(req, res, authOptions);
   if (!session) return res.status(401).json({ message: "Unauthorized" });
 
   const method = req.method as keyof typeof methods;
   const method_services = methods[method];
 
-  const service = req.query.service as keyof typeof services;
+  const [service, ...params] = req.query.service as ServiceParams;
+
   if (!service)
     return res
       .status(400)
       .json({ message: "Bad request: service parameter is missing" });
+
   if (!method_services.includes(service))
     return res
       .status(400)
@@ -33,7 +40,7 @@ export default async function handler(
       .json({ message: "Bad request: unknown data API service" });
 
   try {
-    const result = await dataService({ session, payload: req.body });
+    const result = await dataService({ session, params, payload: req.body });
     return res.status(200).json({ success: true, data: result });
   } catch (err) {
     if (err instanceof Error) {

@@ -1,3 +1,4 @@
-export * from "./config";
-export * from "./user";
 export * from "./platform";
+export * from "./platformQuery";
+export * from "./platformQueryConfig";
+export * from "./user";

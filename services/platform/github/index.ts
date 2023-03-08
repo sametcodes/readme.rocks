@@ -72,3 +72,44 @@ export const getContributionsSummary = async (
   if ("error" in response) return response;
   return { success: true, data: response.data, platform: "github" };
 };
+
+/**
+ * @name getLanguageUsageSummary
+ * @title Get language usage summary
+ * @description Get a summary of your language usage in your contributions on repositories
+ */
+export const getLanguageUsageSummary = async (
+  connection: Connection
+): Promise<ServiceResponse> => {
+  const query = `{ 
+    viewer { 
+      repositories(ownerAffiliations: [OWNER], first: 100, orderBy: {
+        field: PUSHED_AT,
+        direction: DESC
+      }){
+        edges {
+          node {
+            id
+            name
+            languages(first: 100){
+              totalCount
+              totalSize
+              edges {
+                size
+                node {
+                  color
+                  name
+                  id
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }`;
+
+  const response = await request(query, connection);
+  if ("error" in response) return response;
+  return { success: true, data: response.data, platform: "github" };
+};

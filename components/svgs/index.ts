@@ -3,9 +3,7 @@ import * as github from "./github";
 import * as stackoverflow from "./stackoverflow";
 import * as wakatime from "./wakatime";
 
-export { codewars, github, stackoverflow, wakatime };
-
-export const getPlatformServices = (platform: string) => {
+export const getPlatformTemplates = (platform: string) => {
   switch (platform) {
     case "github":
       return github;

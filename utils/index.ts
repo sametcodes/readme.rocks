@@ -15,3 +15,7 @@ export function generateRandomString(): string {
     Math.random().toString(36).substring(2, 15)
   );
 }
+
+export function isObjectID(str: string) {
+  return /^[0-9a-fA-F]{24}$/.test(str);
+}
