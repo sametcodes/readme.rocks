@@ -1,15 +1,13 @@
 import ReactDOMServer from "react-dom/server";
 
-const render = (JSXString: JSX.Element) => {
-  const SVGDocumentString = decodeURIComponent(
-    ReactDOMServer.renderToString(JSXString)
-  )
+const render = (JSXElement: JSX.Element) => {
+  const string = ReactDOMServer.renderToString(JSXElement)
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#x27;/g, "'");
 
-  return SVGDocumentString;
+  return string;
 };
 
 export default render;
