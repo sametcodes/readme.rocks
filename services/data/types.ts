@@ -2,6 +2,7 @@ import { Session } from "next-auth";
 
 export type DataAPIPayload = {
   session: Session;
+  params: string[];
   payload: any;
 };
 

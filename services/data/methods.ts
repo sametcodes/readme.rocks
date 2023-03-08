@@ -1,4 +1,12 @@
-export default {
-  POST: ["createConfig", "editConfig"],
-  GET: ["getUserConfigs", "getPlatforms", "getUser"],
+const methods = {
+  POST: ["createPlatformQueryConfig", "editPlatformQueryConfig"],
+  GET: [
+    "getPlatformQueryConfigs",
+    "getPlatforms",
+    "getPlatformQueries",
+    "getUser",
+    "deletePlatformQueryConfig",
+  ],
 };
+
+export default methods;

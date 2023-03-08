@@ -1,4 +1,23 @@
-import type { PrismaClient } from "@prisma/client";
+import type { Session } from "next-auth";
+import type { NextApiResponse, NextApiHandler } from "next";
+import type {
+  PrismaClient,
+  PlatformQueryConfig,
+  Connection,
+} from "@prisma/client";
+import type { ServerResponse } from "http";
+
+type ResponseLocals = {
+  locals: {
+    platformQueryConfig: PlatformQueryConfig & {
+      platformQuery: PlatformQuery;
+      platform: Platform;
+    };
+    connection: Connection;
+    services: any;
+    templates: any;
+  };
+};
 
 declare global {
   namespace globalThis {
@@ -20,8 +39,19 @@ declare module "next-auth" {
 
 // change unstable_getServerSession returning type
 declare module "next-auth/next" {
-  import type { Session } from "next-auth";
   export function unstable_getServerSession(
     ...args: Parameters<typeof getServerSession>
   ): Promise<Session | null>;
 }
+
+// wide NexApiResponse for res.locals
+// but don't override, wide
+declare module "next" {
+  type NextApiHandler<T = any> = (
+    req: NextApiRequest,
+    res: NextApiResponse<T> & ResponseLocals
+  ) => unknown | Promise<unknown>;
+  type NextApiResponse = NextApiResponse & ResponseLocals;
+}
+
+declare module "http" {}

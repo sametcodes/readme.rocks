@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import fs from "fs";
 import prisma from "@/services/prisma";
+import throat from "throat";
 
 // @ts-ignore
 import jsdoc from "jsdoc-api";
@@ -66,27 +67,52 @@ const migrate = async ({
     const name = Array.from(code)
       .map((letter, i) => (i === 0 ? letter.toUpperCase() : letter))
       .join("");
+
     platform = await prisma.platform.create({
-      data: { code, name, methods: [] },
+      data: { code, name, config: {}, queries: {} },
     });
   }
 
-  const methods = docs
+  const queries = docs
     .map((doc) => ({
       name: doc.name,
       description: doc.description,
-      title: doc.tags.find((tag) => tag.title === "title")?.text,
+      title: doc.tags.find((tag) => tag.title === "title")?.text as string,
     }))
     .filter((doc) => Boolean(doc.title));
 
-  methods.forEach((method) => {
-    console.log(`― Migrating ${code}:${method.name}`);
-  });
+  for (var query of queries) {
+    console.log(`― Migrating ${code}:${query.name}`);
+    const existingQuery = await prisma.platformQuery.findFirst({
+      where: {
+        name: query.name,
+        platformId: platform.id,
+      },
+    });
 
-  await prisma.platform.update({
-    where: { id: platform.id },
-    data: { methods },
-  });
+    if (existingQuery) {
+      await prisma.platformQuery.update({
+        where: { id: existingQuery.id },
+        data: {
+          name: query.name,
+          title: query.title,
+          description: query.description,
+          platform: {
+            connect: { id: platform.id },
+          },
+        },
+      });
+    } else {
+      const newQuery = await prisma.platformQuery.create({
+        data: {
+          name: query.name,
+          title: query.title,
+          description: query.description,
+          platform: { connect: { id: platform.id } },
+        },
+      });
+    }
+  }
 };
 
 const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
@@ -104,7 +130,7 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
 
   const docs = await Promise.all(docs_promise);
   files.forEach((file) => fs.unlinkSync(file.js));
-  Promise.all(docs.map(migrate)).then(() =>
+  Promise.all(docs.map(throat(1, migrate))).then(() =>
     console.log("All the methods are migrated.")
   );
 };

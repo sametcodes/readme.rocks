@@ -1,5 +1,6 @@
 import { Connection, User } from "@prisma/client";
 import prisma from "@/services/prisma";
+import { requestNewAccessToken } from "passport-oauth2-refresh";
 
 import { Session } from "next-auth";
 
@@ -25,6 +26,8 @@ type IUpdateConnection = {
   data: {
     access_token: string;
     expires_at: number;
+    refresh_token?: string;
+    refresh_token_expires_at?: number;
   };
 };
 
@@ -148,7 +151,39 @@ const actions = {
       data: {
         access_token: data.access_token as string,
         expires_at: data.expires_at,
+        refresh_token: data.refresh_token as string,
+        refresh_token_expires_at: data.refresh_token_expires_at,
       },
+    });
+  },
+  refreshAccessToken: async (platformCode: string, connection: Connection) => {
+    return new Promise((resolve, reject) => {
+      requestNewAccessToken(
+        platformCode,
+        connection.refresh_token,
+        async (
+          err: { statusCode: number; data?: any },
+          access_token: string,
+          refresh_token: string,
+          result: any
+        ) => {
+          if (result?.error) return reject(new Error(result.error_description));
+          if (err) return reject(new Error(err.data));
+
+          return actions
+            .updateConnection({
+              connection,
+              data: {
+                access_token,
+                refresh_token,
+                refresh_token_expires_at:
+                  Date.now() + Number(result.refresh_token_expires_in) * 1000,
+                expires_at: Date.now() + Number(result.expires_in) * 1000,
+              },
+            })
+            .then(resolve);
+        }
+      );
     });
   },
 };
