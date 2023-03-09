@@ -1,9 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import {
-  getServerSession,
-  Session,
-  unstable_getServerSession,
-} from "next-auth";
+import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import * as services from "@/services/data";
 
@@ -28,21 +24,22 @@ export default async function handler(
       .status(400)
       .json({ message: "Bad request: service parameter is missing" });
 
-  if (!method_services.includes(service))
-    return res
-      .status(400)
-      .json({ message: "Bad request: method not allowed for this service" });
-
   const dataService = services[service];
   if (!dataService)
     return res
       .status(400)
       .json({ message: "Bad request: unknown data API service" });
 
+  if (!method_services.includes(service))
+    return res
+      .status(400)
+      .json({ message: "Bad request: method not allowed for this service" });
+
   try {
     const result = await dataService({ session, params, payload: req.body });
     return res.status(200).json({ success: true, data: result });
   } catch (err) {
+    console.log(err);
     if (err instanceof Error) {
       res.status(500).json({ success: false, error: err.message });
     } else {

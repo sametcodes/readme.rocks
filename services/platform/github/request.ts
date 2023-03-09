@@ -38,6 +38,10 @@ export default function request(query: string, connection: Connection) {
         throw new Error(res.error_message);
       }
 
+      if (res.errors) {
+        throw new Error(res.errors[0].message);
+      }
+
       return { success: true, data: res };
     })
     .catch((err) => {

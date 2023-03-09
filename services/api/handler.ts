@@ -30,7 +30,6 @@ export const validateRequest = async (
       id: true,
       userId: true,
       queryConfig: true,
-      platformConfig: true,
       viewConfig: true,
       platformQueryId: true,
       platformId: true,

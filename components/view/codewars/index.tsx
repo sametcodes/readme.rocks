@@ -4,10 +4,11 @@ import {
   DocumentTitle,
   List,
   ListItem,
-} from "@/components/svgs/document";
+} from "@/components/view/document";
 import { ObjectEntries } from "@/utils";
+import { ViewComponent } from "@/components/view/types";
 
-export const getUser = (result: any, platform: any) => {
+export const getUser: ViewComponent = (result, platform) => {
   const langs = ObjectEntries(result.ranks.languages).map(([key, value]) => ({
     lang: key,
     ...value,

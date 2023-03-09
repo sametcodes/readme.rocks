@@ -3,10 +3,11 @@ import {
   DocumentTitle,
   List,
   ListItem,
-} from "@/components/svgs/document";
+} from "@/components/view/document";
 import * as Icons from "@/components/icons";
+import { ViewComponent } from "@/components/view/types";
 
-export const getReputation = (result: any, platform: any) => {
+export const getReputation: ViewComponent = (result, platform) => {
   return (
     <Document width={280} height={120}>
       <DocumentTitle>Stackoverflow</DocumentTitle>
