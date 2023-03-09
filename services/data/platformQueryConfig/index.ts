@@ -8,17 +8,38 @@ import * as validations from "@/services/data/validations";
 export const getPlatformQueryConfigs: DataAPIMethod = ({ session, params }) => {
   return prisma.platformQueryConfig.findMany({
     where: { userId: session.user.id },
+    select: {
+      id: true,
+      queryConfig: true,
+      viewConfig: true,
+      platformQuery: {
+        select: {
+          name: true,
+        },
+      },
+      platform: {
+        select: {
+          name: true,
+        },
+      },
+    },
   });
 };
 
-export const getPlatformQueryConfig: DataAPIMethod = ({ session, params }) => {
+export const getPlatformQueryConfig: DataAPIMethod = async ({
+  session,
+  params,
+}) => {
   const [platformQueryConfigId] = params;
   if (isObjectID(platformQueryConfigId) === false)
     throw new Error("id parameter is missing or invalid");
 
-  return prisma.platformQueryConfig.findUnique({
+  const platformQueryConfig = await prisma.platformQueryConfig.findUnique({
     where: { id: platformQueryConfigId },
   });
+
+  if (!platformQueryConfig) throw new Error("Unknown platform query config");
+  return platformQueryConfig;
 };
 
 export const createPlatformQueryConfig: DataAPIMethod = async ({
@@ -36,6 +57,18 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
 
   if (!platformQuery) throw new Error("Unknown platform query");
 
+  const isExistPlatformQueryConfig = await prisma.platformQueryConfig.findFirst(
+    {
+      where: {
+        platformQueryId: platformQueryId,
+        userId: session.user.id,
+      },
+    }
+  );
+
+  if (isExistPlatformQueryConfig)
+    throw new Error("You already have a config for this query.");
+
   await shapeDataAPISchema(
     validations.createPlatformQueryConfig,
     platformQuery.name
@@ -44,7 +77,6 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
   return prisma.platformQueryConfig.create({
     data: {
       queryConfig: payload.queryConfig,
-      platformConfig: payload.platformConfig,
       viewConfig: payload.viewConfig,
 
       platformQueryId: platformQueryId,
@@ -99,7 +131,6 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
   return prisma.platformQueryConfig.update({
     data: {
       queryConfig: payload.queryConfig,
-      platformConfig: payload.platformConfig,
       viewConfig: payload.viewConfig,
     },
     where: { id: platformQueryConfig.id },

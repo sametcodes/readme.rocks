@@ -1,14 +1,15 @@
-import * as Icons from "@/components/icons";
 import { Pie } from "@nivo/pie";
 import { PlatformQueryConfig } from "@prisma/client";
+import * as Icons from "@/components/icons";
 import {
   Document,
   DocumentTitle,
   List,
   ListItem,
 } from "@/components/view/document";
+import { ViewComponent } from "@/components/view/types";
 
-export const getCurrentYearContributions = (result: any, platform: any) => {
+export const getCurrentYearContributions: ViewComponent = (result, config) => {
   const { totalContributions } =
     result.data.viewer.contributionsCollection.contributionCalendar;
 
@@ -26,7 +27,7 @@ export const getCurrentYearContributions = (result: any, platform: any) => {
   );
 };
 
-export const getPopularContributions = (result: any) => {
+export const getPopularContributions: ViewComponent = (result, config) => {
   const popularContributions = result.data.viewer.contributionsCollection;
   const [popularIssue, popularPullrequest] = [
     popularContributions.popularIssueContribution.issue,
@@ -54,7 +55,7 @@ export const getPopularContributions = (result: any) => {
   );
 };
 
-export const getContributionsSummary = (result: any) => {
+export const getContributionsSummary: ViewComponent = (result, config) => {
   const {
     totalRepositoryContributions,
     totalRepositoriesWithContributedCommits,
@@ -91,11 +92,34 @@ export const getContributionsSummary = (result: any) => {
   );
 };
 
-export const getLanguageUsageSummary = (
-  result: any,
-  config: PlatformQueryConfig
-) => {
+export const getLanguageUsageSummary: ViewComponent = (result, config) => {
   const viewConfig = config.viewConfig as any;
+
+  const CenteredMetric = ({
+    dataWithArc,
+    centerX,
+    centerY,
+  }: {
+    dataWithArc: any;
+    centerX: number;
+    centerY: number;
+  }) => {
+    return (
+      <text
+        x={centerX}
+        y={centerY}
+        textAnchor="middle"
+        dominantBaseline="central"
+        style={{
+          fontSize: "28px",
+          fontWeight: 600,
+          fontFamily: "sans-serif",
+        }}
+      >
+        Languages
+      </text>
+    );
+  };
 
   const resolveLanguages = (response: any) => {
     let languages: any = {};
@@ -181,31 +205,5 @@ export const getLanguageUsageSummary = (
         ]}
       />
     </>
-  );
-};
-
-const CenteredMetric = ({
-  dataWithArc,
-  centerX,
-  centerY,
-}: {
-  dataWithArc: any;
-  centerX: number;
-  centerY: number;
-}) => {
-  return (
-    <text
-      x={centerX}
-      y={centerY}
-      textAnchor="middle"
-      dominantBaseline="central"
-      style={{
-        fontSize: "28px",
-        fontWeight: 600,
-        fontFamily: "sans-serif",
-      }}
-    >
-      Languages
-    </text>
   );
 };

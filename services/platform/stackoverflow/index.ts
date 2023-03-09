@@ -1,27 +1,25 @@
-import { ServiceResponse } from "@/services/platform/types";
+import { QueryService } from "@/services/platform/types";
 import request from "@/services/platform/stackoverflow/request";
-import { Connection } from "@prisma/client";
 
 /**
  * @name getReputation
  * @title Get reputation
  * @description Get the total reputation of the user
  */
-export const getReputation = async (
-  connection: Connection
-): Promise<ServiceResponse> => {
+export const getReputation: QueryService = async (connection, config) => {
+  const { queryConfig } = config as any;
   const params = {
     site: "stackoverflow",
-    order: "desc",
-    sort: "reputation",
+    order: queryConfig.order,
+    sort: queryConfig.sort,
     filter: "default",
   };
+
   const response = await request("/me", connection, params);
   if ("error" in response) return response;
 
   return {
     success: true,
     data: { reputation: 5 },
-    platform: "stackoverflow",
   };
 };

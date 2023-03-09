@@ -1,10 +1,9 @@
 import { string, object } from "yup";
 
-export const getLanguageUsageSummary = {
-  queryConfig: object({
-    field: string()
-      .required()
-      .oneOf(["PUSHED_AT", "CREATED_AT", "UPDATED_AT", "STARGAZERS"]),
-    direction: string().required().oneOf(["ASC", "DESC"]),
-  }).noUnknown(true),
-};
+export const getLanguageUsageSummary = object({
+  field: string()
+    .required()
+    .default("PUSHED_AT")
+    .oneOf(["PUSHED_AT", "CREATED_AT", "UPDATED_AT", "STARGAZERS"]),
+  direction: string().required().default("ASC").oneOf(["ASC", "DESC"]),
+}).noUnknown(true);

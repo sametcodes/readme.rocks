@@ -1,29 +1,17 @@
-type Platform = "github" | "stackoverflow" | "codewars" | "wakatime";
+import { Connection, PlatformQueryConfig } from "@prisma/client";
 
 export type ServiceResponse = {
   success: boolean;
   data?: any;
-  platform?: Platform;
   error?: {
     message: string;
     code: number;
   };
 };
 
-export type GithubUserConfig = {
-  username: string;
-  token: string;
-};
-
-export type WakatimeUserConfig = {
-  username: string;
-  token: string;
-};
-
-export type StackoverflowUserConfig = {
-  userId: string;
-};
-
-export type CodewarsUserConfig = {
-  username: string;
+export type QueryService = {
+  (
+    connection: Connection,
+    config: PlatformQueryConfig
+  ): Promise<ServiceResponse>;
 };

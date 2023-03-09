@@ -54,7 +54,6 @@ model PlatformQueryConfig {
     platformId      String @db.ObjectId
 
     queryConfig    Json?
-    platformConfig Json?
     viewConfig     Json?
 
     user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)

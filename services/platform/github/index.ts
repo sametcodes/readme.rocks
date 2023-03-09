@@ -1,15 +1,15 @@
-import { ServiceResponse } from "@/services/platform/types";
 import request from "@/services/platform/github/request";
-import { Connection, PlatformQueryConfig } from "@prisma/client";
+import { QueryService } from "@/services/platform/types";
 
 /**
  * @name getCurrentYearContributions
  * @title Get current year's contributions
  * @description Get the total number of contributions for the current year
  */
-export const getCurrentYearContributions = async (
-  connection: Connection
-): Promise<ServiceResponse> => {
+export const getCurrentYearContributions: QueryService = async (
+  connection,
+  config
+) => {
   const query = `{ viewer {
         contributionsCollection {
           contributionCalendar { totalContributions }
@@ -19,7 +19,7 @@ export const getCurrentYearContributions = async (
 
   const response = await request(query, connection);
   if ("error" in response) return response;
-  return { success: true, data: response.data, platform: "github" };
+  return { success: true, data: response.data };
 };
 
 /**
@@ -27,9 +27,10 @@ export const getCurrentYearContributions = async (
  * @title List popular contributions
  * @description List your most popular contributions overall
  */
-export const getPopularContributions = async (
-  connection: Connection
-): Promise<ServiceResponse> => {
+export const getPopularContributions: QueryService = async (
+  connection,
+  config
+) => {
   const query = `{ viewer {
       contributionsCollection{
           popularIssueContribution{
@@ -46,7 +47,7 @@ export const getPopularContributions = async (
 
   const response = await request(query, connection);
   if ("error" in response) return response;
-  return { success: true, data: response.data, platform: "github" };
+  return { success: true, data: response.data };
 };
 
 /**
@@ -54,9 +55,10 @@ export const getPopularContributions = async (
  * @title Get contributions summary
  * @description Get a summary of your contributions, like count of commits, PRs and issues
  */
-export const getContributionsSummary = async (
-  connection: Connection
-): Promise<ServiceResponse> => {
+export const getContributionsSummary: QueryService = async (
+  connection,
+  config
+) => {
   const query = `{viewer{
       contributionsCollection{
         totalRepositoryContributions
@@ -69,7 +71,7 @@ export const getContributionsSummary = async (
 
   const response = await request(query, connection);
   if ("error" in response) return response;
-  return { success: true, data: response.data, platform: "github" };
+  return { success: true, data: response.data };
 };
 
 /**
@@ -77,17 +79,17 @@ export const getContributionsSummary = async (
  * @title Get language usage summary
  * @description Get a summary of your language usage in your contributions on repositories
  */
-export const getLanguageUsageSummary = async (
-  connection: Connection,
-  config: PlatformQueryConfig
-): Promise<ServiceResponse> => {
-  const { queryConfig } = config;
+export const getLanguageUsageSummary: QueryService = async (
+  connection,
+  config
+) => {
+  const { queryConfig } = config as any;
 
   const query = `{ 
     viewer { 
       repositories(ownerAffiliations: [OWNER], first: 100, orderBy: {
-        field: PUSHED_AT,
-        direction: DESC
+        field: ${queryConfig.field},
+        direction: ${queryConfig.direction}
       }){
         edges {
           node {
@@ -113,5 +115,5 @@ export const getLanguageUsageSummary = async (
 
   const response = await request(query, connection);
   if ("error" in response) return response;
-  return { success: true, data: response.data, platform: "github" };
+  return { success: true, data: response.data };
 };
