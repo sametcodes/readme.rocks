@@ -33,6 +33,7 @@ model Platform {
 
     queries      PlatformQuery[]
     queryConfigs PlatformQueryConfig[]
+    Connection   Connection[]
 }
 
 model PlatformQuery {
@@ -53,8 +54,8 @@ model PlatformQueryConfig {
     platformQueryId String @db.ObjectId
     platformId      String @db.ObjectId
 
-    queryConfig    Json?
-    viewConfig     Json?
+    queryConfig Json?
+    viewConfig  Json?
 
     user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     platformQuery PlatformQuery @relation(fields: [platformQueryId], references: [id], onDelete: Cascade)
@@ -95,8 +96,10 @@ model Connection {
     token_type               String
     scope                    String?
 
-    user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-    profile ConnectionProfile?
+    profile  ConnectionProfile?
+
+    user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+    platform Platform           @relation(fields: [platformId], references: [id], onDelete: Cascade)
 }
 
 model ConnectionProfile {
