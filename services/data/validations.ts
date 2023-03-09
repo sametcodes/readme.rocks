@@ -4,7 +4,7 @@ export * from "@/services/data/platformQueryConfig/validations";
 export * from "@/services/data/user/validations";
 
 import * as queryValidations from "@/services/platform/validations";
-import * as viewValidations from "@/components/svgs/validations";
+import * as viewValidations from "@/components/view/validations";
 import { AnyObject } from "yup";
 
 export const shapeDataAPISchema = (schema: AnyObject, query: string) => {

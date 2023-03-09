@@ -5,7 +5,7 @@ import passport from "passport";
 import refresh from "passport-oauth2-refresh";
 
 import { getPlatformServices } from "@/services/platform";
-import { getPlatformTemplates } from "@/components/svgs";
+import { getPlatformTemplates } from "@/components/view";
 import { getProvider } from "@/services/oauth/providers";
 
 const loadPlatform = (

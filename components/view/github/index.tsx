@@ -6,7 +6,7 @@ import {
   DocumentTitle,
   List,
   ListItem,
-} from "@/components/svgs/document";
+} from "@/components/view/document";
 
 export const getCurrentYearContributions = (result: any, platform: any) => {
   const { totalContributions } =
