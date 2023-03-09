@@ -1,20 +1,17 @@
-import { ServiceResponse } from "@/services/platform/types";
+import { QueryService } from "@/services/platform/types";
 import request from "@/services/platform/codewars/request";
-import { CodewarsUserConfig } from "@/services/platform/types";
-import { Connection } from "@prisma/client";
 
 /**
  * @name getUser
  * @title Get user details
  * @description Get a summary of your scores and top languages
  */
-export const getUser = async (
-  connection: Connection,
-  userConfig: CodewarsUserConfig
-): Promise<ServiceResponse> => {
-  const response = await request(`/users/${userConfig.username}`);
+export const getUser: QueryService = async (connection, config) => {
+  const { queryConfig } = config as any;
+
+  const response = await request(`/users/${queryConfig.username}`);
   if ("error" in response) return response;
 
   const challanges = response.data;
-  return { success: true, data: challanges, platform: "codewars" };
+  return { success: true, data: challanges };
 };
