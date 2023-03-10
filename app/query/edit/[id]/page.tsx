@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import ConfigForm from "@/components/form";
+import prisma from "@/services/prisma";
 
 export default async function EditQueryConfig({
   params,
