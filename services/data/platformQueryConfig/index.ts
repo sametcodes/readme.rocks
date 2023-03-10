@@ -14,7 +14,9 @@ export const getPlatformQueryConfigs: DataAPIMethod = ({ session, params }) => {
       viewConfig: true,
       platformQuery: {
         select: {
+          id: true,
           name: true,
+          title: true,
         },
       },
       platform: {
@@ -70,8 +72,8 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
     throw new Error("You already have a config for this query.");
 
   await shapeDataAPISchema(
-    validations.createPlatformQueryConfig,
-    platformQuery.name
+    platformQuery.name,
+    validations.createPlatformQueryConfig
   ).validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.create({
@@ -124,8 +126,8 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
   if (!platformQueryConfig) throw new Error("Unknown config.");
 
   await shapeDataAPISchema(
-    validations.editPlatformQueryConfig,
-    platformQueryConfig.platformQuery.name
+    platformQueryConfig.platformQuery.name,
+    validations.editPlatformQueryConfig
   ).validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.update({

@@ -26,10 +26,11 @@ model User {
 }
 
 model Platform {
-    id     String @id @default(auto()) @map("_id") @db.ObjectId
-    name   String
-    code   String @unique
-    config Json
+    id           String  @id @default(auto()) @map("_id") @db.ObjectId
+    name         String
+    code         String  @unique
+    config       Json
+    require_auth Boolean
 
     queries      PlatformQuery[]
     queryConfigs PlatformQueryConfig[]
@@ -96,10 +97,10 @@ model Connection {
     token_type               String
     scope                    String?
 
-    profile  ConnectionProfile?
+    profile ConnectionProfile?
 
-    user     User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-    platform Platform           @relation(fields: [platformId], references: [id], onDelete: Cascade)
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    platform Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
 }
 
 model ConnectionProfile {

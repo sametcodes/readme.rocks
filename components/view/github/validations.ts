@@ -8,7 +8,6 @@ export const getContributionsSummary = object().required().noUnknown(true);
 
 export const getLanguageUsageSummary = object({
   first_n: number().required().min(1).max(8),
-  show_legendary: bool().default(true).required(),
 })
   .required()
   .noUnknown(true);

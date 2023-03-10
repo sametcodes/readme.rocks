@@ -17,7 +17,9 @@ export default async function Connect() {
     );
   }
   const activeConnections = await actions.getAllConnections({ session });
-  const platforms = await getPlatforms({ session, params: [], payload: {} });
+  const platforms = await prisma.platform.findMany({
+    where: { require_auth: true },
+  });
 
   const nonConnectedPlatforms = platforms.filter((platform) => {
     return !activeConnections.find(
@@ -38,10 +40,10 @@ export default async function Connect() {
                   <>
                     <ProfileCard profile={activeConnection.profile} />
                     <a
-                      href={`/api/oauth/connect/${activeConnection.platform.code}`}
+                      href={`/api/oauth/disconnect/${activeConnection.platform.code}`}
                     >
                       {" "}
-                      (connect)
+                      (disconnect)
                     </a>
                   </>
                 )}
@@ -51,7 +53,7 @@ export default async function Connect() {
         })}
       </ul>
 
-      <h2>Connect a Platform</h2>
+      <h2>Connect new platform ({nonConnectedPlatforms.length})</h2>
       <ul>
         {nonConnectedPlatforms.map((platform) => {
           return (
