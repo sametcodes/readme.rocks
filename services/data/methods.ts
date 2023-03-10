@@ -1,10 +1,16 @@
 const methods = {
-  POST: ["createPlatformQueryConfig", "editPlatformQueryConfig"],
+  POST: [
+    "createPlatformQueryConfig",
+    "editPlatformQueryConfig",
+    "previewQuery",
+  ],
   GET: [
-    "getPlatformQueryConfigs",
     "getPlatformQueryConfig",
+    "getPlatformQueryConfigs",
+    "getPlatform",
     "getPlatforms",
     "getPlatformQueries",
+    "getAllPlatformQueries",
     "getUser",
     "deletePlatformQueryConfig",
   ],

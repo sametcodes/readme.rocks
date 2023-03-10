@@ -13,7 +13,7 @@ type ResponseLocals = {
       platformQuery: PlatformQuery;
       platform: Platform;
     };
-    connection: Connection;
+    connection: Connection?;
     services: any;
     templates: any;
   };

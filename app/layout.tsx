@@ -16,7 +16,9 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <SessionProvider /* session={session} */>{children}</SessionProvider>
+        <SessionProvider refetchOnWindowFocus={false}>
+          {children}
+        </SessionProvider>
         <Analytics />
       </body>
     </html>
