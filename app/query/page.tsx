@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import Link from "next/link";
 import { getPlatformQueryConfigs, getPlatformQueries } from "@/services/data";
+import prisma from "@/services/prisma";
 
 export default async function Connect() {
   const session = await getServerSession(authOptions);

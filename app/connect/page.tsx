@@ -1,10 +1,9 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import actions from "@/services/oauth/actions";
-import { getPlatforms } from "@/services/data";
 
 import Image from "next/image";
-import Link from "next/link";
+import prisma from "@/services/prisma";
 
 export default async function Connect() {
   const session = await getServerSession(authOptions);
