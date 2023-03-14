@@ -68,9 +68,9 @@ export default async function Connect() {
   );
 }
 
-type IProfileCard = {
-  (props: { profile: { name: string; image: string } }): JSX.Element;
-};
+type IProfileCard = (props: {
+  profile: { name: string; image: string };
+}) => JSX.Element;
 
 const ProfileCard: IProfileCard = ({ profile }) => {
   return (

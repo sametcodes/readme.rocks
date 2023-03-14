@@ -62,7 +62,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
   const isExistPlatformQueryConfig = await prisma.platformQueryConfig.findFirst(
     {
       where: {
-        platformQueryId: platformQueryId,
+        platformQueryId,
         userId: session.user.id,
       },
     }
@@ -81,7 +81,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
       queryConfig: payload.queryConfig,
       viewConfig: payload.viewConfig,
 
-      platformQueryId: platformQueryId,
+      platformQueryId,
       platformId: platformQuery.platformId,
       userId: session.user.id,
     },

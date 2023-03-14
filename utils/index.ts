@@ -1,3 +1,6 @@
+import { ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
 export const trimChars = (body: string) => {
   return body.replace(/[\t|\n]/g, "").replace(/  /g, "");
 };
@@ -18,4 +21,8 @@ export function generateRandomString(): string {
 
 export function isObjectID(str: string) {
   return /^[0-9a-fA-F]{24}$/.test(str);
+}
+
+export function cn(...inputs: Array<ClassValue>) {
+  return twMerge(clsx(inputs));
 }

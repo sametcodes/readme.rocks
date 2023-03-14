@@ -1,3 +1,3 @@
 export default function Index() {
-  return <div>Devstats</div>;
+  return <div>Landing page</div>;
 }

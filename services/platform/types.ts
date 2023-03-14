@@ -9,9 +9,7 @@ export type ServiceResponse = {
   };
 };
 
-export type QueryService = {
-  (
-    connection: Connection,
-    config: PlatformQueryConfig
-  ): Promise<ServiceResponse>;
-};
+export type QueryService = (
+  connection: Connection,
+  config: PlatformQueryConfig
+) => Promise<ServiceResponse>;

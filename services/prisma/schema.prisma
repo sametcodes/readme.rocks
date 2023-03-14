@@ -44,6 +44,7 @@ model PlatformQuery {
     name        String
     title       String
     description String
+    type        String[]
 
     queryConfigs PlatformQueryConfig[]
     platform     Platform              @relation(fields: [platformId], references: [id])

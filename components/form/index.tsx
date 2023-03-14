@@ -13,7 +13,7 @@ const queryValidations = _queryValidations as { [key: string]: AnyObject };
 const viewValidations = _viewValidations as { [key: string]: AnyObject };
 
 type IConfigFormProps = {
-  platforms: Platform[];
+  platforms: Array<Platform>;
   selected?: {
     platformId: string;
     queryId: string;
@@ -35,7 +35,7 @@ export default function ConfigForm({
     schemaName: selected.schemaName,
   });
   const [loading, setLoading] = useState(false);
-  const [queries, setQueries] = useState([] as any[]);
+  const [queries, setQueries] = useState([] as Array<any>);
   const [errors, setErrors] = useState({});
 
   const [preview, setPreview] = useState({
@@ -96,7 +96,7 @@ export default function ConfigForm({
     }, {});
   };
 
-  function mergeSchemas(...schemas: any[]) {
+  function mergeSchemas(...schemas: Array<any>) {
     const [first, ...rest] = schemas;
 
     const merged = rest.reduce(
@@ -120,7 +120,7 @@ export default function ConfigForm({
           readValidationFormValues(viewValidation, "view", data),
       ];
 
-      const formDataValues = Object.assign({}, query || {}, view || {});
+      const formDataValues = { ...(query || {}), ...(view || {}) };
       const validations = [queryValidation, viewValidation].filter(Boolean);
       const schema = mergeSchemas(...validations);
       schema.validateSync(formDataValues, { abortEarly: false });
@@ -297,7 +297,7 @@ export const Select = ({
   ...props
 }: {
   name: string;
-  options: { label: string; value: string }[];
+  options: Array<{ label: string; value: string }>;
   [key: string]: any;
 }) => {
   return (

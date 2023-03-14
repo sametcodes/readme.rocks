@@ -97,7 +97,7 @@ const migrate = async ({
     }))
     .filter((doc) => Boolean(doc.title));
 
-  for (var query of queries) {
+  for (let query of queries) {
     console.log(`― Migrating ${code}:${query.name}`);
     const existingQuery = await prisma.platformQuery.findFirst({
       where: {
