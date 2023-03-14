@@ -39,7 +39,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
       where: { userId: uid, platformId: platform.id },
     });
 
-    var connection: Connection | null = null;
+    let connection: Connection | null = null;
     if (availableOAuthProviders.includes(platformCode)) {
       connection = await prisma.connection.findFirst({
         where: { userId: uid, platformId: platform.id },
