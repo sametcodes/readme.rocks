@@ -6,7 +6,11 @@ module.exports = {
     "./components/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        statistics: "url('/statistics.svg')",
+      },
+    },
   },
   plugins: [],
 };
