@@ -12,4 +12,4 @@ export type DataAPIResponse = {
   error: string;
 };
 
-export type DataAPIMethod = (payload: DataAPIPayload) => Promise<any>;
+export type DataAPIMethod<T = any> = (payload: DataAPIPayload) => Promise<T>;

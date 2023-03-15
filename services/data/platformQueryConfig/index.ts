@@ -4,26 +4,19 @@ import { isObjectID } from "@/utils";
 
 import { shapeDataAPISchema } from "@/services/data/validations";
 import * as validations from "@/services/data/validations";
+import { PlatformQueryConfig, PlatformQuery, Platform } from "@prisma/client";
 
-export const getPlatformQueryConfigs: DataAPIMethod = ({ session, params }) => {
+export const getPlatformQueryConfigs: DataAPIMethod<
+  (PlatformQueryConfig & {
+    platform: Platform;
+    platformQuery: PlatformQuery;
+  })[]
+> = async ({ session, params }) => {
   return prisma.platformQueryConfig.findMany({
     where: { userId: session.user.id },
-    select: {
-      id: true,
-      queryConfig: true,
-      viewConfig: true,
-      platformQuery: {
-        select: {
-          id: true,
-          name: true,
-          title: true,
-        },
-      },
-      platform: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      platform: true,
+      platformQuery: true,
     },
   });
 };
