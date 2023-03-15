@@ -1,70 +1,38 @@
 "use client";
 
-import { Platform } from "@prisma/client";
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef } from "react";
 
 import * as _queryValidations from "@/services/platform/validations";
 import * as _viewValidations from "@/components/view/validations";
 import { AnyObject, ValidationError } from "yup";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { PlatformQuery, PlatformQueryConfig } from "@prisma/client";
+import { cn } from "@/utils";
+import { Image, CopyButton } from "@/components/ui";
 
 const queryValidations = _queryValidations as { [key: string]: AnyObject };
 const viewValidations = _viewValidations as { [key: string]: AnyObject };
 
 type IConfigFormProps = {
-  platforms: Array<Platform>;
-  selected?: {
-    platformId: string;
-    queryId: string;
-    schemaName: string;
-  };
-  initialValues?: any;
+  platformQuery: PlatformQuery;
+  queryConfig?: PlatformQueryConfig;
 };
 
 export default function ConfigForm({
-  platforms,
-  initialValues = null,
-  selected = { platformId: "", queryId: "", schemaName: "" },
+  platformQuery,
+  queryConfig,
 }: IConfigFormProps) {
   const router = useRouter();
 
-  const [meta, setMeta] = useState({
-    platformId: selected.platformId,
-    queryId: selected.queryId,
-    schemaName: selected.schemaName,
-  });
   const [loading, setLoading] = useState(false);
-  const [queries, setQueries] = useState([] as Array<any>);
   const [errors, setErrors] = useState({});
 
-  const [preview, setPreview] = useState({
-    data: "",
-    loading: false,
-  });
-
+  const [preview, setPreview] = useState({ data: "", loading: false });
   const $form = useRef<HTMLFormElement>(null);
 
-  // fetching platform queries
-  useEffect(() => {
-    if (!meta.platformId) return;
-    setLoading(true);
-    (() =>
-      fetch(`/api/data/getPlatformQueries/${meta.platformId}`, {})
-        .then((res) => res.json())
-        .then((result) => setQueries(result.data))
-        .finally(() => setLoading(false)))();
-  }, [meta.platformId]);
-
-  // fetching forms
-  useEffect(() => {
-    if (!meta.queryId) return;
-
-    const query = queries.find((q) => q.id === meta.queryId);
-    if (!query) return;
-
-    setMeta((meta) => ({ ...meta, schemaName: query.name }));
-  }, [meta.queryId, queries]);
+  const [config, setConfig] = useState<PlatformQueryConfig | undefined>(
+    queryConfig
+  );
 
   const readValidationFormValues = (
     validation: AnyObject,
@@ -110,8 +78,8 @@ export default function ConfigForm({
   const readFormData = (data: FormData) => {
     try {
       const [queryValidation, viewValidation] = [
-        queryValidations[meta.schemaName],
-        viewValidations[meta.schemaName],
+        queryValidations[platformQuery.name],
+        viewValidations[platformQuery.name],
       ];
       const [query, view] = [
         queryValidation &&
@@ -153,22 +121,11 @@ export default function ConfigForm({
       delete newErrors[name];
       setErrors(newErrors);
     }
-
-    const allowed = ["platformId", "queryId"];
-    if (!allowed.includes(event.target.name)) return;
-    setPreview({ data: "", loading: false });
-
-    const form = new FormData($form.current);
-    const data = Object.fromEntries(form.entries());
-    let params = data as any;
-    if (event.target.name === "platformId")
-      params = { ...params, schemaName: "" };
-    setMeta(params);
   };
 
   const sendPreviewQueryRequest = useCallback(
     async (data: any) => {
-      return fetch(`/api/preview/${meta.queryId}`, {
+      return fetch(`/api/preview/${platformQuery.id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -176,7 +133,7 @@ export default function ConfigForm({
         body: JSON.stringify(data),
       }).then((res) => res.text());
     },
-    [meta.queryId]
+    [platformQuery.id]
   );
 
   const onPreview = async (event: any) => {
@@ -196,7 +153,28 @@ export default function ConfigForm({
     if (!$form.current) return;
     const data = readFormData(new FormData($form.current));
 
-    fetch(`/api/data/createPlatformQueryConfig/${meta.queryId}`, {
+    if (!config) {
+      return fetch(`/api/data/createPlatformQueryConfig/${platformQuery.id}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((result) => {
+          if (result.success) {
+            setConfig(result.data);
+          } else {
+            alert("ERROR");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    }
+
+    return fetch(`/api/data/editPlatformQueryConfig/${config.id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -212,72 +190,118 @@ export default function ConfigForm({
       });
   };
 
-  console.log(meta);
-
   return (
-    <div>
-      <form ref={$form} onSubmit={onSubmit} onChange={onChange}>
-        <div>
-          <Select
-            name="platformId"
-            options={platforms.map((p) => ({ label: p.name, value: p.id }))}
-            disabled={loading || selected.platformId}
-            value={selected.platformId || undefined}
-          />
-          <Select
-            name="queryId"
-            options={queries.map((q) => ({ label: q.title, value: q.id }))}
-            disabled={loading || selected.queryId}
-            value={selected.queryId || undefined}
-          />
-        </div>
+    <div className="flex flex-row gap-10 mt-10">
+      <form
+        ref={$form}
+        onSubmit={onSubmit}
+        onChange={onChange}
+        className="flex flex-col w-[40%] gap-5 min-h-[400px]"
+      >
+        {platformQuery.name && (
+          <div className="flex flex-col gap-3">
+            <div>
+              <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                Query parameters
+              </h3>
 
-        {meta.schemaName && (
-          <div>
-            <h3>Query parameters</h3>
-            {((queryValidations as any)[meta.schemaName] &&
-              buildFormWithYupSchema(
-                (queryValidations as any)[meta.schemaName],
-                "query",
-                initialValues,
-                errors
-              )) || <p>No parameters required</p>}
+              <div className="flex flex-row gap-2">
+                {((queryValidations as any)[platformQuery.name] &&
+                  buildFormWithYupSchema(
+                    (queryValidations as any)[platformQuery.name],
+                    "query",
+                    config?.queryConfig,
+                    errors
+                  )) || (
+                  <p className="text-slate-400">No parameters required</p>
+                )}
+              </div>
+            </div>
 
-            <h3>View parameters</h3>
-            {((viewValidations as any)[meta.schemaName] &&
-              buildFormWithYupSchema(
-                (viewValidations as any)[meta.schemaName],
-                "view",
-                initialValues,
-                errors
-              )) || <p>No parameters available</p>}
+            <div>
+              <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                View parameters
+              </h3>
+              {((viewValidations as any)[platformQuery.name] &&
+                buildFormWithYupSchema(
+                  (viewValidations as any)[platformQuery.name],
+                  "view",
+                  config?.viewConfig,
+                  errors
+                )) || <p className="text-slate-400">No parameters available</p>}
+            </div>
           </div>
         )}
 
-        <div>
+        <div className="flex flex-row gap-2">
           <button
             onClick={onPreview}
             disabled={loading || Boolean(Object.keys(errors).length)}
+            className="rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 hover:bg-slate-200"
           >
             Preview
           </button>
-          <button type="submit" disabled={loading || !Boolean(preview.data)}>
+          <button
+            type="submit"
+            disabled={loading || !Boolean(preview.data)}
+            className={cn(
+              "rounded-lg py-2 px-4 bg-slate-100 border-[1px]",
+              preview.data
+                ? "bg-slate-100 border-slate-300 hover:bg-slate-200"
+                : "bg-slate-200 text-slate-400 cursor-not-allowed"
+            )}
+          >
             Save
           </button>
         </div>
       </form>
 
-      {preview.loading && <p>Preview loading...</p>}
-      {preview.data && (
-        <div>
-          <h3>Preview</h3>
+      <div className="border-[1px]"></div>
+
+      <div className="w-[60%]">
+        <h3 className="text-lg mb-6 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
+          Preview of SVG output
+        </h3>
+
+        {!preview.data &&
+          (config && !preview.loading ? (
+            <>
+              <Image
+                src={`/api/view/${config.id}`}
+                title={config.id}
+                width={80}
+                height={80}
+                layout="responsive"
+                objectFit="contain"
+                alt="React Logo"
+                unoptimized
+              />
+            </>
+          ) : (
+            <div
+              className={cn(
+                "w-full h-full max-h-[300px] bg-slate-200 rounded-lg flex items-center justify-center",
+                preview.loading ? "animate-pulse" : ""
+              )}
+            >
+              {preview.loading ? (
+                <p className="text-slate-400">The magic is happening...</p>
+              ) : (
+                <p className="text-slate-400">
+                  Choose parameters and click on the preview
+                </p>
+              )}
+            </div>
+          ))}
+
+        {preview.data && (
           <div style={{ width: "500px", height: "auto", position: "relative" }}>
             {preview.data && (
               <Image
                 src={`data:image/svg+xml,${encodeURIComponent(preview.data)}`}
                 title=""
-                width={100}
-                height={100}
+                width={80}
+                height={80}
                 layout="responsive"
                 objectFit="contain"
                 alt="React Logo"
@@ -285,32 +309,68 @@ export default function ConfigForm({
               />
             )}
           </div>
+        )}
+
+        <div className="my-[50px]">
+          <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
+            Add anywhere you want
+          </h3>
+
+          {!config && (
+            <p className="text-slate-400">
+              Save the query to get the embed and raw links
+            </p>
+          )}
+          {config && (
+            <div className="flex flex-col gap-5">
+              <div>
+                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                  As markdown
+                </p>
+                <CopyButton
+                  value={`![](${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id})`}
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                >
+                  <code className="p-4 block w-full text-sm overflow-x-scroll">
+                    ![]({process.env.NEXT_PUBLIC_SITE_URL}/api/view/{config.id})
+                  </code>
+                </CopyButton>
+              </div>
+
+              <div>
+                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                  As HTML
+                </p>
+                <CopyButton
+                  value={`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}" />`}
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                >
+                  <code className="p-4 block w-full text-sm overflow-x-scroll">
+                    {`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}" />`}
+                  </code>
+                </CopyButton>
+              </div>
+
+              <div>
+                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                  Raw link
+                </p>
+                <CopyButton
+                  value={`${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}`}
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                >
+                  <code className="p-4 block w-full text-sm overflow-x-scroll">
+                    {process.env.NEXT_PUBLIC_SITE_URL}/api/view/{config.id}
+                  </code>
+                </CopyButton>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   );
 }
-
-export const Select = ({
-  name,
-  options,
-  ...props
-}: {
-  name: string;
-  options: Array<{ label: string; value: string }>;
-  [key: string]: any;
-}) => {
-  return (
-    <select name={name} {...props}>
-      <option value="">-</option>
-      {options.map((option: any) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
-  );
-};
 
 const buildFormWithYupSchema = (
   validationSchema: AnyObject,
@@ -320,7 +380,6 @@ const buildFormWithYupSchema = (
 ) => {
   const fields = Object.keys(validationSchema.fields);
 
-  console.log(initialValues);
   if (!fields.length) return null;
   return fields.map((fieldName) => {
     const field = validationSchema.fields[fieldName];
@@ -329,6 +388,9 @@ const buildFormWithYupSchema = (
     let fieldProps: any = {
       name: prefix + "__" + fieldName,
       placeholder: fieldName,
+      className: cn(
+        "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full"
+      ),
     };
 
     if (initialValues && initialValues[fieldName]) {
@@ -364,8 +426,13 @@ const buildFormWithYupSchema = (
     }
 
     return (
-      <div key={fieldName}>
-        <label htmlFor={fieldName}>{fieldName}</label>
+      <div key={fieldName} className="mb-2 w-full">
+        <label
+          htmlFor={fieldName}
+          className="block text-slate-500 text-md mb-1 capitalize"
+        >
+          {fieldName}
+        </label>
         {inputElement}
         <p style={{ color: "red" }}>
           {errors[fieldName] && <span>{errors[fieldName]}</span>}
