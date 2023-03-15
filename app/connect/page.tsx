@@ -1,6 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import actions from "@/services/oauth/actions";
+import Link from "next/link";
 
 import Image from "next/image";
 import prisma from "@/services/prisma";
@@ -20,69 +21,103 @@ export default async function Connect() {
     where: { require_auth: true },
   });
 
-  const nonConnectedPlatforms = platforms.filter((platform) => {
+  const allPlatforms = platforms.filter((platform) => {
     return !activeConnections.find(
       (connection) => connection.platform.code === platform.code
     );
   });
 
   return (
-    <div>
-      <h2>Connected Platforms ({activeConnections.length})</h2>
-      <ul>
+    <div className="flex container mx-auto flex-col">
+      <div className="w-full mx-auto lg:w-1/2 mt-3 mb-5">
+        <h1 className="text-3xl font-bold my-3 text-slate-700">Connects</h1>
+        <blockquote className="text-slate-700">
+          <p className="text-md">
+            Connect your accounts to fetch data from platforms.
+          </p>
+        </blockquote>
+      </div>
+
+      <div className="w-full mx-auto lg:w-1/2 mt-[40px]">
+        <h2 className="text-2xl font-bold text-slate-700">
+          Connected Platforms ({activeConnections.length})
+        </h2>
         {activeConnections.map((activeConnection) => {
           return (
-            <li key={activeConnection.id}>
-              <span>{activeConnection.platform.name}</span> ―
-              <span>
-                {activeConnection.profile && (
-                  <>
-                    <ProfileCard profile={activeConnection.profile} />
-                    <a
-                      href={`/api/oauth/disconnect/${activeConnection.platform.code}`}
-                    >
-                      {" "}
-                      (disconnect)
-                    </a>
-                  </>
-                )}
-              </span>
-            </li>
+            <div key={activeConnection.id} className="mt-6">
+              <div className="flex justify-between">
+                <h2 className="text-xl inline-block">
+                  {activeConnection.platform.name}
+                </h2>
+                <a
+                  href={`/api/oauth/disconnect/${activeConnection.platform.code}`}
+                >
+                  <p className="text-xl">Disconnect</p>
+                </a>
+              </div>
+            </div>
           );
         })}
-      </ul>
+      </div>
 
-      <h2>Connect new platform ({nonConnectedPlatforms.length})</h2>
-      <ul>
-        {nonConnectedPlatforms.map((platform) => {
+      <div className="w-full mx-auto lg:w-1/2 mt-[40px]">
+        <h2 className="text-2xl font-bold text-slate-700">
+          All platforms ({allPlatforms.length})
+        </h2>
+        {allPlatforms.map((platform) => {
           return (
-            <li key={platform.code}>
-              <a href={`/api/oauth/connect/${platform.code}`}>
-                Connect to {platform.name}
-              </a>
-            </li>
+            <div key={platform.id} className="mt-6">
+              <div className="flex justify-between">
+                <h2 className="text-xl inline-block">{platform.name}</h2>
+                <a href={`/api/oauth/connect/${platform.code}`}>
+                  <p className="text-xl">Connect</p>
+                </a>
+              </div>
+            </div>
           );
         })}
-      </ul>
+        {allPlatforms.length === 0 && (
+          <p className="text-md text-slate-500 mt-2">No platforms to connect</p>
+        )}
+      </div>
     </div>
+    // <div>
+    //   <h2>Connected Platforms ({activeConnections.length})</h2>
+    //   <ul>
+    //     {activeConnections.map((activeConnection) => {
+    //       return (
+    //         <li key={activeConnection.id}>
+    //           <span>{activeConnection.platform.name}</span> ―
+    //           <span>
+    //             {activeConnection.profile && (
+    //               <>
+    //                 <ProfileCard profile={activeConnection.profile} />
+    //                 <a
+    //                   href={`/api/oauth/disconnect/${activeConnection.platform.code}`}
+    //                 >
+    //                   {" "}
+    //                   (disconnect)
+    //                 </a>
+    //               </>
+    //             )}
+    //           </span>
+    //         </li>
+    //       );
+    //     })}
+    //   </ul>
+
+    //   <h2>Connect new platform ({nonConnectedPlatforms.length})</h2>
+    //   <ul>
+    //     {nonConnectedPlatforms.map((platform) => {
+    //       return (
+    //         <li key={platform.code}>
+    //           <a href={`/api/oauth/connect/${platform.code}`}>
+    //             Connect to {platform.name}
+    //           </a>
+    //         </li>
+    //       );
+    //     })}
+    //   </ul>
+    // </div>
   );
 }
-
-type IProfileCard = (props: {
-  profile: { name: string; image: string };
-}) => JSX.Element;
-
-const ProfileCard: IProfileCard = ({ profile }) => {
-  return (
-    <>
-      <Image
-        src={profile.image}
-        alt={profile.name}
-        width={30}
-        height={30}
-        style={{ display: "inline-block" }}
-      />
-      <span>{profile.name}</span>
-    </>
-  );
-};
