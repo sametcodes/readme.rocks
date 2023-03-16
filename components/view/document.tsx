@@ -1,7 +1,19 @@
 import { ReactElement } from "react";
 
-export const getDocumentStyle = () => {
-  return `<style>
+export const SVGStyle = () => {
+  return (
+    <style>
+      {`
+        text{ font-family: 'Open Sans', 'Segoe UI', Ubuntu, 'Helvetica Neue', Sans-Serif; font-weight: 400; }
+      `}
+    </style>
+  );
+};
+
+export const DocumentStyle = () => {
+  return (
+    <style>
+      {`
         svg{ border: 1px solid #ccc; border-radius: 10px; }
         .header { font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif; fill: #2f80ed; animation: fadeInAnimation 0.8s ease-in-out forwards; }
         .stat { text-transform: capitalize; font: 600 14px 'Segoe UI', Ubuntu, "Helvetica Neue", Sans-Serif; fill: #434d58; }
@@ -23,7 +35,9 @@ export const getDocumentStyle = () => {
 
         /* Media */
         @media (prefers-color-scheme: dark) { svg { background-color: #141d26 } }
-     </style>`;
+      `}
+    </style>
+  );
 };
 
 type IDocument = (props: {
@@ -57,7 +71,7 @@ export const Document: IDocument = ({ width, height, children }) => {
       width={width}
       height={height}
     >
-      {getDocumentStyle()}
+      <DocumentStyle />
 
       {/* <DocumentHeader title={title} desc={desc} /> */}
       {/* <DocumentBackground /> */}
