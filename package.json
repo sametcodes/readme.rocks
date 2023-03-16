@@ -14,7 +14,9 @@
     "prettier:fix": "prettier --write .",
     "prepare": "husky install",
     "prisma:generate": "prisma generate --schema=./services/prisma/schema.prisma",
-    "migrate:platform": "ts-node -r tsconfig-paths/register scripts/migrates/platform.ts",
+    "migrate:queries": "ts-node -r tsconfig-paths/register migrations/jsdocquery.ts",
+    "migrate:down": "npm run migrate:queries && env-cmd -f .vercel/.env.development.local bash migrations/down.sh",
+    "migrate:up": "env-cmd -f .vercel/.env.production.local bash migrations/up.sh",
     "test:platform-api": "jest --config jest.config.js",
     "lint:ts": "tslint --fix -c tslint.json --project ./"
   },

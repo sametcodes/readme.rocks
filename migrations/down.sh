@@ -1,0 +1,2 @@
+mongoexport --uri $DATABASE_URL --collection Platform --type json -o migrations/collections/platform.json
+mongoexport --uri $DATABASE_URL --collection PlatformQuery --type json -o migrations/collections/platformQuery.json
