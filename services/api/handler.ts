@@ -6,6 +6,8 @@ import { isObjectID } from "@/utils";
 import { availableOAuthProviders } from "@/services/oauth/providers";
 import actions from "@/services/oauth/actions";
 import { Connection, PlatformQueryConfig } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 type PlatformAPIHandler = (
   platformCode: string,
@@ -43,6 +45,50 @@ export const validateRequest = async (
   // @ts-ignore
   res.locals = {};
   res.locals.platformQueryConfig = config;
+  return next();
+};
+
+export const loadConfigForPreview = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: () => void
+) => {
+  const session = await getServerSession(req, res, authOptions);
+  if (!session) return res.status(401).json({ message: "Unauthorized" });
+
+  const id = req.query.id as string;
+  if (isObjectID(id) === false)
+    return res
+      .status(400)
+      .json({ message: "Query parameter is missing or invalid" });
+
+  const platformQuery = await prisma.platformQuery.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      platformId: true,
+      platform: { select: { name: true, code: true } },
+    },
+  });
+
+  if (!platformQuery)
+    return res.status(404).json({ message: "Query not found" });
+
+  const connection = await prisma.connection.findFirst({
+    where: { userId: session.user.id, platformId: platformQuery.platformId },
+  });
+
+  // @ts-ignore
+  res.locals = {};
+  res.locals.platformQueryConfig = {
+    userId: session.user.id,
+    platformId: platformQuery.platformId,
+    platformQueryId: platformQuery.id,
+    platformQuery,
+    platform: platformQuery.platform,
+  } as any;
+  res.locals.connection = connection;
   return next();
 };
 

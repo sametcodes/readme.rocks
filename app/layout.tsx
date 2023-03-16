@@ -1,13 +1,17 @@
-"use client";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
-import { Analytics } from "@vercel/analytics/react";
 
-export default function RootLayout({
-  children /* , session */,
+import { Analytics } from "@vercel/analytics/react";
+import Layout from "@/components/layout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+
+export default async function RootLayout({
+  children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getServerSession(authOptions);
+
   return (
     <html lang="en">
       <head>
@@ -16,7 +20,7 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        <SessionProvider /* session={session} */>{children}</SessionProvider>
+        <Layout session={session}>{children}</Layout>
         <Analytics />
       </body>
     </html>

@@ -26,13 +26,15 @@ model User {
 }
 
 model Platform {
-    id     String @id @default(auto()) @map("_id") @db.ObjectId
-    name   String
-    code   String @unique
-    config Json
+    id           String  @id @default(auto()) @map("_id") @db.ObjectId
+    name         String
+    code         String  @unique
+    config       Json
+    require_auth Boolean
 
     queries      PlatformQuery[]
     queryConfigs PlatformQueryConfig[]
+    Connection   Connection[]
 }
 
 model PlatformQuery {
@@ -42,6 +44,7 @@ model PlatformQuery {
     name        String
     title       String
     description String
+    type        String[]
 
     queryConfigs PlatformQueryConfig[]
     platform     Platform              @relation(fields: [platformId], references: [id])
@@ -53,8 +56,8 @@ model PlatformQueryConfig {
     platformQueryId String @db.ObjectId
     platformId      String @db.ObjectId
 
-    queryConfig    Json?
-    viewConfig     Json?
+    queryConfig Json?
+    viewConfig  Json?
 
     user          User          @relation(fields: [userId], references: [id], onDelete: Cascade)
     platformQuery PlatformQuery @relation(fields: [platformQueryId], references: [id], onDelete: Cascade)
@@ -95,8 +98,10 @@ model Connection {
     token_type               String
     scope                    String?
 
-    user    User               @relation(fields: [userId], references: [id], onDelete: Cascade)
     profile ConnectionProfile?
+
+    user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+    platform Platform @relation(fields: [platformId], references: [id], onDelete: Cascade)
 }
 
 model ConnectionProfile {

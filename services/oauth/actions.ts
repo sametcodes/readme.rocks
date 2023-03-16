@@ -13,7 +13,7 @@ type ISignIn = {
 
 type IGetConnection = {
   session: Session;
-  platformCode: string;
+  platformCode?: string;
 };
 
 type IDisconnect = {
@@ -140,6 +140,37 @@ const actions = {
             name: true,
             email: true,
             image: true,
+          },
+        },
+      },
+    });
+  },
+  getAllConnections: async ({ session }: IGetConnection) => {
+    return prisma.connection.findMany({
+      where: {
+        userId: session.user.id as string,
+        type: "oauth",
+      },
+      select: {
+        id: true,
+        expires_at: true,
+        profile: {
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+        platform: {
+          select: {
+            id: true,
+            code: true,
+            name: true,
+            _count: {
+              select: {
+                queries: true,
+              },
+            },
           },
         },
       },

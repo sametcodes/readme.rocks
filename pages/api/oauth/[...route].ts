@@ -37,7 +37,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
           platformCode: platform,
         });
 
-        return res.redirect("/");
+        return res.redirect("/connect");
       }
     )(req, res, next);
   }
@@ -63,7 +63,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   if (action === "disconnect") {
     try {
       await actions.disconnect({ session, platformCode: platform });
-      return res.redirect("/login");
+      return res.redirect("/connect");
     } catch (err) {
       if (err instanceof Error) {
         return res.status(404).send(err.message);

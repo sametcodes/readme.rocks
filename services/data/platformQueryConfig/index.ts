@@ -4,24 +4,19 @@ import { isObjectID } from "@/utils";
 
 import { shapeDataAPISchema } from "@/services/data/validations";
 import * as validations from "@/services/data/validations";
+import { PlatformQueryConfig, PlatformQuery, Platform } from "@prisma/client";
 
-export const getPlatformQueryConfigs: DataAPIMethod = ({ session, params }) => {
+export const getPlatformQueryConfigs: DataAPIMethod<
+  (PlatformQueryConfig & {
+    platform: Platform;
+    platformQuery: PlatformQuery;
+  })[]
+> = async ({ session, params }) => {
   return prisma.platformQueryConfig.findMany({
     where: { userId: session.user.id },
-    select: {
-      id: true,
-      queryConfig: true,
-      viewConfig: true,
-      platformQuery: {
-        select: {
-          name: true,
-        },
-      },
-      platform: {
-        select: {
-          name: true,
-        },
-      },
+    include: {
+      platform: true,
+      platformQuery: true,
     },
   });
 };
@@ -60,7 +55,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
   const isExistPlatformQueryConfig = await prisma.platformQueryConfig.findFirst(
     {
       where: {
-        platformQueryId: platformQueryId,
+        platformQueryId,
         userId: session.user.id,
       },
     }
@@ -70,8 +65,8 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
     throw new Error("You already have a config for this query.");
 
   await shapeDataAPISchema(
-    validations.createPlatformQueryConfig,
-    platformQuery.name
+    platformQuery.name,
+    validations.createPlatformQueryConfig
   ).validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.create({
@@ -79,7 +74,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
       queryConfig: payload.queryConfig,
       viewConfig: payload.viewConfig,
 
-      platformQueryId: platformQueryId,
+      platformQueryId,
       platformId: platformQuery.platformId,
       userId: session.user.id,
     },
@@ -124,8 +119,8 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
   if (!platformQueryConfig) throw new Error("Unknown config.");
 
   await shapeDataAPISchema(
-    validations.editPlatformQueryConfig,
-    platformQueryConfig.platformQuery.name
+    platformQueryConfig.platformQuery.name,
+    validations.editPlatformQueryConfig
   ).validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.update({

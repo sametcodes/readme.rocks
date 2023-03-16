@@ -10,14 +10,15 @@ import * as viewValidations from "@/components/view/validations";
 
 import { object } from "yup";
 
-export const shapeDataAPISchema = (schema: AnyObject, query: string) => {
+export const shapeDataAPISchema = (query: string, schema?: AnyObject) => {
   // @ts-ignore
   const queryValidation = queryValidations[query];
   // @ts-ignore
   const viewValidation = viewValidations[query];
 
-  const defaultSchema = object().required().noUnknown(true);
-  return schema
-    .shape({ queryConfig: queryValidation || defaultSchema })
-    .shape({ viewConfig: viewValidation || defaultSchema });
+  const defaultSchema = object({}).required().noUnknown(true);
+  return (schema || defaultSchema).shape({
+    viewConfig: viewValidation || defaultSchema,
+    queryConfig: queryValidation || defaultSchema,
+  });
 };

@@ -18,6 +18,12 @@ export interface JSDocMinified {
   description: string;
 }
 
+const platforms_require_oauth: { [key: string]: boolean } = {
+  github: true,
+  stackoverflow: true,
+  wakatime: true,
+};
+
 const getFiles = (path: string): Array<File> => {
   return fs
     .readdirSync(path, { withFileTypes: true })
@@ -63,15 +69,25 @@ const migrate = async ({
 }): Promise<void> => {
   let platform = await prisma.platform.findUnique({ where: { code } });
 
-  if (!platform) {
-    const name = Array.from(code)
-      .map((letter, i) => (i === 0 ? letter.toUpperCase() : letter))
-      .join("");
+  const name = Array.from(code)
+    .map((letter, i) => (i === 0 ? letter.toUpperCase() : letter))
+    .join("");
 
-    platform = await prisma.platform.create({
-      data: { code, name, config: {}, queries: {} },
-    });
-  }
+  platform = await prisma.platform.upsert({
+    where: { code },
+    create: {
+      code,
+      name,
+      config: {},
+      queries: {},
+      require_auth: platforms_require_oauth[code] || false,
+    },
+    update: {
+      name,
+      queries: {},
+      require_auth: platforms_require_oauth[code] || false,
+    },
+  });
 
   const queries = docs
     .map((doc) => ({
@@ -81,7 +97,7 @@ const migrate = async ({
     }))
     .filter((doc) => Boolean(doc.title));
 
-  for (var query of queries) {
+  for (let query of queries) {
     console.log(`― Migrating ${code}:${query.name}`);
     const existingQuery = await prisma.platformQuery.findFirst({
       where: {
