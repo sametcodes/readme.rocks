@@ -1,4 +1,4 @@
-import { object, number, bool } from "yup";
+import { object, number, string } from "yup";
 
 export const getCurrentYearContributions = object().required().noUnknown(true);
 
@@ -11,3 +11,5 @@ export const getLanguageUsageSummary = object({
 })
   .required()
   .noUnknown(true);
+
+export const getRepositoryMilestone = object().required().noUnknown(true);

@@ -117,3 +117,44 @@ export const getLanguageUsageSummary: QueryService = async (
   if ("error" in response) return response;
   return { success: true, data: response.data };
 };
+
+/**
+ * @name getRepositoryMilestone
+ * @title Get repository milestone
+ * @description Get the view of a specific milestone with count of issue and PRs for a repository
+ */
+export const getRepositoryMilestone: QueryService = async (
+  connection,
+  config
+) => {
+  const { queryConfig } = config as any;
+
+  const query = `{ 
+    viewer { 
+      repository(name: "${queryConfig.repository_name}"){
+        milestone(number: ${queryConfig.milestone_id}) {
+          id
+          title
+          dueOn
+          description
+          issues {
+            totalCount
+          }
+          pullRequests{
+            totalCount
+          }
+          closedIssues: issues(states: [CLOSED]) {
+            totalCount
+          }
+          closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
+            totalCount
+          }
+        }
+      }
+   }
+  }`;
+
+  const response = await request(query, connection);
+  if ("error" in response) return response;
+  return { success: true, data: response.data };
+};
