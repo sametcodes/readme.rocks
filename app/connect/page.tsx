@@ -81,43 +81,5 @@ export default async function Connect() {
         )}
       </div>
     </div>
-    // <div>
-    //   <h2>Connected Platforms ({activeConnections.length})</h2>
-    //   <ul>
-    //     {activeConnections.map((activeConnection) => {
-    //       return (
-    //         <li key={activeConnection.id}>
-    //           <span>{activeConnection.platform.name}</span> ―
-    //           <span>
-    //             {activeConnection.profile && (
-    //               <>
-    //                 <ProfileCard profile={activeConnection.profile} />
-    //                 <a
-    //                   href={`/api/oauth/disconnect/${activeConnection.platform.code}`}
-    //                 >
-    //                   {" "}
-    //                   (disconnect)
-    //                 </a>
-    //               </>
-    //             )}
-    //           </span>
-    //         </li>
-    //       );
-    //     })}
-    //   </ul>
-
-    //   <h2>Connect new platform ({nonConnectedPlatforms.length})</h2>
-    //   <ul>
-    //     {nonConnectedPlatforms.map((platform) => {
-    //       return (
-    //         <li key={platform.code}>
-    //           <a href={`/api/oauth/connect/${platform.code}`}>
-    //             Connect to {platform.name}
-    //           </a>
-    //         </li>
-    //       );
-    //     })}
-    //   </ul>
-    // </div>
   );
 }
