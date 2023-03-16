@@ -5,7 +5,7 @@ import * as services from "@/services/data";
 
 import methods from "@/services/data/methods";
 
-type ServiceParams = [keyof typeof services, ...string[]];
+type ServiceParams = [keyof typeof services, ...Array<string>];
 
 export default async function handler(
   req: NextApiRequest,

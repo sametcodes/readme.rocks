@@ -36,29 +36,20 @@ export const getPlatformQueries = async ({
   if (isObjectID(platformId) === false)
     throw new Error("id parameter is missing or invalid");
 
-  const userPlatformQueryIDs = await prisma.platformQueryConfig
-    .findMany({
-      where: { userId: session?.user?.id },
-      select: { platformQueryId: true },
-    })
-    .then((res) => res.map((r) => r.platformQueryId));
-
-  return prisma.platformQuery
-    .findMany({
-      where: { platformId },
-      select: {
-        id: true,
-        name: true,
-        title: true,
-        description: true,
-        platform: {
-          select: {
-            name: true,
-          },
+  return prisma.platformQuery.findMany({
+    where: { platformId },
+    select: {
+      id: true,
+      name: true,
+      title: true,
+      description: true,
+      platform: {
+        select: {
+          name: true,
         },
       },
-    })
-    .then((res) => res.filter((r) => !userPlatformQueryIDs.includes(r.id)));
+    },
+  });
 };
 
 export const previewQuery = async ({

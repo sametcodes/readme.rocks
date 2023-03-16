@@ -21,11 +21,10 @@ export default nextConnect()
       services,
       templates,
     } = res.locals;
-    res.locals.platformQueryConfig = Object.assign(
-      {},
-      res.locals.platformQueryConfig,
-      body
-    );
+    res.locals.platformQueryConfig = {
+      ...res.locals.platformQueryConfig,
+      ...body,
+    };
 
     const query = res.locals.platformQueryConfig.platformQuery.name;
     const schema = shapeDataAPISchema(query);

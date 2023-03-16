@@ -1,97 +1,56 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import Link from "next/link";
-import { getPlatformQueryConfigs, getPlatformQueries } from "@/services/data";
+import { getPlatformQueryConfigs } from "@/services/data";
 import prisma from "@/services/prisma";
+import QueryList from "@/components/querylist";
+import { Platform, PlatformQueryConfig, PlatformQuery } from "@prisma/client";
 
-export default async function Connect() {
+export default async function QueriesPage() {
   const session = await getServerSession(authOptions);
-  if (!session) {
-    return (
-      <div>
-        <h1>Not signed in</h1>
-        <p>Sign in to view your configs</p>
-      </div>
-    );
+
+  let configs: (PlatformQueryConfig & {
+      platform: Platform;
+      platformQuery: PlatformQuery;
+    })[] = [],
+    platforms: (Platform & {
+      queries: PlatformQuery[];
+    })[] = [];
+
+  if (session) {
+    configs = await getPlatformQueryConfigs({
+      session,
+      params: [],
+      payload: {},
+    });
+
+    platforms = await prisma.platform.findMany({
+      include: { queries: true },
+    });
   }
 
-  const configs = await getPlatformQueryConfigs({
-    session,
-    params: [],
-    payload: {},
-  });
-  const queries = await prisma.platformQuery.findMany({
-    include: { platform: true },
-  });
-
   return (
-    <div>
-      <h2>Active Queries</h2>
-      <table style={{ border: "1px solid #000" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid #000" }}>Platform</th>
-            <th style={{ border: "1px solid #000" }}>Query</th>
-            <th style={{ border: "1px solid #000" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {configs.length === 0 && (
-            <tr>
-              <td colSpan={3}>No active queries</td>
-            </tr>
-          )}
-          {configs.map((config: any) => (
-            <tr key={config.id}>
-              <td style={{ border: "1px solid #000" }}>
-                {config.platform.name}
-              </td>
-              <td style={{ border: "1px solid #000" }}>
-                {config.platformQuery.title}
-              </td>
-              <td style={{ border: "1px solid #000" }}>
-                <Link href={`/query/edit/${config.id}`}>Edit</Link>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="flex container flex-col w-full mx-auto px-8 lg:px-0 lg:w-1/2">
+      <div className="mb-5">
+        <h1 className="text-3xl font-bold my-3 text-slate-700">Queries</h1>
+        <blockquote className="text-slate-700">
+          <p className="text-md">
+            Queries are used to fetch data from the platform. You can create a
+            query for each platform and get an SVG data.
+          </p>
+        </blockquote>
+      </div>
 
-      <h2>Available Queries</h2>
-      <table style={{ border: "1px solid #000" }}>
-        <thead>
-          <tr>
-            <th style={{ border: "1px solid #000" }}>Platform</th>
-            <th style={{ border: "1px solid #000" }}>Query</th>
-            <th style={{ border: "1px solid #000" }}>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {queries.length === 0 && (
-            <tr>
-              <td colSpan={3}>No available queries</td>
-            </tr>
-          )}
-          {queries
-            .filter(
-              (query: any) =>
-                !configs.find(
-                  (config: any) => config.platformQuery.id === query.id
-                )
-            )
-            .map((query: any) => (
-              <tr key={query.id}>
-                <td style={{ border: "1px solid #000" }}>
-                  {query.platform.name}
-                </td>
-                <td style={{ border: "1px solid #000" }}>{query.title}</td>
-                <td style={{ border: "1px solid #000" }}>
-                  <Link href={`/query/create`}>Create</Link>
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
+      {session ? (
+        <div>
+          <QueryList platforms={platforms} configs={configs} />
+        </div>
+      ) : (
+        <>
+          <p className="text-lg text-slate-500 border-t-[1px] inline-block border-t-slate-300 pt-3">
+            Please login to see the platform queries.
+          </p>
+        </>
+      )}
     </div>
   );
 }

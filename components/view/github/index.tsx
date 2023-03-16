@@ -122,7 +122,7 @@ export const getLanguageUsageSummary: ViewComponent = (result, config) => {
   };
 
   const resolveLanguages = (response: any) => {
-    let languages: any = {};
+    const languages: any = {};
     let total = 0;
     response.data.viewer.repositories.edges.forEach((node: any) => {
       node.node.languages.edges.forEach((edge: any) => {

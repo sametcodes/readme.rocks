@@ -2,7 +2,7 @@ import { Session } from "next-auth";
 
 export type DataAPIPayload = {
   session: Session;
-  params: string[];
+  params: Array<string>;
   payload: any;
 };
 
@@ -12,4 +12,4 @@ export type DataAPIResponse = {
   error: string;
 };
 
-export type DataAPIMethod = (payload: DataAPIPayload) => Promise<any>;
+export type DataAPIMethod<T = any> = (payload: DataAPIPayload) => Promise<T>;
