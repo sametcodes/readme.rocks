@@ -12,7 +12,7 @@ export default function Layout({ session, children }: ILayout) {
       <header className="container sticky top-0 z-40 bg-white mx-auto">
         <NavbarWithLogin session={session} />
       </header>
-      <main className="flex-1">{children}</main>
+      <main>{children}</main>
     </div>
   );
 }

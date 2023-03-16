@@ -19,7 +19,7 @@ type INavbarWithLogin = {
   session: Session | null;
 };
 
-const items = [
+const links = [
   {
     title: "Queries",
     href: "/query",
@@ -33,21 +33,21 @@ const items = [
 export default function NavbarWithLogin({ session }: INavbarWithLogin) {
   const segment = useSelectedLayoutSegment();
   return (
-    <div className="flex h-16 items-center justify-between border-b border-b-slate-200 py-4">
-      <Link href="/" className="hidden items-center space-x-2 md:flex">
-        <span className="hidden font-bold sm:inline-block">devstats</span>
+    <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4">
+      <Link href="/" className="items-center space-x-2 md:flex">
+        <span className="text-2xl font-bold sm:inline-block">devstats</span>
       </Link>
       <nav className="flex gap-6">
-        {items?.map((item, index) => (
+        {links.map((link, index) => (
           <Link
             key={index}
-            href={item.href}
+            href={link.href}
             className={cn(
-              "flex items-center text-lg font-semibold text-slate-400 sm:text-sm",
-              item.href.startsWith(`/${segment}`) && "text-slate-900"
+              "items-center text-lg font-semibold text-slate-400 sm:text-sm hidden sm:flex",
+              link.href.startsWith(`/${segment}`) && "text-slate-900"
             )}
           >
-            {item.title}
+            {link.title}
           </Link>
         ))}
         {!session ? (
@@ -73,7 +73,22 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()}>
+                {links.map((link) => (
+                  <Link
+                    href={link.href}
+                    key={link.href}
+                    className={cn(
+                      "text-slate-500 flex sm:hidden",
+                      link.href.startsWith(`/${segment}`) && "text-slate-900"
+                    )}
+                  >
+                    <DropdownMenuItem>{link.title}</DropdownMenuItem>
+                  </Link>
+                ))}
+                <DropdownMenuItem
+                  onClick={() => signOut()}
+                  className="text-slate-500"
+                >
                   Logout
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -166,6 +166,11 @@ const actions = {
             id: true,
             code: true,
             name: true,
+            _count: {
+              select: {
+                queries: true,
+              },
+            },
           },
         },
       },

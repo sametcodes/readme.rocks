@@ -10,7 +10,7 @@ body {
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
-main {
+.landing {
   height: calc(100vh - 60px);
   background-position: center bottom;
 }

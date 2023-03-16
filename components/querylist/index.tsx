@@ -34,7 +34,7 @@ export default function QueryList({ platforms, configs }: IQueryList) {
     <>
       {platforms.map((platform: Platform & { queries: PlatformQuery[] }) => {
         return (
-          <div key={platform.id} className="mt-6">
+          <div key={platform.id} className="my-12">
             <h2 className="text-2xl border-b-2 border-gray-300 inline-block">
               {platform.name}
             </h2>

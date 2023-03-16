@@ -195,46 +195,53 @@ export default function ConfigForm({
   };
 
   return (
-    <div className="flex flex-row gap-10 mt-10">
+    <div className="flex flex-col justify-center lg:items-start lg:flex-row gap-10 mt-10">
       <form
         ref={$form}
         onSubmit={onSubmit}
         onChange={onChange}
-        className="flex flex-col w-[40%] gap-5 min-h-[400px]"
+        className="flex flex-col gap-5 lg:min-h-[400px] flex-1"
       >
         {platformQuery.name && (
-          <div className="flex flex-col gap-3">
-            <div>
-              <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
-                Query parameters
-              </h3>
+          <>
+            <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
+              Input parameters
+            </h2>
+            <div className="flex flex-row lg:flex-col gap-3">
+              <div>
+                <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                  Query parameters
+                </h3>
 
-              <div className="flex flex-row gap-2">
-                {((queryValidations as any)[platformQuery.name] &&
+                <div className="flex flex-row gap-2">
+                  {((queryValidations as any)[platformQuery.name] &&
+                    buildFormWithYupSchema(
+                      (queryValidations as any)[platformQuery.name],
+                      "query",
+                      config?.queryConfig,
+                      errors
+                    )) || (
+                    <p className="text-slate-400">No parameters required</p>
+                  )}
+                </div>
+              </div>
+
+              <div>
+                <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                  View parameters
+                </h3>
+                {((viewValidations as any)[platformQuery.name] &&
                   buildFormWithYupSchema(
-                    (queryValidations as any)[platformQuery.name],
-                    "query",
-                    config?.queryConfig,
+                    (viewValidations as any)[platformQuery.name],
+                    "view",
+                    config?.viewConfig,
                     errors
                   )) || (
-                  <p className="text-slate-400">No parameters required</p>
+                  <p className="text-slate-400">No parameters available</p>
                 )}
               </div>
             </div>
-
-            <div>
-              <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
-                View parameters
-              </h3>
-              {((viewValidations as any)[platformQuery.name] &&
-                buildFormWithYupSchema(
-                  (viewValidations as any)[platformQuery.name],
-                  "view",
-                  config?.viewConfig,
-                  errors
-                )) || <p className="text-slate-400">No parameters available</p>}
-            </div>
-          </div>
+          </>
         )}
 
         <div className="flex flex-row gap-2">
@@ -262,10 +269,10 @@ export default function ConfigForm({
 
       <div className="border-[1px]"></div>
 
-      <div className="w-[60%]">
-        <h3 className="text-lg mb-6 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
-          Preview of SVG output
-        </h3>
+      <div className="flex flex-col flex-1 gap-3">
+        <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 ">
+          Output as SVG
+        </h2>
 
         {!preview.data &&
           (config && !preview.loading ? (
@@ -284,14 +291,14 @@ export default function ConfigForm({
           ) : (
             <div
               className={cn(
-                "w-full h-full max-h-[300px] bg-slate-200 rounded-lg flex items-center justify-center",
+                "w-full h-full min-h-[350px] bg-slate-200 rounded-lg flex items-center justify-center",
                 preview.loading ? "animate-pulse" : ""
               )}
             >
               {preview.loading ? (
-                <p className="text-slate-400">The magic is happening...</p>
+                <p className="text-slate-500">The magic is happening...</p>
               ) : (
-                <p className="text-slate-400">
+                <p className="text-slate-500">
                   Choose parameters and click on the preview
                 </p>
               )}

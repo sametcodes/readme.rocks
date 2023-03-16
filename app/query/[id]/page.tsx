@@ -27,8 +27,8 @@ export default async function EditQueryConfig({
   });
 
   return (
-    <div className="flex mx-auto flex-col">
-      <div className="w-full container text-center mx-auto lg:w-1/2 mt-[50px] mb-5">
+    <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
+      <div className="container text-center mb-5">
         <h1 className="text-4xl mr-2 font-bold text-slate-700 ">
           {query.platform.name}
         </h1>
@@ -40,13 +40,11 @@ export default async function EditQueryConfig({
         </blockquote>
       </div>
 
-      <div className="w-full mx-auto lg:w-2/3">
-        {queryConfig ? (
-          <ConfigForm platformQuery={query} queryConfig={queryConfig} />
-        ) : (
-          <ConfigForm platformQuery={query} />
-        )}
-      </div>
+      {queryConfig ? (
+        <ConfigForm platformQuery={query} queryConfig={queryConfig} />
+      ) : (
+        <ConfigForm platformQuery={query} />
+      )}
     </div>
   );
 }

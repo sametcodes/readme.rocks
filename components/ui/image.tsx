@@ -12,7 +12,9 @@ export const Image = (props: ImageProps) => {
         !loaded && "animate-pulse max-h-[400px] bg-slate-200 rounded-lg"
       )}
     >
-      {!loaded && <span className="absolute">Loading...</span>}
+      {!loaded && (
+        <span className="absolute text-slate-500">Loading preview...</span>
+      )}
       <NextImage onLoadingComplete={() => setLoaded(true)} {...props} />
     </div>
   );
