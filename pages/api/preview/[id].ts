@@ -29,6 +29,18 @@ export default nextConnect()
     const query = res.locals.platformQueryConfig.platformQuery.name;
     const schema = shapeDataAPISchema(query);
 
-    await schema.validate(body, { abortEarly: false });
+    try {
+      await schema.validate(body, { abortEarly: false });
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const errors = error.inner
+          .map((err) => ({ name: err.path, message: err.message }))
+          .reduce(
+            (acc: any, err: any) => ({ ...acc, [err.name]: err.message }),
+            {}
+          );
+        return res.status(400).json({ errors });
+      }
+    }
     return handlePlatformAPI(platform.code, services, templates)(req, res);
   });
