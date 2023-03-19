@@ -4,7 +4,7 @@ import handlePlatformAPI from "@/services/api/handler";
 import { encode } from "querystring";
 
 import * as services from "@/services/platform/codewars";
-import * as templates from "@/components/view/codewars";
+import * as templates from "@/views/queries/codewars";
 
 const handler = handlePlatformAPI("codewars", services, templates);
 const methods = Object.keys(services);
