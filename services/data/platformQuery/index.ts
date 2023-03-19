@@ -3,7 +3,7 @@ import { DataAPIPayload } from "@/services/data/types";
 import { isObjectID } from "@/utils";
 
 import * as queryValidations from "@/services/platform/validations";
-import * as viewValidations from "@/components/view/validations";
+import * as viewValidations from "@/views/queries/validations";
 import { DataAPIMethod } from "../types";
 import handlePlatformAPI from "@/services/api/handler";
 import { getPlatformResponse } from "@/services/platform/response";

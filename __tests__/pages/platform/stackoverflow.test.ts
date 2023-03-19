@@ -4,7 +4,7 @@ import handlePlatformAPI from "@/services/api/handler";
 import { encode } from "querystring";
 
 import * as services from "@/services/platform/stackoverflow";
-import * as templates from "@/components/view/stackoverflow";
+import * as templates from "@/views/queries/stackoverflow";
 
 const handler = handlePlatformAPI("stackoverflow", services, templates);
 const methods = Object.keys(services);

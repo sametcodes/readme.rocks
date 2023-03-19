@@ -97,6 +97,22 @@ const migrate = async ({
     }))
     .filter((doc) => Boolean(doc.title));
 
+  // delete all queries on the database that are not in the "queries" array
+  const existingQueries = await prisma.platformQuery.findMany({
+    where: {
+      platformId: platform.id,
+    },
+  });
+  const queriesToDelete = existingQueries.filter(
+    (query) => !queries.find((q) => q.name === query.name)
+  );
+
+  for (let query of queriesToDelete) {
+    console.log(`― Removing ${code}:${query.name}`);
+    await prisma.platformQuery.delete({ where: { id: query.id } });
+  }
+
+  // update or create queries
   for (let query of queries) {
     console.log(`― Migrating ${code}:${query.name}`);
     const existingQuery = await prisma.platformQuery.findFirst({

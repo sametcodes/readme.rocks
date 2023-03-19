@@ -20,6 +20,6 @@ export const getReputation: QueryService = async (connection, config) => {
 
   return {
     success: true,
-    data: { reputation: 5 },
+    data: response,
   };
 };

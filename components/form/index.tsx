@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 
 import * as _queryValidations from "@/services/platform/validations";
-import * as _viewValidations from "@/components/view/validations";
+import * as _viewValidations from "@/views/queries/validations";
 import { AnyObject, ValidationError } from "yup";
 import { useRouter } from "next/navigation";
 import { PlatformQuery, PlatformQueryConfig } from "@prisma/client";

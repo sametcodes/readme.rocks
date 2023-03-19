@@ -4,7 +4,7 @@ import handlePlatformAPI from "@/services/api/handler";
 import { encode } from "querystring";
 
 import * as services from "@/services/platform/github";
-import * as templates from "@/components/view/github";
+import * as templates from "@/views/queries/github";
 
 const handler = handlePlatformAPI("github", services, templates);
 const methods = Object.keys(services);

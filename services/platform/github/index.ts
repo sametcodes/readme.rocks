@@ -2,55 +2,6 @@ import request from "@/services/platform/github/request";
 import { QueryService } from "@/services/platform/types";
 
 /**
- * @name getCurrentYearContributions
- * @title Get current year's contributions
- * @description Get the total number of contributions for the current year
- */
-export const getCurrentYearContributions: QueryService = async (
-  connection,
-  config
-) => {
-  const query = `{ viewer {
-        contributionsCollection {
-          contributionCalendar { totalContributions }
-        }
-      }
-    }`;
-
-  const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
-};
-
-/**
- * @name getPopularContributions
- * @title List popular contributions
- * @description List your most popular contributions overall
- */
-export const getPopularContributions: QueryService = async (
-  connection,
-  config
-) => {
-  const query = `{ viewer {
-      contributionsCollection{
-          popularIssueContribution{
-            isRestricted
-            issue { url title }
-          }
-          popularPullRequestContribution{
-            isRestricted
-            pullRequest { url title }
-          }
-        }
-      }
-    }`;
-
-  const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
-};
-
-/**
  * @name getContributionsSummary
  * @title Get contributions summary
  * @description Get a summary of your contributions, like count of commits, PRs and issues
@@ -59,12 +10,12 @@ export const getContributionsSummary: QueryService = async (
   connection,
   config
 ) => {
-  const query = `{viewer{
+  const query = `{
+    viewer{
       contributionsCollection{
-        totalRepositoryContributions
-        totalRepositoriesWithContributedCommits
-        totalRepositoriesWithContributedPullRequests
-        totalRepositoriesWithContributedIssues
+        totalIssueContributions
+        totalCommitContributions
+        totalPullRequestContributions
       }
     }
   }`;

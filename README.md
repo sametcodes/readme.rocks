@@ -2,7 +2,9 @@
 
 _You worked hard, it's time to manifest._
 
-[![Vercel](https://vercelbadge.vercel.app/api/sametcodes/devstats?style=flat-square)](https://vercelbadge.vercel.app/api/sametcodes/devstats?style=flat-square)
+> <a href="https://github.com/sametcodes/devstats/milestone/1">
+> <img width="400" src="https://devstats-app.vercel.app/api/view/641323c77029391496556c6b" />
+> </a>
 
 ### Running locally
 
