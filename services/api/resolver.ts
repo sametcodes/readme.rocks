@@ -1,18 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import handlePlatformAPI from "@/services/api/handler";
 
 import passport from "passport";
 import refresh from "passport-oauth2-refresh";
 
 import { getPlatformServices } from "@/services/platform";
-import { getPlatformTemplates } from "@/components/view";
+import { getPlatformTemplates } from "@/views/queries";
 import { getProvider } from "@/services/oauth/providers";
-
-const loadPlatform = (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: () => void
-) => {};
 
 const resolveHandler = (
   req: NextApiRequest,

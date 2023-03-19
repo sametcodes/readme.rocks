@@ -28,6 +28,7 @@
     "@nivo/pie": "^0.80.0",
     "@prisma/client": "^4.11.0",
     "@radix-ui/react-dropdown-menu": "^2.0.4",
+    "@svgdotjs/svg.js": "^3.1.2",
     "@vercel/analytics": "^0.1.11",
     "clsx": "^1.2.1",
     "lucide-react": "^0.125.0",

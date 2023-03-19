@@ -1,8 +1,4 @@
-import { object, number, string } from "yup";
-
-export const getCurrentYearContributions = object().required().noUnknown(true);
-
-export const getPopularContributions = object().required().noUnknown(true);
+import { object, number } from "yup";
 
 export const getContributionsSummary = object().required().noUnknown(true);
 
