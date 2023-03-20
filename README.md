@@ -1,9 +1,16 @@
-## devstats
+# devstats
 
-_You worked hard, it's time to manifest._
+_All your statistics at once._
+
+![](https://devstats-app.vercel.app/api/view/64179f36e3a8ceaf79c7e710)
+![](https://devstats-app.vercel.app/api/view/64179f45e3a8ceaf79c7e711)
+![](https://devstats-app.vercel.app/api/view/64179f1ee3a8ceaf79c7e70e)
+![](https://devstats-app.vercel.app/api/view/64179f4be3a8ceaf79c7e712)
+
+## Milestones
 
 > <a href="https://github.com/sametcodes/devstats/milestone/1">
-> <img width="400" src="https://devstats-app.vercel.app/api/view/641323c77029391496556c6b" />
+> <img src="https://devstats-app.vercel.app/api/view/64179f30e3a8ceaf79c7e70f" />
 > </a>
 
 ### Running locally
