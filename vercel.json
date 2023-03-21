@@ -1,0 +1,7 @@
+{
+    "functions": {
+        "pages/api/preview/*.ts": {
+            "excludeFiles": "pages/api/preview/*.ts"
+        }
+    }
+}
