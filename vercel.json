@@ -1,0 +1,5 @@
+{
+    "functions": {
+        "excludeFiles": "pages/api/preview/*.ts"
+    }
+}
