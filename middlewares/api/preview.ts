@@ -5,6 +5,7 @@ import { authOptions } from "@/pages/api/auth/[...nextauth]";
 
 import { shapeDataAPISchema } from "@/services/data/validations";
 import { ValidationError } from "yup";
+import prisma from "@/services/prisma";
 
 export const validatePreviewRequest = async (
   req: NextApiRequest,

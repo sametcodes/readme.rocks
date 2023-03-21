@@ -4,7 +4,6 @@ import nextConnect from "next-connect";
 import { resolveHandler } from "@/middlewares/api";
 import { validatePublicRequest } from "@/middlewares/api/public";
 import handlePlatformAPI from "@/services/api/handler";
-import { NextResponse } from "next/server";
 
 /**
  * This is the handler for the public API endpoint.

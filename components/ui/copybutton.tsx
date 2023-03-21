@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/utils";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 type ICopyButton = {
   children: React.ReactNode;

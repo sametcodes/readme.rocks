@@ -3,8 +3,8 @@ import handlePlatformAPI from "@/services/api/handler";
 
 import { encode } from "querystring";
 
-import * as services from "@/services/platform/stackoverflow";
-import * as templates from "@/views/queries/stackoverflow";
+import * as services from "@/platforms/stackoverflow/query";
+import * as templates from "@/platforms/stackoverflow/view";
 
 const handler = handlePlatformAPI(services, templates, "", {});
 const methods = Object.keys(services);

@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isObjectID } from "@/utils/index";
+import prisma from "@/services/prisma";
 
 export const validatePrivateRequest = async (
   req: NextApiRequest,

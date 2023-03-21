@@ -2,10 +2,11 @@
 
 import { useState, useCallback, useRef } from "react";
 
-import * as _queryValidations from "@/services/platform/validations";
-import * as _viewValidations from "@/views/queries/validations";
+import {
+  queryValidations as _queryValidations,
+  viewValidations as _viewValidations,
+} from "@/platforms/validations";
 import { AnyObject, ValidationError } from "yup";
-import { useRouter } from "next/navigation";
 import { PlatformQuery, PlatformQueryConfig } from "@prisma/client";
 import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
@@ -22,9 +23,6 @@ export default function ConfigForm({
   platformQuery,
   queryConfig,
 }: IConfigFormProps) {
-  const router = useRouter();
-
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const [preview, setPreview] = useState({ data: "", loading: false });
@@ -247,14 +245,14 @@ export default function ConfigForm({
         <div className="flex flex-row gap-2">
           <button
             onClick={onPreview}
-            disabled={loading || Boolean(Object.keys(errors).length)}
+            disabled={preview.loading || Boolean(Object.keys(errors).length)}
             className="rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 hover:bg-slate-200"
           >
             Preview
           </button>
           <button
             type="submit"
-            disabled={loading || !Boolean(preview.data)}
+            disabled={preview.loading || !Boolean(preview.data)}
             className={cn(
               "rounded-lg py-2 px-4 bg-slate-100 border-[1px]",
               preview.data

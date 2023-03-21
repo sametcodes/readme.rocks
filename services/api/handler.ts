@@ -1,11 +1,7 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { getPlatformResponse } from "@/services/platform/response";
-
-import prisma from "@/services/prisma";
-import { Connection, PlatformQueryConfig } from "@prisma/client";
-
+import { Connection } from "@prisma/client";
 import JSXRender from "@/utils/render";
-import { isObjectID, trimChars } from "@/utils";
+import { trimChars } from "@/utils";
 
 type PlatformAPIHandler = (
   services: any,

@@ -1,7 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-import { getPlatformServices } from "@/services/platform";
-import { getPlatformTemplates } from "@/views/queries";
+import { getPlatformServices, getPlatformTemplates } from "@/platforms";
 
 export const resolveHandler = (
   req: NextApiRequest,

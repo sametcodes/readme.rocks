@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isObjectID } from "@/utils/index";
 import { parseQueryString } from "@/utils";
+import prisma from "@/services/prisma";
 
 export const validatePublicRequest = async (
   req: NextApiRequest,

@@ -143,7 +143,7 @@ const migrate = async ({
         },
       });
     } else {
-      const newQuery = await prisma.platformQuery.create({
+      await prisma.platformQuery.create({
         data: {
           name: query.name,
           title: query.title,
