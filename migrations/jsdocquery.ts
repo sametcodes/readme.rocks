@@ -14,7 +14,7 @@ type File = {
 
 export interface JSDocMinified {
   name: string;
-  tags: Array<{ title: string; text: string }>;
+  tags: { title: string; text: string }[];
   description: string;
 }
 
@@ -90,11 +90,18 @@ const migrate = async ({
   });
 
   const queries = docs
-    .map((doc) => ({
-      name: doc.name,
-      description: doc.description,
-      title: doc.tags.find((tag) => tag.title === "title")?.text as string,
-    }))
+    .map((doc) => {
+      const title = doc.tags.find((tag) => tag.title === "title");
+      const requires_auth = doc.tags.find(
+        (tag) => tag.title === "requires_auth"
+      );
+      return {
+        name: doc.name,
+        description: doc.description,
+        title: title?.text as string,
+        requires_auth: requires_auth?.text === "true",
+      };
+    })
     .filter((doc) => Boolean(doc.title));
 
   // delete all queries on the database that are not in the "queries" array
@@ -128,6 +135,7 @@ const migrate = async ({
         data: {
           name: query.name,
           title: query.title,
+          requires_auth: query.requires_auth,
           description: query.description,
           platform: {
             connect: { id: platform.id },
@@ -139,6 +147,7 @@ const migrate = async ({
         data: {
           name: query.name,
           title: query.title,
+          requires_auth: query.requires_auth,
           description: query.description,
           platform: { connect: { id: platform.id } },
         },

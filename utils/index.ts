@@ -26,3 +26,53 @@ export function isObjectID(str: string) {
 export function cn(...inputs: Array<ClassValue>) {
   return twMerge(clsx(inputs));
 }
+
+interface Dictionary<T> {
+  [key: string]: T;
+}
+
+export function objectToQueryString(obj: Dictionary<unknown>, prefix?: string) {
+  const pairs: string[] = [];
+
+  for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
+
+    const value = obj[key];
+    const newKey = prefix ? `${prefix}[${key}]` : key;
+
+    if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+      pairs.push(
+        ...objectToQueryString(value as Dictionary<unknown>, newKey).split("&")
+      );
+    } else {
+      pairs.push(
+        encodeURIComponent(newKey) + "=" + encodeURIComponent(String(value))
+      );
+    }
+  }
+
+  return pairs.join("&");
+}
+
+export function parseQueryString(queryString: string): Dictionary<unknown> {
+  const pairs = queryString.split("&");
+  const result: Dictionary<unknown> = {};
+
+  pairs.forEach((pair) => {
+    const [key, value] = pair.split("=").map(decodeURIComponent);
+    const keys = key.split(/\]\[|\[|\]/).filter((k) => k);
+
+    let current: Dictionary<unknown> = result;
+    for (let i = 0; i < keys.length - 1; i++) {
+      const keyPart = keys[i];
+      if (!current[keyPart]) {
+        current[keyPart] = {};
+      }
+      current = current[keyPart] as Dictionary<unknown>;
+    }
+
+    current[keys[keys.length - 1]] = value;
+  });
+
+  return result;
+}

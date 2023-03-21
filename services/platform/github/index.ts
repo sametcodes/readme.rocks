@@ -4,6 +4,7 @@ import { QueryService } from "@/services/platform/types";
 /**
  * @name getContributionsSummary
  * @title Get contributions summary
+ * @requires_auth true
  * @description Get a summary of your contributions, like count of commits, PRs and issues
  */
 export const getContributionsSummary: QueryService = async (
@@ -28,6 +29,7 @@ export const getContributionsSummary: QueryService = async (
 /**
  * @name getLanguageUsageSummary
  * @title Get language usage summary
+ * @requires_auth true
  * @description Get a summary of your language usage in your contributions on repositories
  */
 export const getLanguageUsageSummary: QueryService = async (
@@ -72,6 +74,7 @@ export const getLanguageUsageSummary: QueryService = async (
 /**
  * @name getRepositoryMilestone
  * @title Get repository milestone
+ * @requires_auth false
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getRepositoryMilestone: QueryService = async (

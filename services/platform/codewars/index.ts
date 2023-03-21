@@ -4,6 +4,7 @@ import request from "@/services/platform/codewars/request";
 /**
  * @name getUser
  * @title Get user details
+ * @requires_auth false
  * @description Get a summary of your scores and top languages
  */
 export const getUser: QueryService = async (connection, config) => {

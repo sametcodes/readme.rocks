@@ -6,7 +6,7 @@ import { encode } from "querystring";
 import * as services from "@/services/platform/stackoverflow";
 import * as templates from "@/views/queries/stackoverflow";
 
-const handler = handlePlatformAPI("stackoverflow", services, templates);
+const handler = handlePlatformAPI(services, templates, "", {});
 const methods = Object.keys(services);
 
 describe("Stackoverflow Platform APIs", () => {

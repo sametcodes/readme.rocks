@@ -3,8 +3,6 @@ import { WakatimeIcon } from "@/views/@dsvgui/icons";
 import { Bars } from "@/views/@dsvgui";
 
 export const getAllTimeSinceToday: ViewComponent = (result, platform) => {
-  console.log(result);
-
   return (
     <Bars
       icon={WakatimeIcon}

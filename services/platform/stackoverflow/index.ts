@@ -4,6 +4,7 @@ import request from "@/services/platform/stackoverflow/request";
 /**
  * @name getReputation
  * @title Get reputation
+ * @requires_auth true
  * @description Get the total reputation of the user
  */
 export const getReputation: QueryService = async (connection, config) => {

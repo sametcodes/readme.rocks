@@ -1,24 +1,29 @@
 import nextConnect from "next-connect";
 import passport from "passport";
-import handlePlatformAPI, {
-  validateRequest,
-  validateAccessToken,
-} from "@/services/api/handler";
-import resolveHandler from "@/services/api/resolver";
 
+import handlePlatformAPI from "@/services/api/handler";
+
+import { validatePrivateRequest } from "@/middlewares/api/private";
+import { validateAccessToken, loadPassport } from "@/middlewares/api/auth";
+import { resolveHandler } from "@/middlewares/api";
+import { NextApiRequest, NextApiResponse } from "next";
+
+/**
+ * This is the handler for the private API endpoint.
+ **/
 export default nextConnect()
-  .use(validateRequest)
+  .use(validatePrivateRequest)
   .use(passport.initialize())
   .use(resolveHandler)
+  .use(loadPassport)
   .use(validateAccessToken)
-  .get((req, res) => {
-    // @ts-ignore
-    const {
-      platformQueryConfig: { platform },
+  .get((req: NextApiRequest, res: NextApiResponse) => {
+    const { services, templates, connection, query, config } = res.locals;
+    return handlePlatformAPI(
       services,
       templates,
-      // @ts-ignore
-    } = res.locals;
-    // @ts-ignore
-    return handlePlatformAPI(platform.code, services, templates)(req, res);
+      query.name,
+      config,
+      connection
+    )(req, res);
   });
