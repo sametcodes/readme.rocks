@@ -1,33 +1,19 @@
-import { createCanvas } from "canvas";
-import { JSDOM } from "jsdom";
-
-export const getTextWidth = (
-  inputText: string,
+type IGetTextWidth = (
+  inputText: string | number | null,
   options: {
-    ratio: number;
-  } = {
-    ratio: 1,
+    fontSize: number;
+    ratio?: number;
   }
-) => {
-  const container = createCanvas(300, 300);
-  const dom = new JSDOM("<!DOCTYPE html><body></body>");
-  const window = dom.window;
-  const document = window.document;
+) => number;
+
+export const getTextWidth: IGetTextWidth = (inputText, options) => {
+  const { fontSize = 16, ratio = 0.5 } = options;
 
   let width = 0;
   let text = inputText ?? "";
   text = text.toString();
-  let context = container.getContext("2d");
 
-  context.font = window
-    .getComputedStyle(document.body)
-    .getPropertyValue("font");
-  width = context.measureText(text).width;
-
-  console.log({
-    width,
-    inputText,
-    ratio: options.ratio,
-  });
-  return width * options.ratio;
+  // Estimate the width using a monospace font (each character has the same width)
+  width = text.length * fontSize * ratio;
+  return width;
 };

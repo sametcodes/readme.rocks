@@ -15,8 +15,8 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
   let initial_padding = 30;
 
   const width = data.reduce((acc, item) => {
-    const w_value = getTextWidth(item.value.toString(), { ratio: 2.3 });
-    const w_title = getTextWidth(item.title.toString(), { ratio: 1.1 });
+    const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
+    const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
     const w_text = Math.max(w_value, w_title);
 
     return acc + w_text + padding;
@@ -28,8 +28,8 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
 
       <g transform="translate(55, 0)">
         {data.map((item, index) => {
-          const w_value = getTextWidth(item.value.toString(), { ratio: 2.3 });
-          const w_title = getTextWidth(item.title.toString(), { ratio: 1.1 });
+          const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
+          const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
           const w_text = Math.max(w_value, w_title);
 
           const x_text = initial_padding;
