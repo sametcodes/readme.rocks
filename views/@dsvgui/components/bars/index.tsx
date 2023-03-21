@@ -1,5 +1,6 @@
 import { Document, IconProps } from "@/views/@dsvgui";
 import { Fragment } from "react";
+import { getTextWidth } from "@/views/@dsvgui/utils";
 
 type IBars = {
   icon: React.FC<IconProps>;
@@ -10,9 +11,16 @@ type IBars = {
 };
 
 export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
-  const padding = 35;
-  const col_width = 80;
-  const width = data.length * col_width + padding + 50;
+  const padding = 40;
+  let initial_padding = 30;
+
+  const width = data.reduce((acc, item) => {
+    const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
+    const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
+    const w_text = Math.max(w_value, w_title);
+
+    return acc + w_text + padding;
+  }, padding + initial_padding);
 
   return (
     <Document w={width} h={75}>
@@ -20,8 +28,13 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
 
       <g transform="translate(55, 0)">
         {data.map((item, index) => {
-          let x = padding + index * col_width;
-          let line_x = col_width * index + 20;
+          const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
+          const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
+          const w_text = Math.max(w_value, w_title);
+
+          const x_text = initial_padding;
+          initial_padding += w_text + padding;
+          let x_line = x_text - 10;
 
           return (
             <Fragment key={index}>
@@ -32,7 +45,7 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
                 fontSize="11"
                 letterSpacing="0.3px"
               >
-                <tspan x={x} y={30}>
+                <tspan x={x_text} y={30}>
                   {item.title}
                 </tspan>
               </text>
@@ -44,16 +57,16 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
                 fontWeight="600"
                 letterSpacing="0.3px"
               >
-                <tspan x={x} y={53.5195}>
+                <tspan x={x_text} y={53.5195}>
                   {item.value}
                 </tspan>
               </text>
 
               {index !== 0 && (
                 <line
-                  x1={line_x}
+                  x1={x_line}
                   y1={19}
-                  x2={line_x}
+                  x2={x_line}
                   y2={56}
                   stroke="#E3E3E3"
                 />
