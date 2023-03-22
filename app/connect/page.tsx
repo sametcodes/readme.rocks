@@ -1,9 +1,7 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import actions from "@/services/oauth/actions";
 
 import prisma from "@/services/prisma";
-import { Connection, ConnectionProfile, Platform } from "@prisma/client";
 
 type IConnectionWithPlatforms = {
   id: string;

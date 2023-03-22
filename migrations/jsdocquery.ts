@@ -8,13 +8,16 @@ import jsdoc from "jsdoc-api";
 
 type File = {
   directory: string;
+  platform_code: string;
   js: string;
   ts: string;
 };
 
+type QueryType = "Public" | "Private";
+
 export interface JSDocMinified {
   name: string;
-  tags: Array<{ title: string; text: string }>;
+  tags: { title: string; text: string }[];
   description: string;
 }
 
@@ -29,9 +32,10 @@ const getFiles = (path: string): Array<File> => {
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => ({
-      directory: dirent.name,
-      js: process.cwd() + "/" + path + "/" + dirent.name + "/index.js",
-      ts: process.cwd() + "/" + path + "/" + dirent.name + "/index.ts",
+      directory: dirent.name + "/query",
+      platform_code: dirent.name,
+      js: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.js",
+      ts: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.ts",
     }));
 };
 
@@ -90,11 +94,17 @@ const migrate = async ({
   });
 
   const queries = docs
-    .map((doc) => ({
-      name: doc.name,
-      description: doc.description,
-      title: doc.tags.find((tag) => tag.title === "title")?.text as string,
-    }))
+    .map((doc) => {
+      const title = doc.tags.find((tag) => tag.title === "title");
+      const query_type = doc.tags.find((tag) => tag.title === "query_type");
+
+      return {
+        name: doc.name,
+        description: doc.description,
+        title: title?.text as string,
+        query_type: query_type?.text as QueryType,
+      };
+    })
     .filter((doc) => Boolean(doc.title));
 
   // delete all queries on the database that are not in the "queries" array
@@ -128,6 +138,7 @@ const migrate = async ({
         data: {
           name: query.name,
           title: query.title,
+          query_type: query.query_type,
           description: query.description,
           platform: {
             connect: { id: platform.id },
@@ -135,10 +146,11 @@ const migrate = async ({
         },
       });
     } else {
-      const newQuery = await prisma.platformQuery.create({
+      await prisma.platformQuery.create({
         data: {
           name: query.name,
           title: query.title,
+          query_type: query.query_type,
           description: query.description,
           platform: { connect: { id: platform.id } },
         },
@@ -156,7 +168,7 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
         (doc: any) =>
           !doc?.undocumented && doc.kind === "member" && doc.scope === "global"
       ),
-      code: file.directory,
+      code: file.platform_code,
     };
   });
 
@@ -167,5 +179,5 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
   );
 };
 
-const files = getFiles("services/platform");
+const files = getFiles("platforms/");
 compileTs(files, explainAndMigrateJSDoc);

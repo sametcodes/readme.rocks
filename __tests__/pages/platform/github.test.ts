@@ -3,10 +3,10 @@ import handlePlatformAPI from "@/services/api/handler";
 
 import { encode } from "querystring";
 
-import * as services from "@/services/platform/github";
-import * as templates from "@/views/queries/github";
+import * as services from "@/platforms/github/query";
+import * as templates from "@/platforms/github/view";
 
-const handler = handlePlatformAPI("github", services, templates);
+const handler = handlePlatformAPI(services, templates, "", {});
 const methods = Object.keys(services);
 
 describe("Github Platform APIs", () => {

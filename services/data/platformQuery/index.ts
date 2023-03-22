@@ -2,12 +2,6 @@ import prisma from "@/services/prisma";
 import { DataAPIPayload } from "@/services/data/types";
 import { isObjectID } from "@/utils";
 
-import * as queryValidations from "@/services/platform/validations";
-import * as viewValidations from "@/views/queries/validations";
-import { DataAPIMethod } from "../types";
-import handlePlatformAPI from "@/services/api/handler";
-import { getPlatformResponse } from "@/services/platform/response";
-
 export const getAllPlatformQueries = ({
   payload,
   session,
@@ -50,23 +44,4 @@ export const getPlatformQueries = async ({
       },
     },
   });
-};
-
-export const previewQuery = async ({
-  payload,
-  session,
-  params,
-}: DataAPIPayload) => {
-  const [platformQueryId] = params;
-  const platformQuery = await prisma.platformQuery.findFirst({
-    where: { id: platformQueryId },
-    select: {
-      name: true,
-      platform: {
-        select: { code: true },
-      },
-    },
-  });
-
-  throw new Error("Not implemented");
 };

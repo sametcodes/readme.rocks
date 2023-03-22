@@ -1,4 +1,4 @@
-import { Connection, User } from "@prisma/client";
+import { Connection } from "@prisma/client";
 import prisma from "@/services/prisma";
 import { requestNewAccessToken } from "passport-oauth2-refresh";
 
@@ -198,8 +198,8 @@ const actions = {
           refresh_token: string,
           result: any
         ) => {
+          if (err) return reject(err);
           if (result?.error) return reject(new Error(result.error_description));
-          if (err) return reject(new Error(err.data));
 
           return actions
             .updateConnection({

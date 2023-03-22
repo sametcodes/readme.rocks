@@ -3,10 +3,10 @@ import handlePlatformAPI from "@/services/api/handler";
 
 import { encode } from "querystring";
 
-import * as services from "@/services/platform/codewars";
-import * as templates from "@/views/queries/codewars";
+import * as services from "@/platforms/codewars/query";
+import * as templates from "@/platforms/codewars/view";
 
-const handler = handlePlatformAPI("codewars", services, templates);
+const handler = handlePlatformAPI(services, templates, "", {});
 const methods = Object.keys(services);
 
 describe("Codewars Platform APIs", () => {

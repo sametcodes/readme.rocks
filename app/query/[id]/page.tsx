@@ -1,7 +1,10 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import ConfigForm from "@/components/form";
+import * as ConfigForm from "@/components/form";
 import prisma from "@/services/prisma";
+
+import { PlatformQuery, ConnectionProfile, Platform } from "@prisma/client";
+import NextImage from "next/image";
 
 export default async function EditQueryConfig({
   params,
@@ -26,6 +29,12 @@ export default async function EditQueryConfig({
     include: { platform: true, platformQuery: true },
   });
 
+  const connectionProfile = await prisma.connectionProfile.findFirst({
+    where: { platformId: query.platformId, userId: session.user.id },
+  });
+
+  const query_view = query.query_type.toLowerCase();
+
   return (
     <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
       <div className="container text-center mb-5">
@@ -38,13 +47,86 @@ export default async function EditQueryConfig({
         <blockquote className="text-slate-700">
           <p className="text-md">{query.description}</p>
         </blockquote>
+
+        {query_view === "private" && (
+          <ConnectAccount {...{ platformQuery: query, connectionProfile }} />
+        )}
       </div>
 
-      {queryConfig ? (
-        <ConfigForm platformQuery={query} queryConfig={queryConfig} />
-      ) : (
-        <ConfigForm platformQuery={query} />
+      {query_view === "public" && (
+        <ConfigForm.Public
+          {...{
+            platformQuery: query,
+            queryConfig: queryConfig || undefined,
+            connectionProfile,
+          }}
+        />
+      )}
+
+      {query_view === "private" && (
+        <>
+          <ConfigForm.Private
+            {...{
+              platformQuery: query,
+              queryConfig: queryConfig || undefined,
+              connectionProfile,
+            }}
+          />
+        </>
       )}
     </div>
   );
 }
+
+const ConnectAccount = ({
+  platformQuery,
+  connectionProfile,
+}: {
+  platformQuery: PlatformQuery & { platform: Platform };
+  connectionProfile: ConnectionProfile | null;
+}) => {
+  return (
+    <div className="flex text-center flex-col max-w-[500px] items-center mx-auto my-5">
+      <div className="flex flex-row gap-2">
+        <div className="flex flex-col gap-1">
+          {connectionProfile ? (
+            <div>
+              <div className="flex items-center">
+                <NextImage
+                  src={connectionProfile.image}
+                  alt={connectionProfile.name || ""}
+                  width={50}
+                  height={50}
+                  className="rounded-lg border-[2px] border-slate-600"
+                />
+                <div className="ml-3">
+                  <h3 className="text-xl text-slate-800">
+                    {connectionProfile.name}
+                  </h3>
+                  <a
+                    className="text-slate-500"
+                    href={`/api/oauth/disconnect/${platformQuery.platform.code}`}
+                  >
+                    Disconnect
+                  </a>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <a
+              href={`/api/oauth/connect/${platformQuery.platform.code}`}
+              className="bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 border rounded-lg py-2 px-4"
+            >
+              Connect your {platformQuery.platform.name} account
+            </a>
+          )}
+        </div>
+      </div>
+      <p className="text-slate-500 my-3 text-sm">
+        You can get your private stats without exposing any credentials, if you
+        connect your account. After connecting your account, you can get a
+        unique link for each query.
+      </p>
+    </div>
+  );
+};
