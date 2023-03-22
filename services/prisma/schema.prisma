@@ -32,19 +32,25 @@ model Platform {
     config       Json
     require_auth Boolean
 
-    queries      PlatformQuery[]
-    queryConfigs PlatformQueryConfig[]
-    Connection   Connection[]
+    queries           PlatformQuery[]
+    queryConfigs      PlatformQueryConfig[]
+    Connection        Connection[]
+    ConnectionProfile ConnectionProfile[]
+}
+
+enum QueryType {
+    Public
+    Private
 }
 
 model PlatformQuery {
     id         String @id @default(auto()) @map("_id") @db.ObjectId
     platformId String @db.ObjectId
 
-    name        String
-    title       String
-    description String
-    type        String[]
+    name          String
+    title         String
+    description   String
+    query_type QueryType
 
     queryConfigs PlatformQueryConfig[]
     platform     Platform              @relation(fields: [platformId], references: [id])
@@ -114,6 +120,7 @@ model ConnectionProfile {
     email String
     image String
 
+    platform   Platform   @relation(fields: [platformId], references: [id])
     user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
     connection Connection @relation(fields: [connectionId], references: [id], onDelete: Cascade)
 }

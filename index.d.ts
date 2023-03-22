@@ -5,14 +5,12 @@ import type {
   PlatformQueryConfig,
   Connection,
 } from "@prisma/client";
-import type { ServerResponse } from "http";
 
 type ResponseLocals = {
   locals: {
-    platformQueryConfig: PlatformQueryConfig & {
-      platformQuery: PlatformQuery;
-      platform: Platform;
-    };
+    platform: Platform;
+    query: PlatformQuery;
+    config: any;
     connection: Connection?;
     services: any;
     templates: any;

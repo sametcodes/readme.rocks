@@ -3,10 +3,10 @@ import handlePlatformAPI from "@/services/api/handler";
 
 import { encode } from "querystring";
 
-import * as services from "@/services/platform/wakatime";
-import * as templates from "@/views/queries/wakatime";
+import * as services from "@/platforms/wakatime/query";
+import * as templates from "@/platforms/wakatime/view";
 
-const handler = handlePlatformAPI("wakatime", services, templates);
+const handler = handlePlatformAPI(services, templates, "", {});
 const methods = Object.keys(services);
 
 describe("Wakatime Platform APIs", () => {

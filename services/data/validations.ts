@@ -5,8 +5,7 @@ export * from "@/services/data/platformQuery/validations";
 export * from "@/services/data/platformQueryConfig/validations";
 export * from "@/services/data/user/validations";
 
-import * as queryValidations from "@/services/platform/validations";
-import * as viewValidations from "@/views/queries/validations";
+import { queryValidations, viewValidations } from "@/platforms/validations";
 
 import { object } from "yup";
 

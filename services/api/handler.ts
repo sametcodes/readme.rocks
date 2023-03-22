@@ -1,154 +1,47 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { getPlatformResponse } from "@/services/platform/response";
-import prisma from "@/services/prisma";
-import { isObjectID } from "@/utils";
-
-import { availableOAuthProviders } from "@/services/oauth/providers";
-import actions from "@/services/oauth/actions";
-import { Connection, PlatformQueryConfig } from "@prisma/client";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { Connection } from "@prisma/client";
+import JSXRender from "@/utils/render";
+import { trimChars } from "@/utils";
 
 type PlatformAPIHandler = (
-  platformCode: string,
   services: any,
-  templates: any
+  templates: any,
+  queryName: string,
+  config: any,
+  connection?: Connection | null
 ) => NextApiHandler;
 
-export const validateRequest = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: () => void
-) => {
-  const id = req.query.id as string;
-  if (isObjectID(id) === false)
-    return res
-      .status(400)
-      .json({ message: "Config parameter is missing or invalid" });
-
-  const config = await prisma.platformQueryConfig.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      userId: true,
-      queryConfig: true,
-      viewConfig: true,
-      platformQueryId: true,
-      platformId: true,
-      platformQuery: { select: { name: true } },
-      platform: { select: { name: true, code: true } },
-    },
-  });
-
-  if (!config) return res.status(404).json({ message: "Config not found" });
-
-  // @ts-ignore
-  res.locals = {};
-  res.locals.platformQueryConfig = config;
-  return next();
-};
-
-export const loadConfigForPreview = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: () => void
-) => {
-  const session = await getServerSession(req, res, authOptions);
-  if (!session) return res.status(401).json({ message: "Unauthorized" });
-
-  const id = req.query.id as string;
-  if (isObjectID(id) === false)
-    return res
-      .status(400)
-      .json({ message: "Query parameter is missing or invalid" });
-
-  const platformQuery = await prisma.platformQuery.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      name: true,
-      platformId: true,
-      platform: { select: { name: true, code: true } },
-    },
-  });
-
-  if (!platformQuery)
-    return res.status(404).json({ message: "Query not found" });
-
-  const connection = await prisma.connection.findFirst({
-    where: { userId: session.user.id, platformId: platformQuery.platformId },
-  });
-
-  // @ts-ignore
-  res.locals = {};
-  res.locals.platformQueryConfig = {
-    userId: session.user.id,
-    platformId: platformQuery.platformId,
-    platformQueryId: platformQuery.id,
-    platformQuery,
-    platform: platformQuery.platform,
-  } as any;
-  res.locals.connection = connection;
-  return next();
-};
-
-export const validateAccessToken = async (
-  req: NextApiRequest,
-  res: NextApiResponse,
-  next: () => void
-) => {
-  const {
-    platformQueryConfig: { userId, platformId, platform },
-  } = res.locals;
-
-  if (!availableOAuthProviders.includes(platform.code)) return next();
-  const connection = await prisma.connection.findFirst({
-    where: { userId, platformId },
-  });
-  if (!connection)
-    return res
-      .status(404)
-      .json({ message: "User has no connection on this platform" });
-  res.locals.connection = connection;
-
-  if (connection.expires_at && Date.now() > connection.expires_at) {
-    try {
-      await actions.refreshAccessToken(platform.code, connection);
-      res.locals.connection = (await prisma.connection.findFirst({
-        where: { id: connection.id },
-      })) as Connection;
-    } catch (error) {
-      if (error instanceof Error)
-        return res.status(500).json({ message: error.message });
-    }
-  }
-
-  return next();
-};
-
 const handlePlatformAPI: PlatformAPIHandler = (
-  platformCode,
   services,
-  templates
+  templates,
+  queryName,
+  config,
+  connection
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    const { platformQueryConfig: config, connection } = res.locals;
+    if (Object.keys(services).includes(queryName) === false)
+      return res.status(404).json({ message: "Query not found" });
 
-    const result = await getPlatformResponse(
-      req.query,
-      services,
-      templates,
-      connection,
-      config
-    );
+    const service = services[queryName];
+    const template = templates[queryName];
 
-    if (result.success === false) {
-      return res.status(result.status).json({ message: result.error });
-    }
+    if (!service) return res.status(500).json({ message: "Service not found" });
+    if (!template)
+      return res.status(500).json({ message: "Template not found" });
 
-    res.setHeader("Content-Type", result.contentType || "image/svg+xml");
+    const response = await service(connection, config);
+
+    if (response.success === false)
+      return res.status(500).json({ message: response.message });
+
+    const templateOutput = template(response.data, config);
+    if (!templateOutput)
+      return res.status(500).json({ message: "Template output is empty" });
+
+    const data = trimChars(JSXRender(templateOutput));
+    res.setHeader("Content-Type", "image/svg+xml");
     res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate=59");
-    return res.status(result.status).send(result.data);
+    return res.status(200).send(data);
   };
 };
 
