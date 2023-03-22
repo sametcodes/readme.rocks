@@ -9,7 +9,11 @@ export default function request(query: string, connection: Connection) {
   return fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${connection.access_token}`,
+      Authorization: `Bearer ${
+        connection
+          ? connection.access_token
+          : process.env.GITHUB_PUBLIC_CLIENT_PAT
+      }`,
       Accept: "application/vnd.github.v4.idl",
       "Content-Type": "application/json",
     },

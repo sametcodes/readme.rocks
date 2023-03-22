@@ -4,7 +4,7 @@ import request from "@/platforms/wakatime/query/request";
 /**
  * @name getAllTimeSinceToday
  * @title Get All Time Since Today
- * @requires_auth true
+ * @query_type Private
  * @description Get overall time since today
  */
 export const getAllTimeSinceToday: QueryService = async (

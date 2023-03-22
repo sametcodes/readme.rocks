@@ -1,4 +1,4 @@
-import { string, number, object } from "yup";
+import { string, number, object, boolean } from "yup";
 
 export const getLanguageUsageSummary = object({
   field: string()
@@ -10,6 +10,15 @@ export const getLanguageUsageSummary = object({
   .noUnknown(true);
 
 export const getRepositoryMilestone = object({
+  repository_name: string().required(),
+  milestone_id: number().required(),
+})
+  .required()
+  .noUnknown(true);
+
+export const getPublicRepositoryMilestone = object({
+  owner_name: string().required(),
+  is_organization: boolean().required(),
   repository_name: string().required(),
   milestone_id: number().required(),
 })

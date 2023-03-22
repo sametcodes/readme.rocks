@@ -8,9 +8,12 @@ import jsdoc from "jsdoc-api";
 
 type File = {
   directory: string;
+  platform_code: string;
   js: string;
   ts: string;
 };
+
+type QueryType = "Public" | "Private";
 
 export interface JSDocMinified {
   name: string;
@@ -29,9 +32,10 @@ const getFiles = (path: string): Array<File> => {
     .readdirSync(path, { withFileTypes: true })
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => ({
-      directory: dirent.name,
-      js: process.cwd() + "/" + path + "/" + dirent.name + "/index.js",
-      ts: process.cwd() + "/" + path + "/" + dirent.name + "/index.ts",
+      directory: dirent.name + "/query",
+      platform_code: dirent.name,
+      js: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.js",
+      ts: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.ts",
     }));
 };
 
@@ -92,14 +96,13 @@ const migrate = async ({
   const queries = docs
     .map((doc) => {
       const title = doc.tags.find((tag) => tag.title === "title");
-      const requires_auth = doc.tags.find(
-        (tag) => tag.title === "requires_auth"
-      );
+      const query_type = doc.tags.find((tag) => tag.title === "query_type");
+
       return {
         name: doc.name,
         description: doc.description,
         title: title?.text as string,
-        requires_auth: requires_auth?.text === "true",
+        query_type: query_type?.text as QueryType,
       };
     })
     .filter((doc) => Boolean(doc.title));
@@ -135,7 +138,7 @@ const migrate = async ({
         data: {
           name: query.name,
           title: query.title,
-          requires_auth: query.requires_auth,
+          query_type: query.query_type,
           description: query.description,
           platform: {
             connect: { id: platform.id },
@@ -147,7 +150,7 @@ const migrate = async ({
         data: {
           name: query.name,
           title: query.title,
-          requires_auth: query.requires_auth,
+          query_type: query.query_type,
           description: query.description,
           platform: { connect: { id: platform.id } },
         },
@@ -165,7 +168,7 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
         (doc: any) =>
           !doc?.undocumented && doc.kind === "member" && doc.scope === "global"
       ),
-      code: file.directory,
+      code: file.platform_code,
     };
   });
 
@@ -176,5 +179,5 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
   );
 };
 
-const files = getFiles("services/platform");
+const files = getFiles("platforms/");
 compileTs(files, explainAndMigrateJSDoc);

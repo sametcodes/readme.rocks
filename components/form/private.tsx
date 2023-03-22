@@ -1,13 +1,19 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import { buildFormWithYupSchema } from "./builder";
 
 import {
   queryValidations as _queryValidations,
   viewValidations as _viewValidations,
 } from "@/platforms/validations";
 import { AnyObject, ValidationError } from "yup";
-import { PlatformQuery, PlatformQueryConfig } from "@prisma/client";
+import {
+  ConnectionProfile,
+  Platform,
+  PlatformQuery,
+  PlatformQueryConfig,
+} from "@prisma/client";
 import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
 
@@ -15,13 +21,20 @@ const queryValidations = _queryValidations as { [key: string]: AnyObject };
 const viewValidations = _viewValidations as { [key: string]: AnyObject };
 
 type IConfigFormProps = {
-  platformQuery: PlatformQuery;
-  queryConfig?: PlatformQueryConfig;
+  platformQuery: PlatformQuery & { platform: Platform };
+  queryConfig:
+    | (PlatformQueryConfig & {
+        platform: Platform;
+        platformQuery: PlatformQuery;
+      })
+    | undefined;
+  connectionProfile: ConnectionProfile | null;
 };
 
-export default function ConfigForm({
+export default function PrivateConfigForm({
   platformQuery,
   queryConfig,
+  connectionProfile,
 }: IConfigFormProps) {
   const [errors, setErrors] = useState({});
 
@@ -195,23 +208,23 @@ export default function ConfigForm({
   return (
     <div className="flex flex-col justify-center lg:items-start lg:flex-row gap-10 mt-10">
       <form
+        className="flex flex-col gap-5 lg:min-h-[400px] lg:w-1/3"
         ref={$form}
         onSubmit={onSubmit}
         onChange={onChange}
-        className="flex flex-col gap-5 lg:min-h-[400px] flex-1"
       >
         {platformQuery.name && (
           <>
             <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
               Input parameters
             </h2>
-            <div className="flex flex-row lg:flex-col gap-3">
+            <div className="flex flex-row lg:flex-col gap-5">
               <div>
                 <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
                   Query parameters
                 </h3>
 
-                <div className="flex flex-row gap-2">
+                <div className="flex flex-row gap-2 flex-wrap">
                   {((queryValidations as any)[platformQuery.name] &&
                     buildFormWithYupSchema(
                       (queryValidations as any)[platformQuery.name],
@@ -224,19 +237,21 @@ export default function ConfigForm({
                 </div>
               </div>
 
-              <div>
+              <div className="flex flex-col">
                 <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
                   View parameters
                 </h3>
-                {((viewValidations as any)[platformQuery.name] &&
-                  buildFormWithYupSchema(
-                    (viewValidations as any)[platformQuery.name],
-                    "view",
-                    config?.viewConfig,
-                    errors
-                  )) || (
-                  <p className="text-slate-400">No parameters available</p>
-                )}
+                <div className="flex flex-row gap-2 flex-wrap">
+                  {((viewValidations as any)[platformQuery.name] &&
+                    buildFormWithYupSchema(
+                      (viewValidations as any)[platformQuery.name],
+                      "view",
+                      config?.viewConfig,
+                      errors
+                    )) || (
+                    <p className="text-slate-400">No parameters available</p>
+                  )}
+                </div>
               </div>
             </div>
           </>
@@ -263,11 +278,38 @@ export default function ConfigForm({
             Save
           </button>
         </div>
+
+        {/* <div>
+                    <h3 className="text-lg border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                        Connected account
+                    </h3>
+                    <p className="text-slate-500 my-3 text-sm border-l-slate-400 border-l-[3px] pl-2">You can get your private stats without exposing any credentials, if you connect your account. After connecting your account, you can get a unique link for each query.</p>
+                    <div className="flex flex-row gap-2">
+                        <div className="flex flex-col gap-1">
+                            {connectionProfile
+                                ? <div>
+                                    <div className="flex items-center">
+                                        <NextImage src={connectionProfile.image} alt={connectionProfile.name} width={50} height={50} className="rounded-lg border-[2px] border-slate-600" />
+                                        <div className="ml-3">
+                                            <h3 className="text-xl text-slate-800">{connectionProfile.name}</h3>
+                                            <a className="text-slate-500" href={`/api/oauth/disconnect/${platformQuery.platform.code}`}>
+                                                Disconnect
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                : <a href={`/api/oauth/connect/${platformQuery.platform.code}`} className="bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 border rounded-lg py-2 px-4">
+                                    Connect your {platformQuery.platform.name} account
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div> */}
       </form>
 
       <div className="border-[1px]"></div>
 
-      <div className="flex flex-col flex-1 gap-3">
+      <div className="flex flex-col gap-3 lg:w-2/3">
         <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 ">
           Output as SVG
         </h2>
@@ -380,73 +422,3 @@ export default function ConfigForm({
     </div>
   );
 }
-
-const buildFormWithYupSchema = (
-  validationSchema: AnyObject,
-  prefix: string,
-  initialValues: any,
-  errors: { [key: string]: string }
-) => {
-  const fields = Object.keys(validationSchema.fields);
-
-  if (!fields.length) return null;
-  return fields.map((fieldName) => {
-    const field = validationSchema.fields[fieldName];
-    const fieldType = field.type;
-
-    let fieldProps: any = {
-      name: prefix + "__" + fieldName,
-      placeholder: fieldName,
-      className: cn(
-        "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full"
-      ),
-    };
-
-    if (initialValues && initialValues[fieldName]) {
-      fieldProps = { ...fieldProps, defaultValue: initialValues[fieldName] };
-    }
-
-    let inputElement = null;
-    switch (fieldType) {
-      case "number":
-        inputElement = <input type="number" {...fieldProps} />;
-        break;
-      case "string":
-        if (field._whitelist.size > 1) {
-          inputElement = (
-            <select {...fieldProps}>
-              {Array.from(field._whitelist).map((enumValue: any) => (
-                <option key={enumValue} value={enumValue}>
-                  {enumValue}
-                </option>
-              ))}
-            </select>
-          );
-        } else {
-          inputElement = <input type="text" {...fieldProps} />;
-        }
-        break;
-      case "boolean":
-        inputElement = <input type="checkbox" id={fieldName} {...fieldProps} />;
-        break;
-      default:
-        inputElement = <input type="text" {...fieldProps} />;
-        break;
-    }
-
-    return (
-      <div key={fieldName} className="mb-2 w-full">
-        <label
-          htmlFor={fieldName}
-          className="block text-slate-500 text-md mb-1 capitalize"
-        >
-          {fieldName}
-        </label>
-        {inputElement}
-        <p style={{ color: "red" }}>
-          {errors[fieldName] && <span>{errors[fieldName]}</span>}
-        </p>
-      </div>
-    );
-  });
-};

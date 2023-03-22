@@ -4,7 +4,7 @@ import { QueryService } from "@/platforms/types";
 /**
  * @name getContributionsSummary
  * @title Get contributions summary
- * @requires_auth true
+ * @query_type Private
  * @description Get a summary of your contributions, like count of commits, PRs and issues
  */
 export const getContributionsSummary: QueryService = async (
@@ -29,7 +29,7 @@ export const getContributionsSummary: QueryService = async (
 /**
  * @name getLanguageUsageSummary
  * @title Get language usage summary
- * @requires_auth true
+ * @query_type Private
  * @description Get a summary of your language usage in your contributions on repositories
  */
 export const getLanguageUsageSummary: QueryService = async (
@@ -74,7 +74,7 @@ export const getLanguageUsageSummary: QueryService = async (
 /**
  * @name getRepositoryMilestone
  * @title Get repository milestone
- * @requires_auth false
+ * @query_type Private
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getRepositoryMilestone: QueryService = async (
@@ -84,28 +84,72 @@ export const getRepositoryMilestone: QueryService = async (
   const { queryConfig } = config as any;
 
   const query = `{ 
-    viewer { 
-      repository(name: "${queryConfig.repository_name}"){
-        milestone(number: ${queryConfig.milestone_id}) {
-          id
-          title
-          dueOn
-          description
-          issues {
-            totalCount
-          }
-          pullRequests{
-            totalCount
-          }
-          closedIssues: issues(states: [CLOSED]) {
-            totalCount
-          }
-          closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
-            totalCount
+      viewer {
+        repository(name: "${queryConfig.repository_name}"){
+          milestone(number: ${queryConfig.milestone_id}) {
+            id
+            title
+            dueOn
+            description
+            issues {
+              totalCount
+            }
+            pullRequests{
+              totalCount
+            }
+            closedIssues: issues(states: [CLOSED]) {
+              totalCount
+            }
+            closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
+              totalCount
+            }
           }
         }
-      }
-   }
+    }
+  }`;
+
+  const response = await request(query, connection);
+  if ("error" in response) return response;
+  return { success: true, data: response.data };
+};
+
+/**
+ * @name getPublicRepositoryMilestone
+ * @title Get public repository milestone
+ * @query_type Public
+ * @description Get the view of a specific milestone with count of issue and PRs for a repository
+ */
+export const getPublicRepositoryMilestone: QueryService = async (
+  connection,
+  config
+) => {
+  const { queryConfig } = config as any;
+
+  const query = `{ 
+      ${queryConfig.is_organization ? "organization" : "user"}(login: "${
+    queryConfig.owner_name
+  }"){
+        repository(name: "${queryConfig.repository_name}"){
+          milestone(number: ${queryConfig.milestone_id}) {
+            id
+            title
+            dueOn
+            description
+            issues {
+              totalCount
+            }
+            pullRequests{
+              totalCount
+            }
+            closedIssues: issues(states: [CLOSED]) {
+              totalCount
+            }
+            closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
+              totalCount
+            }
+          }
+        }
+    }
   }`;
 
   const response = await request(query, connection);

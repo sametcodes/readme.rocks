@@ -51,7 +51,7 @@ export function objectToQueryString(obj: Dictionary<unknown>, prefix?: string) {
     }
   }
 
-  return pairs.join("&");
+  return pairs.filter(Boolean).join("&");
 }
 
 export function parseQueryString(queryString: string): Dictionary<unknown> {
