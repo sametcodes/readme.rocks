@@ -7,6 +7,8 @@ import nextConnect from "next-connect";
 import OAuthProviders from "@/services/oauth/providers";
 import actions from "@/services/oauth/actions";
 
+let redirects: { [key: string]: string } = {};
+
 async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.redirect("/login");
@@ -16,6 +18,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   if (req.method !== "GET") return res.status(405).end();
 
   if (action === "connect") {
+    if (req.query.redirect) {
+      redirects[session.user.id] = req.query.redirect as string;
+    }
+
     return passport.authenticate(platform)(req, res);
   }
 
@@ -36,6 +42,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
           session,
           platformCode: platform,
         });
+
+        if (redirects[session.user.id]) {
+          return res.redirect(redirects[session.user.id]);
+        }
 
         return res.redirect("/connect");
       }

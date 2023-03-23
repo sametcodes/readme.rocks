@@ -2,15 +2,15 @@
 
 _All your statistics at once._
 
-![](https://devstats-app.vercel.app/api/view/64179f36e3a8ceaf79c7e710)
-![](https://devstats-app.vercel.app/api/view/64179f45e3a8ceaf79c7e711)
-![](https://devstats-app.vercel.app/api/view/64179f1ee3a8ceaf79c7e70e)
-![](https://devstats-app.vercel.app/api/view/64179f4be3a8ceaf79c7e712)
+![](https://devstats.co/api/view/641b5deaa6550999ac4331d0)
+![](https://devstats.co/api/view/641b5e30a6550999ac4331d2)
+![](https://devstats.co/api/view/641b5e1aa6550999ac4331d1)
+![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
 ## Milestones
 
-> <a href="https://github.com/sametcodes/devstats/milestone/1">
-> <img src="https://devstats-app.vercel.app/api/view/64179f30e3a8ceaf79c7e70f" />
+> <a href="https://github.com/sametcodes/devstats/milestone/2">
+> <img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
 > </a>
 
 ### Running locally

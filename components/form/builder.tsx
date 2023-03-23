@@ -47,7 +47,37 @@ export const buildFormWithYupSchema = (
         }
         break;
       case "boolean":
-        inputElement = <input type="checkbox" id={fieldName} {...fieldProps} />;
+        inputElement = (
+          <div
+            className="block w-full"
+            onClick={() => {
+              const input: HTMLInputElement | null = document.querySelector(
+                `#${fieldName}`
+              );
+              if (!input) return;
+
+              input.checked = !input.checked;
+
+              // @ts-ignore
+              input?.nextSibling?.classList.toggle("bg-[#3056d3]");
+              // @ts-ignore
+              input?.nextSibling?.classList.toggle("bg-[#CCCCCE]");
+              // @ts-ignore
+              input?.nextSibling?.classList.toggle("justify-end");
+            }}
+          >
+            <input
+              type="checkbox"
+              id={fieldName}
+              {...fieldProps}
+              className={cn(fieldProps.className, "inline p-3 w-4 h-4 sr-only")}
+            />
+
+            <span className="slider mr-3 flex h-[26px] w-[50px] items-center rounded-full bg-[#CCCCCE] p-1 duration-200">
+              <span className="dot h-[18px] w-[18px] rounded-full bg-white duration-200"></span>
+            </span>
+          </div>
+        );
         break;
       default:
         inputElement = <input type="text" {...fieldProps} />;
@@ -57,7 +87,7 @@ export const buildFormWithYupSchema = (
     return (
       <div
         key={fieldName}
-        className="mb-2 flex-wrap flex basis-[min-content] min-w-full"
+        className="mb-2 flex-wrap flex basis-[min-content] min-w-full items-center"
       >
         <label
           htmlFor={fieldName}
