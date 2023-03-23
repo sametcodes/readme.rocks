@@ -2,13 +2,15 @@ import * as codewars from "./codewars/query";
 import * as github from "./github/query";
 import * as stackoverflow from "./stackoverflow/query";
 import * as wakatime from "./wakatime/query";
+import * as devto from "./devto/query";
 
 import * as codewars_view from "./codewars/view";
 import * as github_view from "./github/view";
 import * as stackoverflow_view from "./stackoverflow/view";
 import * as wakatime_view from "./wakatime/view";
+import * as devto_view from "./devto/view";
 
-export { codewars, github, stackoverflow, wakatime };
+export { codewars, github, stackoverflow, wakatime, devto };
 
 export const getPlatformServices = (platform: string) => {
   switch (platform) {
@@ -20,6 +22,8 @@ export const getPlatformServices = (platform: string) => {
       return wakatime;
     case "codewars":
       return codewars;
+    case "devto":
+      return devto;
     default:
       return null;
   }
@@ -35,6 +39,8 @@ export const getPlatformTemplates = (platform: string) => {
       return wakatime_view;
     case "codewars":
       return codewars_view;
+    case "devto":
+      return devto_view;
     default:
       return null;
   }
