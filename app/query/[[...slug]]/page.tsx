@@ -10,37 +10,58 @@ import Link from "next/link";
 
 export default async function EditQueryConfig({
   params,
-  searchParams,
 }: {
-  params: { id: string };
-  searchParams: { [key: string]: string };
+  params: { slug: string[] };
 }) {
+  const [query_id] = params.slug || [];
   const session = await getServerSession(authOptions);
-  if (!session) return <p>Not signed in</p>;
+
+  const platforms = await prisma.platform.findMany({
+    include: { queries: true },
+  });
+
+  if (!query_id)
+    return (
+      <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
+        <div className="container text-center mb-5">
+          <SelectQuery
+            session={session}
+            platforms={platforms}
+            platformId={undefined}
+            queryId={undefined}
+          />
+          <p className="text-slate-400">
+            Login to see non-public and more queries.
+          </p>
+        </div>
+      </div>
+    );
 
   const query = await prisma.platformQuery.findUnique({
-    where: { id: params.id },
+    where: { id: query_id },
     include: { platform: true },
   });
 
   if (!query) return <p>Query not found</p>;
 
-  const queryConfig = await prisma.platformQueryConfig.findFirst({
-    where: {
-      platformQueryId: params.id,
-      userId: session.user.id,
-    },
-    include: { platform: true, platformQuery: true },
-  });
+  let queryConfig,
+    connectionProfile: ConnectionProfile | null = null;
 
-  const connectionProfile = await prisma.connectionProfile.findFirst({
-    where: { platformId: query.platformId, userId: session.user.id },
-  });
+  if (session) {
+    queryConfig = await prisma.platformQueryConfig.findFirst({
+      where: {
+        platformQueryId: query_id,
+        userId: session.user.id,
+      },
+      include: { platform: true, platformQuery: true },
+    });
+
+    connectionProfile = await prisma.connectionProfile.findFirst({
+      where: { platformId: query.platformId, userId: session.user.id },
+    });
+  }
 
   const query_view = query.query_type.toLowerCase();
-  const platforms = await prisma.platform.findMany({
-    include: { queries: true },
-  });
 
   return (
     <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
@@ -49,6 +70,7 @@ export default async function EditQueryConfig({
           platforms={platforms}
           platformId={query.platformId}
           queryId={query.id}
+          session={session}
         />
 
         <blockquote className="text-slate-700">

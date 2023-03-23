@@ -4,22 +4,26 @@ import { useState, useRef } from "react";
 import { Platform, PlatformQuery } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { isObjectID } from "@/utils";
+import { Session } from "next-auth";
 
 export const SelectQuery = ({
   platforms,
   platformId,
   queryId,
+  session,
 }: {
   platforms: (Platform & {
     queries: PlatformQuery[];
   })[];
-  platformId: string;
-  queryId: string;
+  platformId: string | undefined;
+  queryId: string | undefined;
+  session?: Session | null;
 }) => {
   const router = useRouter();
 
-  const [selectedPlatformId, setSelectedPlatformId] =
-    useState<string>(platformId);
+  const [selectedPlatformId, setSelectedPlatformId] = useState<
+    string | undefined
+  >(platformId);
   const $form = useRef<HTMLFormElement>(null);
 
   const onChange = (event: React.ChangeEvent<HTMLFormElement>) => {
@@ -42,6 +46,11 @@ export const SelectQuery = ({
   const selectedPlatform = platforms.find(
     (platform) => platform.id === selectedPlatformId
   );
+  const queries = !session
+    ? (selectedPlatform?.queries || []).filter(
+        (query) => query.query_type === "Public"
+      )
+    : selectedPlatform?.queries || [];
   return (
     <form
       className="flex flex-col items-center"
@@ -53,6 +62,7 @@ export const SelectQuery = ({
         name="platformId"
         defaultValue={selectedPlatformId}
       >
+        <option>Select platform</option>
         {platforms.map((platform) => (
           <option key={platform.id} value={platform.id}>
             {platform.name}
@@ -63,15 +73,22 @@ export const SelectQuery = ({
       <select
         className="text-2xl border-b-slate-300 border-b-[1px] pb-1 mt-2 mb-3 text-slate-700 text-center w-fit"
         name="queryId"
+        disabled={!selectedPlatformId || queries.length === 0}
         defaultValue={queryId}
       >
-        <option>Select query</option>
-        {selectedPlatform &&
-          selectedPlatform.queries.map((query) => (
-            <option key={query.id} value={query.id}>
-              {query.title}
-            </option>
-          ))}
+        {queries.length === 0 && !session ? (
+          <option>No queries available</option>
+        ) : (
+          <>
+            <option>Select query</option>
+            {selectedPlatform &&
+              queries.map((query) => (
+                <option key={query.id} value={query.id}>
+                  {query.title}
+                </option>
+              ))}
+          </>
+        )}
       </select>
     </form>
   );
