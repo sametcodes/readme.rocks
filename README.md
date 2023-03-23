@@ -9,8 +9,8 @@ _All your statistics at once._
 ![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
 ## Your latest `daily.dev` and `dev.to` articles
-<img align="left" src="https://devstats.co/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="49%" />
-<img src="https://devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="49%" />
+<img align="left" src="https://devstats.co/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
+<img src="https://devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
 <br clear="left"/>
 
 ## Milestones
