@@ -65,7 +65,15 @@ export const SelectQuery = ({
         <option>Select platform</option>
         {platforms.map((platform) => (
           <option key={platform.id} value={platform.id}>
-            {platform.name}
+            {platform.name}{" "}
+            {!session
+              ? `(${
+                  platform.queries.filter(
+                    (query) => query.query_type === "Public"
+                  ).length
+                })`
+              : `(${platform.queries.length})
+          `}
           </option>
         ))}
       </select>
