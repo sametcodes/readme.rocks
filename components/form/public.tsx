@@ -8,12 +8,7 @@ import {
   viewValidations as _viewValidations,
 } from "@/platforms/validations";
 import { AnyObject, ValidationError } from "yup";
-import {
-  ConnectionProfile,
-  Platform,
-  PlatformQuery,
-  PlatformQueryConfig,
-} from "@prisma/client";
+import { Platform, PlatformQuery } from "@prisma/client";
 import { Image, CopyButton } from "@/components/ui";
 import { objectToQueryString } from "../../utils/index";
 
@@ -22,14 +17,13 @@ const viewValidations = _viewValidations as { [key: string]: AnyObject };
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
-  queryConfig?: PlatformQueryConfig & {
-    platform: Platform;
-    platformQuery: PlatformQuery;
-  };
-  connectionProfile: ConnectionProfile | null;
+  children?: React.ReactNode;
 };
 
-export default function PublicConfigForm({ platformQuery }: IConfigFormProps) {
+export default function PublicConfigForm({
+  platformQuery,
+  children,
+}: IConfigFormProps) {
   const [errors, setErrors] = useState({});
   const [queryString, setQueryString] = useState<string | undefined>(undefined);
 
@@ -136,65 +130,68 @@ export default function PublicConfigForm({ platformQuery }: IConfigFormProps) {
 
   return (
     <div className="flex flex-col justify-center lg:items-start lg:flex-row gap-10 mt-10">
-      <form
-        className="flex flex-col gap-5 lg:min-h-[400px] lg:w-1/3"
-        ref={$form}
-        onSubmit={onSubmit}
-        onChange={onChange}
-      >
-        {platformQuery.name && (
-          <>
-            <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
-              Input parameters
-            </h2>
-            <div className="flex flex-row lg:flex-col gap-5">
-              <div className="flex flex-col">
-                <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
-                  Query parameters
-                </h3>
+      <div className="flex flex-col gap-5 lg:min-h-[400px] lg:w-1/3">
+        {children}
+        <form
+          className="flex flex-col gap-5"
+          ref={$form}
+          onSubmit={onSubmit}
+          onChange={onChange}
+        >
+          {platformQuery.name && (
+            <>
+              <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
+                Input parameters
+              </h2>
+              <div className="flex flex-row lg:flex-col gap-5">
+                <div className="flex flex-col">
+                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                    Query parameters
+                  </h3>
 
-                <div className="flex flex-row gap-2 flex-wrap">
-                  {((queryValidations as any)[platformQuery.name] &&
-                    buildFormWithYupSchema(
-                      (queryValidations as any)[platformQuery.name],
-                      "query",
-                      {},
-                      errors
-                    )) || (
-                    <p className="text-slate-400">No parameters required</p>
-                  )}
+                  <div className="flex flex-row gap-2 flex-wrap">
+                    {((queryValidations as any)[platformQuery.name] &&
+                      buildFormWithYupSchema(
+                        (queryValidations as any)[platformQuery.name],
+                        "query",
+                        {},
+                        errors
+                      )) || (
+                      <p className="text-slate-400">No parameters required</p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex flex-col">
+                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                    View parameters
+                  </h3>
+                  <div className="flex flex-row gap-2 flex-wrap">
+                    {((viewValidations as any)[platformQuery.name] &&
+                      buildFormWithYupSchema(
+                        (viewValidations as any)[platformQuery.name],
+                        "view",
+                        {},
+                        errors
+                      )) || (
+                      <p className="text-slate-400">No parameters available</p>
+                    )}
+                  </div>
                 </div>
               </div>
+            </>
+          )}
 
-              <div className="flex flex-col">
-                <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
-                  View parameters
-                </h3>
-                <div className="flex flex-row gap-2 flex-wrap">
-                  {((viewValidations as any)[platformQuery.name] &&
-                    buildFormWithYupSchema(
-                      (viewValidations as any)[platformQuery.name],
-                      "view",
-                      {},
-                      errors
-                    )) || (
-                    <p className="text-slate-400">No parameters available</p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
-
-        <div className="flex flex-row gap-2">
-          <button
-            type="submit"
-            className="rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200"
-          >
-            Preview
-          </button>
-        </div>
-      </form>
+          <div className="flex flex-row gap-2">
+            <button
+              type="submit"
+              className="rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200"
+            >
+              Preview
+            </button>
+          </div>
+        </form>
+      </div>
 
       <div className="border-[1px]"></div>
 
