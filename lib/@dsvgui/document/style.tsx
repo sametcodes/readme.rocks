@@ -2,8 +2,8 @@ import {
   Manrope300,
   Manrope500,
   Manrope700,
-} from "@/components/@dsvgui/document/fonts";
-import { IBoxShadow } from "@/components/@dsvgui/types";
+} from "@/lib/@dsvgui/document/fonts";
+import { IBoxShadow } from "@/lib/@dsvgui/types";
 
 export const Style: React.FC = () => {
   return (

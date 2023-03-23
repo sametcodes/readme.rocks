@@ -34,7 +34,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
     if (response.success === false)
       return res.status(500).json({ message: response.message });
 
-    const templateOutput = template(response.data, config);
+    const templateOutput = await template(response.data, config);
     if (!templateOutput)
       return res.status(500).json({ message: "Template output is empty" });
 

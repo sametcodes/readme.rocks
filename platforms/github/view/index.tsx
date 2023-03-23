@@ -1,8 +1,8 @@
 import { Pie } from "@nivo/pie";
 
-import { GithubIcon } from "@/components/@dsvgui/icons";
-import { Bars } from "@/components/@dsvgui/components";
-import { Style as SVGStyle } from "@/components/@dsvgui/document";
+import { GithubIcon } from "@/lib/@dsvgui/icons";
+import { Bars } from "@/lib/@dsvgui/components";
+import { Style as SVGStyle } from "@/lib/@dsvgui/document";
 import { ViewComponent } from "@/platforms/types";
 
 export const getContributionsSummary: ViewComponent = (result, config) => {

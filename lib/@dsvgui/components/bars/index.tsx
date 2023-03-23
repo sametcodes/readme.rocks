@@ -1,6 +1,6 @@
-import { Document, IconProps } from "@/components/@dsvgui";
+import { Document, IconProps } from "@/lib/@dsvgui";
 import { Fragment } from "react";
-import { getTextWidth } from "@/components/@dsvgui/utils";
+import { getTextWidth } from "@/lib/@dsvgui/utils";
 
 type IBars = {
   icon: React.FC<IconProps>;
@@ -23,7 +23,7 @@ export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
   }, padding + initial_padding);
 
   return (
-    <Document w={width} h={75}>
+    <Document w={width} h={75} padding={10}>
       <Icon x={25} y={22} />
 
       <g transform="translate(55, 0)">
