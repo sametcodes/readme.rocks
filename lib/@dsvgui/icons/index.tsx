@@ -1,4 +1,4 @@
-import { IconProps } from "@/components/@dsvgui/types";
+import { IconProps } from "@/lib/@dsvgui/types";
 
 export const IssueIcon: React.FC<IconProps> = (props) => (
   <svg

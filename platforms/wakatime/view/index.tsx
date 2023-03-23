@@ -1,6 +1,6 @@
 import { ViewComponent } from "@/platforms/types";
-import { WakatimeIcon } from "@/components/@dsvgui/icons";
-import { Bars } from "@/components/@dsvgui";
+import { WakatimeIcon } from "@/lib/@dsvgui/icons";
+import { Bars } from "@/lib/@dsvgui";
 
 export const getAllTimeSinceToday: ViewComponent = (result, platform) => {
   return (

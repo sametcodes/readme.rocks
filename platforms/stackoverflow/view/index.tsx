@@ -1,6 +1,6 @@
 import { ViewComponent } from "@/platforms/types";
-import { Bars } from "@/components/@dsvgui";
-import { StackOverflowIcon } from "@/components/@dsvgui/icons";
+import { Bars } from "@/lib/@dsvgui";
+import { StackOverflowIcon } from "@/lib/@dsvgui/icons";
 
 export const getReputation: ViewComponent = (result, platform) => {
   const [{ reputation }] = result.data.items;
