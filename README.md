@@ -2,10 +2,14 @@
 
 _All your statistics at once._
 
+## Metrics
 ![](https://devstats.co/api/view/641b5deaa6550999ac4331d0)
 ![](https://devstats.co/api/view/641b5e30a6550999ac4331d2)
 ![](https://devstats.co/api/view/641b5e1aa6550999ac4331d1)
 ![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
+
+## Latest dev.to articles
+<img src="https://preview.devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="500" />
 
 ## Milestones
 
