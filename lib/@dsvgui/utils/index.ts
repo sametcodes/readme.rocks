@@ -50,3 +50,30 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
 
   return lines.map(cb);
 };
+
+type IConvertDateFormat = (isoTimestamp: string) => string;
+export const convertDateFormat: IConvertDateFormat = (isoTimestamp) => {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const date = new Date(isoTimestamp);
+
+  const month = months[date.getMonth()];
+  const day = date.getDate();
+  const year = date.getFullYear().toString().substr(2, 2);
+
+  if (new Date().getFullYear() === date.getFullYear()) return `${month} ${day}`;
+
+  return `${month} ${day} '${year}`;
+};
