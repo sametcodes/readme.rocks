@@ -34,8 +34,8 @@ const getFiles = (path: string): Array<File> => {
     .map((dirent) => ({
       directory: dirent.name + "/query",
       platform_code: dirent.name,
-      js: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.js",
-      ts: process.cwd() + "/" + path + "/" + dirent.name + "/query/index.ts",
+      js: process.cwd() + "/" + path + dirent.name + "/query/index.js",
+      ts: process.cwd() + "/" + path + dirent.name + "/query/index.ts",
     }));
 };
 
