@@ -61,6 +61,8 @@ export const buildFormWithYupSchema = (
               // @ts-ignore
               input?.nextSibling?.classList.toggle("bg-[#3056d3]");
               // @ts-ignore
+              input?.nextSibling?.classList.toggle("bg-[#CCCCCE]");
+              // @ts-ignore
               input?.nextSibling?.classList.toggle("justify-end");
             }}
           >
