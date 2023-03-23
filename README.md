@@ -9,7 +9,7 @@ _All your statistics at once._
 ![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
 ## Latest dev.to articles
-<img src="https://preview.devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="500" />
+<img src="https://devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="500" />
 
 ## Milestones
 
