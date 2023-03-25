@@ -5,6 +5,7 @@ import request from "./request";
  * @name listArticles
  * @title List articles
  * @query_type Public
+ * @cache_time 3600
  * @description List the articles of a user, sorted by most recent or popular.
  */
 export const listArticles: QueryService = async (connection, config) => {

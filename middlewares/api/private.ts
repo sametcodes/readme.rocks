@@ -22,7 +22,7 @@ export const validatePrivateRequest = async (
       viewConfig: true,
       platformQueryId: true,
       platformId: true,
-      platformQuery: { select: { name: true } },
+      platformQuery: { select: { name: true, cache_time: true } },
       platform: { select: { name: true, code: true } },
     },
   });

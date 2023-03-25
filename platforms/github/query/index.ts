@@ -5,6 +5,7 @@ import { QueryService } from "@/platforms/types";
  * @name getContributionsSummary
  * @title Get contributions summary
  * @query_type Private
+ * @cache_time 3600
  * @description Get a summary of your contributions, like count of commits, PRs and issues
  */
 export const getContributionsSummary: QueryService = async (
@@ -30,6 +31,7 @@ export const getContributionsSummary: QueryService = async (
  * @name getLanguageUsageSummary
  * @title Get language usage summary
  * @query_type Private
+ * @cache_time 3600
  * @description Get a summary of your language usage in your contributions on repositories
  */
 export const getLanguageUsageSummary: QueryService = async (
@@ -75,6 +77,7 @@ export const getLanguageUsageSummary: QueryService = async (
  * @name getRepositoryMilestone
  * @title Get repository milestone
  * @query_type Private
+ * @cache_time 60
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getRepositoryMilestone: QueryService = async (
@@ -117,6 +120,7 @@ export const getRepositoryMilestone: QueryService = async (
  * @name getPublicRepositoryMilestone
  * @title Get public repository milestone
  * @query_type Public
+ * @cache_time 60
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getPublicRepositoryMilestone: QueryService = async (

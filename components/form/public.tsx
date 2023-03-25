@@ -226,6 +226,11 @@ export default function PublicConfigForm({
             Add anywhere you want
           </h3>
 
+          <p className="mb-5 text-slate-500">
+            Keep in mind that this query will be cached for{" "}
+            {platformQuery.cache_time} seconds.
+          </p>
+
           {!queryString && (
             <p className="text-slate-400">
               Preview the query to get the embed and raw links
