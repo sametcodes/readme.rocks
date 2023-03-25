@@ -308,7 +308,7 @@ export default function PrivateConfigForm({
           (config && connectionProfile && !preview.loading ? (
             <>
               <Image
-                src={`/api/view/${config.id}`}
+                src={`/api/view/${config.id}?_vercel_no_cache=1`}
                 title={config.id}
                 width={80}
                 height={80}
