@@ -5,6 +5,7 @@ import request from "@/platforms/codewars/query/request";
  * @name getUser
  * @title Get user details
  * @query_type Public
+ * @cache_time 3600
  * @description Get a summary of your scores and top languages
  */
 export const getUser: QueryService = async (connection, config) => {
