@@ -47,10 +47,11 @@ model PlatformQuery {
     id         String @id @default(auto()) @map("_id") @db.ObjectId
     platformId String @db.ObjectId
 
-    name          String
-    title         String
-    description   String
-    query_type QueryType
+    name        String
+    title       String
+    description String
+    query_type  QueryType
+    cache_time  Int       @default(86400)
 
     queryConfigs PlatformQueryConfig[]
     platform     Platform              @relation(fields: [platformId], references: [id])

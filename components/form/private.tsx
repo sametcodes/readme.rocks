@@ -308,7 +308,7 @@ export default function PrivateConfigForm({
           (config && connectionProfile && !preview.loading ? (
             <>
               <Image
-                src={`/api/view/${config.id}`}
+                src={`/api/view/${config.id}?_vercel_no_cache=1`}
                 title={config.id}
                 width={80}
                 height={80}
@@ -358,6 +358,12 @@ export default function PrivateConfigForm({
           <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
             Add anywhere you want
           </h3>
+
+          <p className="mb-5 text-slate-500">
+            Keep in mind that this query will be cached for{" "}
+            {platformQuery.cache_time} seconds. And it revalidates only if you
+            make changes on the parameters.
+          </p>
 
           {(!config || !connectionProfile) && (
             <p className="text-slate-400">

@@ -5,6 +5,7 @@ import request from "@/platforms/stackoverflow/query/request";
  * @name getReputation
  * @title Get reputation
  * @query_type Private
+ * @cache_time 3600
  * @description Get the total reputation of the user
  */
 export const getReputation: QueryService = async (connection, config) => {

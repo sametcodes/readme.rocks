@@ -19,6 +19,7 @@ export const validatePublicRequest = async (
     select: {
       id: true,
       name: true,
+      cache_time: true,
       platformId: true,
       platform: { select: { name: true, code: true } },
     },

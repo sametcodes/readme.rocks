@@ -97,12 +97,14 @@ const migrate = async ({
     .map((doc) => {
       const title = doc.tags.find((tag) => tag.title === "title");
       const query_type = doc.tags.find((tag) => tag.title === "query_type");
+      const cache_time = doc.tags.find((tag) => tag.title === "cache_time");
 
       return {
         name: doc.name,
         description: doc.description,
         title: title?.text as string,
         query_type: query_type?.text as QueryType,
+        cache_time: Number((cache_time?.text as string) || 86400),
       };
     })
     .filter((doc) => Boolean(doc.title));
@@ -139,6 +141,7 @@ const migrate = async ({
           name: query.name,
           title: query.title,
           query_type: query.query_type,
+          cache_time: query.cache_time,
           description: query.description,
           platform: {
             connect: { id: platform.id },
@@ -151,6 +154,7 @@ const migrate = async ({
           name: query.name,
           title: query.title,
           query_type: query.query_type,
+          cache_time: query.cache_time,
           description: query.description,
           platform: { connect: { id: platform.id } },
         },
