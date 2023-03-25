@@ -40,7 +40,10 @@ const handlePlatformAPI: PlatformAPIHandler = (
 
     const data = trimChars(JSXRender(templateOutput));
     res.setHeader("Content-Type", "image/svg+xml");
-    res.setHeader("Cache-Control", "s-maxage=1, stale-while-revalidate=59");
+    res.setHeader(
+      "Cache-Control",
+      "public, max-age=0, s-maxage=86400, stale-while-revalidate=86400"
+    );
     return res.status(200).send(data);
   };
 };
