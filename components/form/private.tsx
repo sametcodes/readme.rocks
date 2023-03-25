@@ -359,6 +359,12 @@ export default function PrivateConfigForm({
             Add anywhere you want
           </h3>
 
+          <p className="mb-5 text-slate-500">
+            Keep in mind that this query will be cached for{" "}
+            {platformQuery.cache_time} seconds. And it revalidates only if you
+            make changes on the parameters.
+          </p>
+
           {(!config || !connectionProfile) && (
             <p className="text-slate-400">
               Save the query to get the embed and raw links
