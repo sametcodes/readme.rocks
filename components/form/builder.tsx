@@ -14,11 +14,16 @@ export const buildFormWithYupSchema = (
     const field = validationSchema.fields[fieldName];
     const fieldType = field.type;
 
+    const errorMessage =
+      errors[fieldName] &&
+      errors[fieldName].replaceAll(fieldName, field.spec.meta.label);
+
     let fieldProps: any = {
       name: prefix + "__" + fieldName,
-      placeholder: fieldName,
+      placeholder: field?.spec?.meta?.placeholder || fieldName,
       className: cn(
-        "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full"
+        "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full",
+        errorMessage && "border-red-500 border-[2px] bg-red-100"
       ),
     };
 
@@ -91,14 +96,18 @@ export const buildFormWithYupSchema = (
       >
         <label
           htmlFor={fieldName}
-          className="block text-slate-500 text-md mb-1 capitalize"
+          className="block text-slate-700 text-md mb-1"
         >
-          {fieldName}
+          {field?.spec?.meta?.label || fieldName}
         </label>
         {inputElement}
-        <p style={{ color: "red" }}>
-          {errors[fieldName] && <span>{errors[fieldName]}</span>}
-        </p>
+        {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
+        {field?.spec?.meta?.description && (
+          <p className="text-slate-400 text-sm mt-2">
+            {" "}
+            {field.spec.meta.description}{" "}
+          </p>
+        )}
       </div>
     );
   });

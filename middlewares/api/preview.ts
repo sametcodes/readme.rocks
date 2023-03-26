@@ -56,9 +56,9 @@ export const validatePreviewBody = async (
   next: () => void
 ) => {
   const { body } = req;
-  const { query } = res.locals;
+  const { query, platform } = res.locals;
 
-  const schema = shapeDataAPISchema(query.name);
+  const schema = shapeDataAPISchema(platform.code, query.name);
 
   try {
     await schema.validate(body, { abortEarly: false });
