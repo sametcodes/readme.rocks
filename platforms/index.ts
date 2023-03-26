@@ -1,33 +1,25 @@
-import * as codewars from "./codewars/query";
-import * as github from "./github/query";
-import * as stackoverflow from "./stackoverflow/query";
-import * as wakatime from "./wakatime/query";
-import * as devto from "./devto/query";
-import * as dailydev from "./dailydev/query";
-
-import * as codewars_view from "./codewars/view";
-import * as github_view from "./github/view";
-import * as stackoverflow_view from "./stackoverflow/view";
-import * as wakatime_view from "./wakatime/view";
-import * as devto_view from "./devto/view";
-import * as dailydev_view from "./dailydev/view";
-
-export { codewars, github, stackoverflow, wakatime, devto };
+import * as codewars from "./codewars";
+import * as github from "./github";
+import * as stackoverflow from "./stackoverflow";
+import * as wakatime from "./wakatime";
+import * as devto from "./devto";
+import * as dailydev from "./dailydev";
+import { AnyObject } from "yup";
 
 export const getPlatformServices = (platform: string) => {
   switch (platform) {
     case "github":
-      return github;
+      return github.query;
     case "stackoverflow":
-      return stackoverflow;
+      return stackoverflow.query;
     case "wakatime":
-      return wakatime;
+      return wakatime.query;
     case "codewars":
-      return codewars;
+      return codewars.query;
     case "devto":
-      return devto;
+      return devto.query;
     case "dailydev":
-      return dailydev;
+      return dailydev.query;
     default:
       return null;
   }
@@ -36,17 +28,38 @@ export const getPlatformServices = (platform: string) => {
 export const getPlatformTemplates = (platform: string) => {
   switch (platform) {
     case "github":
-      return github_view;
+      return github.view;
     case "stackoverflow":
-      return stackoverflow_view;
+      return stackoverflow.view;
     case "wakatime":
-      return wakatime_view;
+      return wakatime.view;
     case "codewars":
-      return codewars_view;
+      return codewars.view;
     case "devto":
-      return devto_view;
+      return devto.view;
     case "dailydev":
-      return dailydev_view;
+      return dailydev.view;
+    default:
+      return null;
+  }
+};
+
+export const getPlatformValidations = (
+  platform: string
+): { query: AnyObject; view: AnyObject } | null => {
+  switch (platform) {
+    case "github":
+      return github.validations;
+    case "stackoverflow":
+      return stackoverflow.validations;
+    case "wakatime":
+      return wakatime.validations;
+    case "codewars":
+      return codewars.validations;
+    case "devto":
+      return devto.validations;
+    case "dailydev":
+      return dailydev.validations;
     default:
       return null;
   }

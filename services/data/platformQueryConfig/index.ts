@@ -48,6 +48,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
 
   const platformQuery = await prisma.platformQuery.findFirst({
     where: { id: platformQueryId },
+    include: { platform: true },
   });
 
   if (!platformQuery) throw new Error("Unknown platform query");
@@ -65,6 +66,7 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
     throw new Error("You already have a config for this query.");
 
   await shapeDataAPISchema(
+    platformQuery.platform.code,
     platformQuery.name,
     validations.createPlatformQueryConfig
   ).validate(payload, { strict: true });
@@ -114,11 +116,13 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
     select: {
       id: true,
       platformQuery: { select: { name: true } },
+      platform: { select: { code: true } },
     },
   });
   if (!platformQueryConfig) throw new Error("Unknown config.");
 
   await shapeDataAPISchema(
+    platformQueryConfig.platform.code,
     platformQueryConfig.platformQuery.name,
     validations.editPlatformQueryConfig
   ).validate(payload, { strict: true });

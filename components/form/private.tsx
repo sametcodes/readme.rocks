@@ -1,13 +1,9 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useMemo, useRef } from "react";
 import { buildFormWithYupSchema } from "./builder";
 
-import {
-  queryValidations as _queryValidations,
-  viewValidations as _viewValidations,
-} from "@/platforms/validations";
-import { AnyObject, ValidationError } from "yup";
+import { ValidationError, AnyObject } from "yup";
 import {
   ConnectionProfile,
   Platform,
@@ -16,9 +12,7 @@ import {
 } from "@prisma/client";
 import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
-
-const queryValidations = _queryValidations as { [key: string]: AnyObject };
-const viewValidations = _viewValidations as { [key: string]: AnyObject };
+import { getPlatformValidations } from "@/platforms";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
@@ -88,55 +82,6 @@ export default function PrivateConfigForm({
 
     return merged;
   }
-
-  const readFormData = (data: FormData) => {
-    try {
-      const [queryValidation, viewValidation] = [
-        queryValidations[platformQuery.name],
-        viewValidations[platformQuery.name],
-      ];
-      const [query, view] = [
-        queryValidation &&
-          readValidationFormValues(queryValidation, "query", data),
-        viewValidation &&
-          readValidationFormValues(viewValidation, "view", data),
-      ];
-
-      const formDataValues = { ...(query || {}), ...(view || {}) };
-      const validations = [queryValidation, viewValidation].filter(Boolean);
-      const schema = mergeSchemas(...validations);
-      schema.validateSync(formDataValues, { abortEarly: false });
-
-      return {
-        queryConfig: query || {},
-        viewConfig: view || {},
-      };
-    } catch (error) {
-      if (error instanceof ValidationError) {
-        const errors = error.inner
-          .map((err) => ({ name: err.path, message: err.message }))
-          .reduce(
-            (acc: any, err: any) => ({ ...acc, [err.name]: err.message }),
-            {}
-          );
-        setErrors(errors);
-      }
-    }
-
-    return null;
-  };
-
-  const onChange = (event: any) => {
-    if (!$form.current) return;
-    $formHasChanged.current = true;
-
-    const name = event.target.name.replace("query__", "").replace("view__", "");
-    if (name in errors) {
-      const newErrors: any = { ...errors };
-      delete newErrors[name];
-      setErrors(newErrors);
-    }
-  };
 
   const sendPreviewQueryRequest = useCallback(
     async (data: any) => {
@@ -209,6 +154,60 @@ export default function PrivateConfigForm({
       });
   };
 
+  const validation = useMemo(() => {
+    return getPlatformValidations(platformQuery.platform.code);
+  }, [platformQuery.platform.code]);
+  if (!validation) return null;
+
+  const readFormData = (data: FormData) => {
+    try {
+      const [queryValidation, viewValidation]: [AnyObject, AnyObject] = [
+        validation.query[platformQuery.name],
+        validation.view[platformQuery.name],
+      ];
+      const [query, view] = [
+        queryValidation &&
+          readValidationFormValues(queryValidation, "query", data),
+        viewValidation &&
+          readValidationFormValues(viewValidation, "view", data),
+      ];
+
+      const formDataValues = { ...(query || {}), ...(view || {}) };
+      const validations = [queryValidation, viewValidation].filter(Boolean);
+      const schema = mergeSchemas(...validations);
+      schema.validateSync(formDataValues, { abortEarly: false });
+
+      return {
+        queryConfig: query || {},
+        viewConfig: view || {},
+      };
+    } catch (error) {
+      if (error instanceof ValidationError) {
+        const errors = error.inner
+          .map((err) => ({ name: err.path, message: err.message }))
+          .reduce(
+            (acc: any, err: any) => ({ ...acc, [err.name]: err.message }),
+            {}
+          );
+        setErrors(errors);
+      }
+    }
+
+    return null;
+  };
+
+  const onChange = (event: any) => {
+    if (!$form.current) return;
+    $formHasChanged.current = true;
+
+    const name = event.target.name.replace("query__", "").replace("view__", "");
+    if (name in errors) {
+      const newErrors: any = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
+    }
+  };
+
   return (
     <div className="flex flex-col justify-center lg:items-start lg:flex-row gap-10 mt-10">
       <div className="flex flex-col gap-5 lg:min-h-[400px] lg:w-1/3">
@@ -235,9 +234,9 @@ export default function PrivateConfigForm({
                     </h3>
 
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {((queryValidations as any)[platformQuery.name] &&
+                      {(validation.query[platformQuery.name] &&
                         buildFormWithYupSchema(
-                          (queryValidations as any)[platformQuery.name],
+                          validation.query[platformQuery.name],
                           "query",
                           config?.queryConfig,
                           errors
@@ -252,9 +251,9 @@ export default function PrivateConfigForm({
                       View parameters
                     </h3>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {((viewValidations as any)[platformQuery.name] &&
+                      {(validation.view[platformQuery.name] &&
                         buildFormWithYupSchema(
-                          (viewValidations as any)[platformQuery.name],
+                          validation.view[platformQuery.name],
                           "view",
                           config?.viewConfig,
                           errors

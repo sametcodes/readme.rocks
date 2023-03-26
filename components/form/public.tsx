@@ -1,19 +1,13 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useMemo } from "react";
 import { buildFormWithYupSchema } from "./builder";
 
-import {
-  queryValidations as _queryValidations,
-  viewValidations as _viewValidations,
-} from "@/platforms/validations";
 import { AnyObject, ValidationError } from "yup";
 import { Platform, PlatformQuery } from "@prisma/client";
 import { Image, CopyButton } from "@/components/ui";
 import { objectToQueryString } from "../../utils/index";
-
-const queryValidations = _queryValidations as { [key: string]: AnyObject };
-const viewValidations = _viewValidations as { [key: string]: AnyObject };
+import { getPlatformValidations } from "@/platforms";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
@@ -70,11 +64,16 @@ export default function PublicConfigForm({
     return merged;
   }
 
+  const validation = useMemo(() => {
+    return getPlatformValidations(platformQuery.platform.code);
+  }, [platformQuery.platform.code]);
+  if (!validation) return null;
+
   const readFormData = (data: FormData) => {
     try {
-      const [queryValidation, viewValidation] = [
-        queryValidations[platformQuery.name],
-        viewValidations[platformQuery.name],
+      const [queryValidation, viewValidation]: [AnyObject, AnyObject] = [
+        validation.query[platformQuery.name],
+        validation.view[platformQuery.name],
       ];
       const [query, view] = [
         queryValidation &&
@@ -150,9 +149,9 @@ export default function PublicConfigForm({
                   </h3>
 
                   <div className="flex flex-row gap-2 flex-wrap">
-                    {((queryValidations as any)[platformQuery.name] &&
+                    {(validation.query[platformQuery.name] &&
                       buildFormWithYupSchema(
-                        (queryValidations as any)[platformQuery.name],
+                        validation.query[platformQuery.name],
                         "query",
                         {},
                         errors
@@ -167,9 +166,9 @@ export default function PublicConfigForm({
                     View parameters
                   </h3>
                   <div className="flex flex-row gap-2 flex-wrap">
-                    {((viewValidations as any)[platformQuery.name] &&
+                    {(validation.view[platformQuery.name] &&
                       buildFormWithYupSchema(
-                        (viewValidations as any)[platformQuery.name],
+                        validation.view[platformQuery.name],
                         "view",
                         {},
                         errors
