@@ -39,9 +39,10 @@ export default function PrivateConfigForm({
   children,
 }: IConfigFormProps) {
   const [errors, setErrors] = useState({});
-
   const [preview, setPreview] = useState({ data: "", loading: false });
+
   const $form = useRef<HTMLFormElement>(null);
+  const $formHasChanged = useRef<boolean>(false);
 
   const [config, setConfig] = useState<PlatformQueryConfig | undefined>(
     queryConfig
@@ -127,6 +128,7 @@ export default function PrivateConfigForm({
 
   const onChange = (event: any) => {
     if (!$form.current) return;
+    $formHasChanged.current = true;
 
     const name = event.target.name.replace("query__", "").replace("view__", "");
     if (name in errors) {
@@ -308,7 +310,9 @@ export default function PrivateConfigForm({
           (config && connectionProfile && !preview.loading ? (
             <>
               <Image
-                src={`/api/view/${config.id}?_vercel_no_cache=1`}
+                src={`/api/view/${config.id}${
+                  $formHasChanged.current ? "?_vercel_no_cache=1" : ""
+                }`}
                 title={config.id}
                 width={80}
                 height={80}
