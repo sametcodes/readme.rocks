@@ -7,6 +7,7 @@ _All your statistics at once._
 ![](https://devstats.co/api/view/641b5e30a6550999ac4331d2)
 ![](https://devstats.co/api/view/641b5e1aa6550999ac4331d1)
 ![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
+![](https://devstats.co/api/view/642220d0c3f0ffcbcafd573f)
 
 ## Your latest `daily.dev` and `dev.to` articles
 <img align="left" src="https://devstats.co/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
