@@ -1,5 +1,6 @@
 import { QueryService } from "@/platforms/types";
 import request from "@/platforms/wakatime/query/request";
+import { objectToQueryString } from "../../../utils/index";
 
 /**
  * @name getAllTimeSinceToday
@@ -14,9 +15,28 @@ export const getAllTimeSinceToday: QueryService = async (
 ) => {
   const response = await request(
     "/users/current/all_time_since_today",
-    connection.access_token as string
+    connection
   );
   if ("error" in response) return response;
 
   return { success: true, data: response.data.data };
+};
+
+/**
+ * @name getTimeWithRange
+ * @title Get Time With Range
+ * @query_type Private
+ * @cache_time 60
+ * @description Get your wakatime time stats with a specific date range.
+ */
+export const getTimeWithRange: QueryService = async (connection, config) => {
+  const { range } = config.queryConfig as any;
+  const query_string = objectToQueryString({ range });
+  const response = await request(
+    `/users/current/summaries?${query_string}`,
+    connection
+  );
+  if ("error" in response) return response;
+
+  return { success: true, data: response.data };
 };
