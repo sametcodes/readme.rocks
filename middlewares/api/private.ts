@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { isObjectID } from "@/utils/index";
 import prisma from "@/services/prisma";
+import { sendFallbackResponse } from "@/services/api/response";
 
 export const validatePrivateRequest = async (
   req: NextApiRequest,
@@ -9,9 +10,10 @@ export const validatePrivateRequest = async (
 ) => {
   const id = req.query.id as string;
   if (isObjectID(id) === false)
-    return res
-      .status(400)
-      .json({ message: "Config parameter is missing or invalid" });
+    return sendFallbackResponse(res, 400, {
+      title: "Invalid configuration",
+      message: "The configuration ID doesn't seem valid.",
+    });
 
   const config = await prisma.platformQueryConfig.findFirst({
     where: { id },
@@ -27,7 +29,11 @@ export const validatePrivateRequest = async (
     },
   });
 
-  if (!config) return res.status(404).json({ message: "Config not found" });
+  if (!config)
+    return sendFallbackResponse(res, 404, {
+      title: "Not found",
+      message: "The configuration does not exist, please check the URL.",
+    });
 
   // @ts-ignore
   res.locals = {};

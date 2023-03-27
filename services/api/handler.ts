@@ -2,6 +2,7 @@ import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { Connection } from "@prisma/client";
 import JSXRender from "@/utils/render";
 import { trimChars } from "@/utils";
+import { sendFallbackResponse } from "@/services/api/response";
 
 type PlatformAPIHandler = (
   services: any,
@@ -20,23 +21,41 @@ const handlePlatformAPI: PlatformAPIHandler = (
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     if (Object.keys(services).includes(queryName) === false)
-      return res.status(404).json({ message: "Query not found" });
+      return sendFallbackResponse(res, 404, {
+        title: "Query not found",
+        message: "The query doesn't exist. This is not your fault.",
+      });
 
     const service = services[queryName];
     const template = templates[queryName];
 
-    if (!service) return res.status(500).json({ message: "Service not found" });
+    if (!service)
+      return sendFallbackResponse(res, 404, {
+        title: "Service not found",
+        message:
+          "The service function is missing or invalid. This is not your fault.",
+      });
     if (!template)
-      return res.status(500).json({ message: "Template not found" });
+      return sendFallbackResponse(res, 404, {
+        title: "Template not found",
+        message: "The template is missing or invalid. This is not your fault.",
+      });
 
     const response = await service(connection, config);
-
     if (response.success === false)
-      return res.status(500).json({ message: response.message });
+      return sendFallbackResponse(res, 404, {
+        title: "Service returned an error",
+        message:
+          "The service returned an error. Please check the provided parameters, and try again.",
+      });
 
     const templateOutput = await template(response.data, config);
     if (!templateOutput)
-      return res.status(500).json({ message: "Template output is empty" });
+      return sendFallbackResponse(res, 404, {
+        title: "Template is not implemented",
+        message:
+          "The template returned an empty result, it seems it's not implemented yet.",
+      });
 
     const data = trimChars(JSXRender(templateOutput));
     res.setHeader("Content-Type", "image/svg+xml");
