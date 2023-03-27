@@ -26,7 +26,7 @@ export const validateAccessToken = async (
   });
 
   if (!connection)
-    return sendFallbackResponse(res, 401, {
+    return sendFallbackResponse(res, {
       title: "Not authorized",
       message:
         "User disconnected the account that the query was configured with.",
