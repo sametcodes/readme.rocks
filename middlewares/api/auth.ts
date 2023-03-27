@@ -7,6 +7,7 @@ import prisma from "@/services/prisma";
 import passport from "passport";
 import refresh from "passport-oauth2-refresh";
 import { getProvider } from "@/services/oauth/providers";
+import { sendFallbackResponse } from "@/services/api/response";
 
 export const validateAccessToken = async (
   req: NextApiRequest,
@@ -25,9 +26,11 @@ export const validateAccessToken = async (
   });
 
   if (!connection)
-    return res
-      .status(404)
-      .json({ message: "User has no connection on this platform" });
+    return sendFallbackResponse(res, {
+      title: "Not authorized",
+      message:
+        "User disconnected the account that the query was configured with.",
+    });
 
   res.locals.connection = connection;
 
