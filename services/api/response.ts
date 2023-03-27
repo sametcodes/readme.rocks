@@ -4,13 +4,11 @@ import JSXRender from "@/utils/render";
 
 type ISendFallbackResponse = (
   res: NextApiResponse,
-  status: number,
   data: { title: string; message: string }
 ) => void;
 
 export const sendFallbackResponse: ISendFallbackResponse = (
   res,
-  status,
   { title, message }
 ) => {
   const response = Fallback({ title, message });
@@ -20,5 +18,5 @@ export const sendFallbackResponse: ISendFallbackResponse = (
 
   const data = JSXRender(response);
   res.setHeader("Content-Type", "image/svg+xml");
-  return res.status(status).send(data);
+  return res.status(200).send(data);
 };

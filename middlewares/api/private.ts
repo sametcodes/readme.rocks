@@ -10,7 +10,7 @@ export const validatePrivateRequest = async (
 ) => {
   const id = req.query.id as string;
   if (isObjectID(id) === false)
-    return sendFallbackResponse(res, 400, {
+    return sendFallbackResponse(res, {
       title: "Invalid configuration",
       message: "The configuration ID doesn't seem valid.",
     });
@@ -30,7 +30,7 @@ export const validatePrivateRequest = async (
   });
 
   if (!config)
-    return sendFallbackResponse(res, 404, {
+    return sendFallbackResponse(res, {
       title: "Not found",
       message: "The configuration does not exist, please check the URL.",
     });

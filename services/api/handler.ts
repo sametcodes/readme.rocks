@@ -21,7 +21,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
     if (Object.keys(services).includes(queryName) === false)
-      return sendFallbackResponse(res, 404, {
+      return sendFallbackResponse(res, {
         title: "Query not found",
         message: "The query doesn't exist. This is not your fault.",
       });
@@ -30,20 +30,20 @@ const handlePlatformAPI: PlatformAPIHandler = (
     const template = templates[queryName];
 
     if (!service)
-      return sendFallbackResponse(res, 404, {
+      return sendFallbackResponse(res, {
         title: "Service not found",
         message:
           "The service function is missing or invalid. This is not your fault.",
       });
     if (!template)
-      return sendFallbackResponse(res, 404, {
+      return sendFallbackResponse(res, {
         title: "Template not found",
         message: "The template is missing or invalid. This is not your fault.",
       });
 
     const response = await service(connection, config);
     if (response.success === false)
-      return sendFallbackResponse(res, 404, {
+      return sendFallbackResponse(res, {
         title: "Service returned an error",
         message:
           "The service returned an error. Please check the provided parameters, and try again.",
@@ -51,7 +51,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
 
     const templateOutput = await template(response.data, config);
     if (!templateOutput)
-      return sendFallbackResponse(res, 404, {
+      return sendFallbackResponse(res, {
         title: "Template is not implemented",
         message:
           "The template returned an empty result, it seems it's not implemented yet.",
