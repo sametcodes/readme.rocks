@@ -2,7 +2,7 @@ import { Document, IconProps } from "@/lib/@dsvgui";
 import { Fragment } from "react";
 import { getTextWidth } from "@/lib/@dsvgui/utils";
 
-type IBars = {
+type IMetrics = {
   icon: React.FC<IconProps>;
   data: {
     title: string;
@@ -10,7 +10,7 @@ type IBars = {
   }[];
 };
 
-export const Bars: React.FC<IBars> = ({ data, icon: Icon }) => {
+export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
   const padding = 40;
   let initial_padding = 30;
 

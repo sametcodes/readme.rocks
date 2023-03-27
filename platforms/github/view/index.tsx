@@ -1,7 +1,7 @@
 import { Pie } from "@nivo/pie";
 
 import { GithubIcon } from "@/lib/@dsvgui/icons";
-import { Bars } from "@/lib/@dsvgui/components";
+import { Metrics } from "@/lib/@dsvgui/components";
 import { Style as SVGStyle } from "@/lib/@dsvgui/document";
 import { ViewComponent } from "@/platforms/types";
 
@@ -13,7 +13,7 @@ export const getContributionsSummary: ViewComponent = (result, config) => {
   } = result.data.viewer.contributionsCollection;
 
   return (
-    <Bars
+    <Metrics
       icon={GithubIcon}
       data={[
         { title: "Commits", value: totalCommitContributions },
