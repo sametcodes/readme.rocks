@@ -1,12 +1,14 @@
+import { Connection } from "@prisma/client";
+
 /**
  * @param {string} endpoint - The endpoint to send the request to
  * @returns {Promise<any>} - The response from the StackOverflow API
  * @throws {Error} - If the response is not JSON
  */
-export default function request(endpoint: string, token: string) {
+export default function request(endpoint: string, connection: Connection) {
   return fetch(`https://wakatime.com/api/v1${endpoint}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${connection.access_token}`,
     },
   })
     .then((res) => {

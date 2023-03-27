@@ -17,7 +17,10 @@ export const shapeDataAPISchema = (
 
   if (!validation) throw new Error("No validation found to shape");
 
-  const [queryValidation, viewValidation] = [validation.query, validation.view];
+  const [queryValidation, viewValidation] = [
+    validation.query[queryName],
+    validation.view[queryName],
+  ];
 
   const defaultSchema = object({}).required().noUnknown(true);
   return (schema || defaultSchema).shape({
