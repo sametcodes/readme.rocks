@@ -19,7 +19,7 @@ export default async function RootLayout({
         <meta name="description" content="dev stats ― developer stats" />
         <link rel="icon" href="/favicon.ico" />
       </head>
-      <body>
+      <body className="dark:bg-[#22272e]">
         <Layout session={session}>{children}</Layout>
         <Analytics />
       </body>

@@ -58,7 +58,7 @@ export const SelectQuery = ({
       onChange={onChange}
     >
       <select
-        className="text-4xl mr-2 font-bold text-slate-700 text-center w-fit"
+        className="text-4xl mr-2 font-bold text-slate-700 text-center w-fit dark:text-gray-200 dark:bg-[#22272e]"
         name="platformId"
         defaultValue={selectedPlatformId}
       >
@@ -79,7 +79,7 @@ export const SelectQuery = ({
       </select>
 
       <select
-        className="text-2xl border-b-slate-300 border-b-[1px] pb-1 mt-2 mb-3 text-slate-700 text-center w-fit"
+        className="text-2xl border-b-slate-300 border-b-[1px] pb-1 mt-2 mb-3 text-slate-700 text-center w-fit dark:bg-[#22272e] dark:text-gray-200 dark:border-b-gray-500 dark:border-b-gray-600"
         name="queryId"
         disabled={!selectedPlatformId || queries.length === 0}
         defaultValue={queryId}

@@ -4,7 +4,7 @@ import { Connection } from "@prisma/client";
 export type ViewComponent = (
   result: any,
   config: PlatformQueryConfig
-) => JSX.Element | Promise<JSX.Element>;
+) => JSX.Element | Promise<JSX.Element> | null;
 
 export type ServiceResponse = {
   success: boolean;

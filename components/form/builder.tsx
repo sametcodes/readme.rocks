@@ -23,7 +23,8 @@ export const buildFormWithYupSchema = (
       placeholder: field?.spec?.meta?.placeholder || fieldName,
       className: cn(
         "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full",
-        errorMessage && "border-red-500 border-[2px] bg-red-100"
+        errorMessage && "border-red-500 border-[2px] bg-red-100",
+        "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
       ),
     };
 
@@ -96,14 +97,14 @@ export const buildFormWithYupSchema = (
       >
         <label
           htmlFor={fieldName}
-          className="block text-slate-700 text-md mb-1"
+          className="block text-slate-700 text-md mb-1 dark:text-gray-400"
         >
           {field?.spec?.meta?.label || fieldName}
         </label>
         {inputElement}
         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
         {field?.spec?.meta?.description && (
-          <p className="text-slate-400 text-sm mt-2">
+          <p className="text-slate-400 text-sm mt-2 dark:text-gray-400">
             {" "}
             {field.spec.meta.description}{" "}
           </p>
