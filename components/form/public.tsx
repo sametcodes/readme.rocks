@@ -6,7 +6,7 @@ import { buildFormWithYupSchema } from "./builder";
 import { AnyObject, ValidationError } from "yup";
 import { Platform, PlatformQuery } from "@prisma/client";
 import { Image, CopyButton } from "@/components/ui";
-import { objectToQueryString } from "../../utils/index";
+import { objectToQueryString } from "@/utils";
 import { getPlatformValidations } from "@/platforms";
 
 type IConfigFormProps = {
@@ -139,12 +139,12 @@ export default function PublicConfigForm({
         >
           {platformQuery.name && (
             <>
-              <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
+              <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2 dark:text-gray-300 dark:border-b-gray-600">
                 Input parameters
               </h2>
               <div className="flex flex-row lg:flex-col gap-5">
                 <div className="flex flex-col">
-                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700 dark:text-gray-300 dark:border-b-gray-600">
                     Query parameters
                   </h3>
 
@@ -156,13 +156,15 @@ export default function PublicConfigForm({
                         {},
                         errors
                       )) || (
-                      <p className="text-slate-400">No parameters required</p>
+                      <p className="text-slate-400 dark:text-gray-300">
+                        No parameters required
+                      </p>
                     )}
                   </div>
                 </div>
 
                 <div className="flex flex-col">
-                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                  <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700 dark:text-gray-300 dark:border-b-gray-600">
                     View parameters
                   </h3>
                   <div className="flex flex-row gap-2 flex-wrap">
@@ -173,7 +175,9 @@ export default function PublicConfigForm({
                         {},
                         errors
                       )) || (
-                      <p className="text-slate-400">No parameters available</p>
+                      <p className="text-slate-400 dark:text-gray-300">
+                        No parameters available
+                      </p>
                     )}
                   </div>
                 </div>
@@ -184,7 +188,7 @@ export default function PublicConfigForm({
           <div className="flex flex-row gap-2">
             <button
               type="submit"
-              className="rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200"
+              className="rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
             >
               Preview
             </button>
@@ -192,10 +196,10 @@ export default function PublicConfigForm({
         </form>
       </div>
 
-      <div className="border-[1px]"></div>
+      <div></div>
 
       <div className="flex flex-col gap-3 lg:w-2/3">
-        <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 ">
+        <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 dark:text-gray-300">
           Output as SVG
         </h2>
 
@@ -213,37 +217,37 @@ export default function PublicConfigForm({
             />
           </>
         ) : (
-          <div className="w-full h-full min-h-[350px] bg-slate-200 rounded-lg flex items-center justify-center">
-            <p className="text-slate-500">
+          <div className="w-full h-full min-h-[350px] bg-slate-200 rounded-lg flex items-center justify-center dark:bg-gray-700">
+            <p className="text-slate-500 dark:text-gray-400">
               Choose parameters and click on the preview
             </p>
           </div>
         )}
 
         <div className="my-[50px]">
-          <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
+          <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600 dark:text-gray-300 dark:border-b-gray-600">
             Add anywhere you want
           </h3>
 
-          <p className="mb-5 text-slate-500">
+          <p className="mb-5 text-slate-500 dark:text-gray-400">
             Keep in mind that this query will be cached for{" "}
             {platformQuery.cache_time} seconds.
           </p>
 
           {!queryString && (
-            <p className="text-slate-400">
+            <p className="text-slate-400 dark:text-gray-400">
               Preview the query to get the embed and raw links
             </p>
           )}
           {queryString && (
             <div className="flex flex-col gap-5">
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   As markdown
                 </p>
                 <CopyButton
                   value={`![](${process.env.NEXT_PUBLIC_SITE_URL}/api/view?${queryString})`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg dark:bg-gray-800 dark:text-gray-300"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     ![]({process.env.NEXT_PUBLIC_SITE_URL}/api/view?
@@ -253,12 +257,12 @@ export default function PublicConfigForm({
               </div>
 
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   As HTML
                 </p>
                 <CopyButton
                   value={`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view?${queryString}" />`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg dark:bg-gray-800 dark:text-gray-300"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     {`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view?${queryString}" />`}
@@ -267,12 +271,12 @@ export default function PublicConfigForm({
               </div>
 
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   Raw link
                 </p>
                 <CopyButton
                   value={`${process.env.NEXT_PUBLIC_SITE_URL}/api/view?${queryString}`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg dark:bg-gray-800 dark:text-gray-300"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     {process.env.NEXT_PUBLIC_SITE_URL}/api/view?{queryString}

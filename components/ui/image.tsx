@@ -9,11 +9,14 @@ export const Image = (props: ImageProps) => {
     <div
       className={cn(
         "flex w-full items-center justify-center",
-        !loaded && "animate-pulse max-h-[400px] bg-slate-200 rounded-lg"
+        !loaded &&
+          "animate-pulse max-h-[400px] bg-slate-200 rounded-lg dark:bg-gray-700"
       )}
     >
       {!loaded && (
-        <span className="absolute text-slate-500">Loading preview...</span>
+        <span className="absolute text-slate-500 dark:text-gray-400">
+          Loading preview...
+        </span>
       )}
       <NextImage onLoadingComplete={() => setLoaded(true)} {...props} />
     </div>
