@@ -23,8 +23,9 @@ export const buildFormWithYupSchema = (
       placeholder: field?.spec?.meta?.placeholder || fieldName,
       className: cn(
         "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 w-full",
-        errorMessage && "border-red-500 border-[2px] bg-red-100",
-        "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300"
+        "dark:bg-gray-800 dark:border-gray-700 dark:text-gray-300",
+        errorMessage &&
+          "border-red-500 border-[2px] bg-red-100 dark:border-red-500"
       ),
     };
 
@@ -67,6 +68,8 @@ export const buildFormWithYupSchema = (
               // @ts-ignore
               input?.nextSibling?.classList.toggle("bg-[#3056d3]");
               // @ts-ignore
+              input?.nextSibling?.classList.toggle("dark:bg-[#3056d3]");
+              // @ts-ignore
               input?.nextSibling?.classList.toggle("bg-[#CCCCCE]");
               // @ts-ignore
               input?.nextSibling?.classList.toggle("justify-end");
@@ -79,8 +82,8 @@ export const buildFormWithYupSchema = (
               className={cn(fieldProps.className, "inline p-3 w-4 h-4 sr-only")}
             />
 
-            <span className="slider mr-3 flex h-[26px] w-[50px] items-center rounded-full bg-[#CCCCCE] p-1 duration-200">
-              <span className="dot h-[18px] w-[18px] rounded-full bg-white duration-200"></span>
+            <span className="slider mr-3 flex h-[26px] w-[50px] items-center rounded-full bg-[#CCCCCE] dark:bg-gray-500 p-1 duration-200">
+              <span className="dot h-[18px] w-[18px] rounded-full bg-white dark:bg-gray-200 duration-200"></span>
             </span>
           </div>
         );
