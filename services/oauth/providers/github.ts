@@ -5,7 +5,7 @@ const strategy = new Strategy(
     clientID: process.env.GITHUB_CLIENT_ID as string,
     clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
     callbackURL: `${process.env.NEXTAUTH_URL}/api/oauth/callback/github`,
-    scope: ["read:user", "user:email", "repo"],
+    scope: ["read:user", "user", "user:email", "gist", "repo", "project"],
   },
   (
     accessToken: string,
@@ -17,10 +17,16 @@ const strategy = new Strategy(
     return cb(null, {
       token: {
         access_token: accessToken,
-        refresh_token: refreshToken,
-        expires_at: Date.now() + Number(params.expires_in) * 1000,
+        refresh_token: refreshToken || "",
+        expires_at:
+          Date.now() +
+          Number(params.expires_in || 1000 * 60 * 60 * 24 * 365 * 5) * 1000,
         refresh_token_expires_at:
-          Date.now() + Number(params.refresh_token_expires_in) * 1000,
+          Date.now() +
+          Number(
+            params.refresh_token_expires_in || 1000 * 60 * 60 * 24 * 365 * 5
+          ) *
+            1000,
         scope: params.scope,
         token_type: params.token_type,
       },
