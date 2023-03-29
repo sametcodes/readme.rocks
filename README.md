@@ -18,9 +18,9 @@ _All your statistics at once._
 
 ## Milestones
 
-> <a href="https://github.com/sametcodes/devstats/milestone/2">
-> <img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
-> </a>
+<a href="https://github.com/sametcodes/devstats/milestone/2">
+<img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
+</a>
 
 ### Running locally
 
