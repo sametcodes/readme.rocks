@@ -198,5 +198,16 @@ export const getUserActiveSponsorGoal: QueryService = async (
 
   const response = await request(query, connection);
   if ("error" in response) return response;
+
+  if (!response.data.data.user.sponsorsListing.activeGoal) {
+    return {
+      success: false,
+      fallback: {
+        title: "No active sponsor goal",
+        message:
+          "This user has no active sponsor goal, or the user is not a GitHub Sponsors member.",
+      },
+    };
+  }
   return { success: true, data: response.data };
 };

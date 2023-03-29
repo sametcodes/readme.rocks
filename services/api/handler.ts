@@ -44,8 +44,9 @@ const handlePlatformAPI: PlatformAPIHandler = (
     const response = await service(connection, config);
     if (response.success === false)
       return sendFallbackResponse(res, {
-        title: "Service returned an error",
+        title: response?.fallback.title || "Service returned an error",
         message:
+          response?.fallback.message ||
           "The service returned an error. Please check the provided parameters, and try again.",
       });
 
