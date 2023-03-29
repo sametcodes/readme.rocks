@@ -16,10 +16,13 @@ _All your statistics at once._
 <img src="https://devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
 <br clear="left"/>
 
-## Milestones
+## Milestones and sponsorship goals
 
 <a href="https://github.com/sametcodes/devstats/milestone/2">
-<img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
+   <img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
+</a>
+<a href="https://github.com/sponsors/d-fischer">
+   <img src="https://devstats.co/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
 </a>
 
 ### Running locally
