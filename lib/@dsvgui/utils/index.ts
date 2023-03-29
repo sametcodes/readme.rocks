@@ -51,8 +51,10 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
   return lines.map(cb);
 };
 
-type IConvertDateFormat = (isoTimestamp: string) => string;
-export const convertDateFormat: IConvertDateFormat = (isoTimestamp) => {
+type IConvertDateToReadbleFormat = (isoTimestamp: string) => string;
+export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
+  isoTimestamp
+) => {
   const months = [
     "Jan",
     "Feb",

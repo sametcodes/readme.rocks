@@ -31,6 +31,7 @@
     "@svgdotjs/svg.js": "^3.1.2",
     "@vercel/analytics": "^0.1.11",
     "clsx": "^1.2.1",
+    "image-size": "^1.0.2",
     "lucide-react": "^0.125.0",
     "next-auth": "^4.19.0",
     "next-connect": "^0.8.1",
