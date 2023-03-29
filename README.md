@@ -1,4 +1,4 @@
-# devstats
+# readme.rocks
 
 _All your statistics at once._
 

@@ -35,7 +35,7 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
   return (
     <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4 dark:border-b-gray-500">
       <Link href="/" className="items-center space-x-2 md:flex">
-        <span className="text-2xl font-bold sm:inline-block">devstats</span>
+        <span className="text-2xl font-bold sm:inline-block">readme.rocks</span>
       </Link>
       <nav className="flex gap-6">
         {links.map((link, index) => (
