@@ -57,3 +57,13 @@ export const getPublicRepositoryMilestone = object({
 })
   .required()
   .noUnknown(true);
+
+export const getUserActiveSponsorGoal = object({
+  username: string().required().meta({
+    label: "Username",
+    placeholder: "Username",
+    description: "The username of the profile, do not include the @ symbol.",
+  }),
+})
+  .required()
+  .noUnknown(true);

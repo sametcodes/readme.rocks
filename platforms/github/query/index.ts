@@ -160,3 +160,43 @@ export const getPublicRepositoryMilestone: QueryService = async (
   if ("error" in response) return response;
   return { success: true, data: response.data };
 };
+
+/**
+ * @name getUserActiveSponsorGoal
+ * @title Get active sponsor goal
+ * @query_type Public
+ * @cache_time 3600
+ * @description Show your active sponsor goal
+ */
+export const getUserActiveSponsorGoal: QueryService = async (
+  connection,
+  config
+) => {
+  const { username } = config.queryConfig as any;
+  const query = `{ 
+    user(login: "${username}"){
+      id
+      hasSponsorsListing
+      estimatedNextSponsorsPayoutInCents
+      monthlyEstimatedSponsorsIncomeInCents
+      sponsors{
+        totalCount
+      }
+      sponsorsListing {
+        id
+        name
+        shortDescription
+        activeGoal {
+          title
+          percentComplete
+          targetValue
+          description
+        }
+      }
+    }
+  }`;
+
+  const response = await request(query, connection);
+  if ("error" in response) return response;
+  return { success: true, data: response.data };
+};
