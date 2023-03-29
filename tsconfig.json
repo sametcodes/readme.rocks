@@ -33,8 +33,7 @@
     "pages/api/github",
     "services/prisma/schema.prisma",
     ".lintstagedrc.js",
-    ".next/types/**/*.ts",
-    "/Users/samet/Documents/GitHub/devstats/.next/types/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"],
   "ts-node": {
