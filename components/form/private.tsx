@@ -224,12 +224,12 @@ export default function PrivateConfigForm({
           >
             {platformQuery.name && (
               <>
-                <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2">
+                <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2 dark:text-gray-300 dark:border-b-gray-600">
                   Input parameters
                 </h2>
                 <div className="flex flex-row lg:flex-col gap-5">
                   <div>
-                    <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                    <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700 dark:text-gray-300 dark:border-b-gray-600">
                       Query parameters
                     </h3>
 
@@ -241,13 +241,15 @@ export default function PrivateConfigForm({
                           config?.queryConfig,
                           errors
                         )) || (
-                        <p className="text-slate-400">No parameters required</p>
+                        <p className="text-slate-400 dark:text-gray-300">
+                          No parameters required
+                        </p>
                       )}
                     </div>
                   </div>
 
                   <div className="flex flex-col">
-                    <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700">
+                    <h3 className="text-lg mb-3 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-700 dark:text-gray-300 dark:border-b-gray-600">
                       View parameters
                     </h3>
                     <div className="flex flex-row gap-2 flex-wrap">
@@ -258,7 +260,7 @@ export default function PrivateConfigForm({
                           config?.viewConfig,
                           errors
                         )) || (
-                        <p className="text-slate-400">
+                        <p className="text-slate-400 dark:text-gray-300">
                           No parameters available
                         </p>
                       )}
@@ -278,7 +280,8 @@ export default function PrivateConfigForm({
                 }
                 className={cn(
                   "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 hover:bg-slate-200",
-                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed"
+                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
+                  "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
                 )}
               >
                 Preview
@@ -288,7 +291,8 @@ export default function PrivateConfigForm({
                 disabled={preview.loading || !Boolean(preview.data)}
                 className={cn(
                   "rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200",
-                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed"
+                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
+                  "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
                 )}
               >
                 Save
@@ -298,10 +302,10 @@ export default function PrivateConfigForm({
         </form>
       </div>
 
-      <div className="border-[1px]"></div>
+      <div></div>
 
       <div className="flex flex-col gap-3 lg:w-2/3">
-        <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 ">
+        <h2 className="text-2xl text-slate-600 font-bold mb-5 inline-block border-b-slate-300 border-b-[1px] pb-2 dark:text-gray-300 dark:border-b-gray-600">
           Output as SVG
         </h2>
 
@@ -324,14 +328,16 @@ export default function PrivateConfigForm({
           ) : (
             <div
               className={cn(
-                "w-full h-full min-h-[350px] bg-slate-200 rounded-lg flex items-center justify-center",
+                "w-full h-full min-h-[350px] bg-slate-200 rounded-lg flex items-center justify-center dark:bg-gray-700",
                 preview.loading ? "animate-pulse" : ""
               )}
             >
               {preview.loading ? (
-                <p className="text-slate-500">The magic is happening...</p>
+                <p className="text-slate-500 dark:text-gray-400">
+                  The magic is happening...
+                </p>
               ) : (
-                <p className="text-slate-500">
+                <p className="text-slate-500 dark:text-gray-400">
                   {connectionProfile
                     ? "Choose parameters and click on the preview"
                     : "Connect your account first and choose parameters"}{" "}
@@ -358,30 +364,30 @@ export default function PrivateConfigForm({
         )}
 
         <div className="my-[50px]">
-          <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600">
+          <h3 className="text-lg mb-4 border-b-slate-600 border-b-[1px] inline-block pb-1 text-slate-600 dark:text-gray-300 dark:border-b-gray-600">
             Add anywhere you want
           </h3>
 
-          <p className="mb-5 text-slate-500">
+          <p className="mb-5 text-slate-500 dark:text-gray-400">
             Keep in mind that this query will be cached for{" "}
             {platformQuery.cache_time} seconds. And it revalidates only if you
             make changes on the parameters.
           </p>
 
           {(!config || !connectionProfile) && (
-            <p className="text-slate-400">
+            <p className="text-slate-400 dark:text-gray-400">
               Save the query to get the embed and raw links
             </p>
           )}
           {config && connectionProfile && (
             <div className="flex flex-col gap-5">
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   As markdown
                 </p>
                 <CopyButton
                   value={`![](${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id})`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full border-[1px] bg-slate-200 whitespace-pre rounded-lg  dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     ![]({process.env.NEXT_PUBLIC_SITE_URL}/api/view/{config.id})
@@ -390,12 +396,12 @@ export default function PrivateConfigForm({
               </div>
 
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   As HTML
                 </p>
                 <CopyButton
                   value={`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}" />`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full border-[1px]  bg-slate-200 whitespace-pre rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     {`<img src="${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}" />`}
@@ -404,12 +410,12 @@ export default function PrivateConfigForm({
               </div>
 
               <div>
-                <p className="block text-slate-700 text-sm mb-1 capitalize">
+                <p className="block text-slate-700 text-sm mb-1 capitalize dark:text-gray-400">
                   Raw link
                 </p>
                 <CopyButton
                   value={`${process.env.NEXT_PUBLIC_SITE_URL}/api/view/${config.id}`}
-                  className="relative inline-block w-full bg-slate-200 whitespace-pre rounded-lg"
+                  className="relative inline-block w-full border-[1px]  bg-slate-200 whitespace-pre rounded-lg dark:bg-gray-800 dark:text-gray-300 dark:border-gray-700"
                 >
                   <code className="p-4 block w-full text-sm overflow-x-scroll">
                     {process.env.NEXT_PUBLIC_SITE_URL}/api/view/{config.id}

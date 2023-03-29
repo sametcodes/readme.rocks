@@ -30,7 +30,7 @@ export default async function EditQueryConfig({
             platformId={undefined}
             queryId={undefined}
           />
-          <p className="text-slate-400">
+          <p className="text-slate-400 dark:text-gray-500">
             Login to see non-public and more queries.
           </p>
         </div>
@@ -73,7 +73,7 @@ export default async function EditQueryConfig({
           session={session}
         />
 
-        <blockquote className="text-slate-700">
+        <blockquote className="text-slate-700 dark:text-gray-500">
           <p className="text-md">{query.description}</p>
         </blockquote>
       </div>
@@ -107,7 +107,7 @@ const ConnectAccount = ({
 }) => {
   return (
     <div className="w-full">
-      <h2 className="text-2xl text-slate-600 font-bold border-b-slate-300 border-b-[1px] pb-2 mb-3 w-full">
+      <h2 className="text-2xl text-slate-600 font-bold border-b-slate-300 border-b-[1px] pb-2 mb-3 w-full dark:text-gray-300 dark:border-b-gray-600">
         Connected account
       </h2>
       <div className="flex flex-row gap-2">
@@ -119,18 +119,21 @@ const ConnectAccount = ({
                 alt={connectionProfile.name || ""}
                 width={50}
                 height={50}
-                className="rounded-lg border-[2px] border-slate-600"
+                className="rounded-lg border-[2px] border-slate-600 dark:border-gray-600"
               />
               <div className="flex justify-between items-center ml-3 flex-auto">
                 <div>
-                  <h3 className="text-xl text-slate-800">
+                  <h3 className="text-xl text-slate-800 dark:text-gray-300">
                     {connectionProfile.name}
                   </h3>
                   <p className="text-slate-500">
                     {platformQuery.platform.name}
                   </p>
                 </div>
-                <Link href="/connect" className="text-sm text-slate-500">
+                <Link
+                  href="/connect"
+                  className="text-sm text-slate-500 dark:text-gray-500"
+                >
                   Manage connections
                 </Link>
               </div>
