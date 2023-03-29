@@ -322,3 +322,59 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
     />
   );
 };
+
+export const getUserActiveSponsorGoal: ViewComponent = (result, config) => {
+  const { user } = result.data;
+
+  const Icons = {
+    TargetArrow: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -18)"
+        d="M21.6 6.4a0.6 0.6 0 0 1-0.2 0.6l-2.4 2.4A0.6 0.6 0 0 1 18.6 9.6h-3.4l-1.6 1.6a1.8 1.8 0 1 1-0.8-0.8L14.4 8.8V5.4a0.6 0.6 0 0 1 0.2-0.4l2.4-2.4A0.6 0.6 0 0 1 18 3V6h3a0.6 0.6 0 0 1 0.6 0.4ZM19.6 7.2H17.4a0.6 0.6 0 0 1-0.6-0.6V4.4l-1.2 1.2V8.4h2.8l1.2-1.2Zm1.5 1.8C21.4 10 21.6 11 21.6 12a9.6 9.6 0 1 1-6.6-9.1l-1 0.9a8.4 8.4 0 1 0 6.2 6.2l0.9-1ZM17.9 10.8A6 6 0 1 1 13.2 6.1v1.3A4.8 4.8 0 1 0 16.6 10.8H17.9Z"
+      />
+    ),
+    Sponsors: (
+      <g>
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7z m4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+        />
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M5.2 14A2.2 2.2 0 0 1 5 13c0-1.4 0.7-2.8 1.9-3.7A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.2z"
+        />
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
+        />
+      </g>
+    ),
+  };
+
+  const metrics: IProgress["metrics"] = [
+    {
+      text: `%${user.sponsorsListing.activeGoal.percentComplete} reached`,
+      icon: Icons.TargetArrow,
+    },
+    {
+      text: `${user.sponsors.totalCount} total sponsors`,
+      icon: Icons.Sponsors,
+    },
+  ];
+
+  return (
+    <Progress
+      title={user.sponsorsListing.activeGoal.title}
+      percent={user.sponsorsListing.activeGoal.percentComplete}
+      metrics={metrics}
+    />
+  );
+};
