@@ -16,4 +16,5 @@ export type IBoxShadow = {
   width: number;
   padding: number;
   height: number;
+  id: string;
 };
