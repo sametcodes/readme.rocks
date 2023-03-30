@@ -35,7 +35,7 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
   return (
     <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4 dark:border-b-gray-500">
       <Link href="/" className="items-center space-x-2 md:flex">
-        <span className="text-2xl font-bold sm:inline-block">devstats</span>
+        <span className="text-2xl font-bold sm:inline-block">readme.rocks</span>
       </Link>
       <nav className="flex gap-6">
         {links.map((link, index) => (
@@ -43,9 +43,9 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
             key={index}
             href={link.href}
             className={cn(
-              "items-center text-lg font-semibold text-slate-400 sm:text-sm hidden sm:flex dark:text-gray-500",
+              "items-center text-lg text-slate-600 sm:text-sm hidden sm:flex dark:text-gray-400",
               link.href.startsWith(`/${segment}`) &&
-                "text-slate-900 dark:text-gray-300"
+                "text-slate-900 font-semibold dark:text-gray-200"
             )}
           >
             {link.title}
@@ -53,10 +53,10 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
         ))}
         {!session ? (
           <div
-            className="text-lg font-semibold text-slate-400 sm:text-sm cursor-pointer hover:text-slate-700"
+            className="text-lg font-semibold text-slate-700 sm:text-sm cursor-pointer hover:text-slate-700"
             onClick={() => signIn("github")}
           >
-            Login
+            Login with GitHub
           </div>
         ) : (
           <Link href="/connect" className="cursor-pointer flex items-center">
