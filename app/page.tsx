@@ -1,4 +1,5 @@
 import NextImage from "next/image";
+import Link from "next/link";
 
 export default function Index() {
   return (
@@ -13,9 +14,11 @@ export default function Index() {
             Manifest your work with integrating data from various platforms.
           </p>
         </div>
-        <button className="h-11 px-5 mt-5 font-semibold rounded-lg border-purple-500 border-[1px] text-purple-500 hover:bg-gray-200 dark:hover:bg-gray-800 max-w-fit">
-          Open builder
-        </button>
+        <Link href="/query">
+          <button className="h-11 px-5 mt-5 font-semibold rounded-lg border-purple-500 border-[1px] text-purple-500 hover:bg-gray-200 dark:hover:bg-gray-800 max-w-fit">
+            Open builder
+          </button>
+        </Link>
       </div>
 
       <div className="hidden lg:block absolute h-full w-[45%] top-[30px] -right-8">
