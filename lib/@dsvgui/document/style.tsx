@@ -67,7 +67,7 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
     </g>
     <defs>
       <filter
-        id={`cripsEdges_${id}`}
+        id={`crispEdges_${id}`}
         x="-2"
         y="-1"
         width={width + padding}
