@@ -151,7 +151,7 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
     Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
   const dueDate =
     (milestone.dueOn &&
-      "Due by" +
+      "Due by " +
         new Date(milestone.dueOn).toLocaleDateString("en-US", {
           month: "long",
           day: "numeric",
@@ -244,7 +244,7 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
     Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
   const dueDate =
     (milestone.dueOn &&
-      "Due by" +
+      "Due by " +
         new Date(milestone.dueOn).toLocaleDateString("en-US", {
           month: "long",
           day: "numeric",

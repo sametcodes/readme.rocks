@@ -53,7 +53,7 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
         ))}
         {!session ? (
           <div
-            className="text-lg font-semibold text-slate-700 sm:text-sm cursor-pointer hover:text-slate-700"
+            className="text-lg font-semibold text-slate-700 sm:text-sm cursor-pointer hover:text-slate-700 dark:text-gray-300 hover:dark:text-gray-500"
             onClick={() => signIn("github")}
           >
             Login with GitHub

@@ -18,62 +18,12 @@ export default function Index() {
         </button>
       </div>
 
-      <div className="hidden lg:block">
+      <div className="hidden lg:block absolute h-full w-[45%] top-[30px] -right-8">
         <NextImage
-          className="absolute top-[110px] right-[90px]"
-          src="/assets/line1.svg"
-          alt=""
-          width={400}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[260px] -right-[150px]"
-          src="/assets/article1.svg"
-          alt=""
-          width={500}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[260px] right-[520px]"
-          src="/assets/metrics1.svg"
-          alt=""
-          width={260}
-          height={500}
-        />
-        <NextImage
-          className="absolute top-[350px] right-[390px]"
-          src="/assets/metrics3.svg"
-          alt=""
-          width={350}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[480px] right-[420px]"
-          src="/assets/progress1.svg"
-          alt=""
-          width={450}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[660px] right-[180px]"
-          src="/assets/metrics2.svg"
-          alt=""
-          width={210}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[660px] right-[480px]"
-          src="/assets/metrics4.svg"
-          alt=""
-          width={250}
-          height={400}
-        />
-        <NextImage
-          className="absolute top-[790px] right-[120px]"
-          src="/assets/progress2.svg"
-          alt=""
-          width={450}
-          height={400}
+          src="/assets/views.svg"
+          alt="Views of components"
+          fill
+          style={{ width: "100%", height: "100%" }}
         />
       </div>
     </div>
