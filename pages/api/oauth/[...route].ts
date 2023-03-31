@@ -11,7 +11,7 @@ let redirects: { [key: string]: string } = {};
 
 async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);
-  if (!session) return res.redirect("/login");
+  if (!session) return res.redirect("/");
 
   const [action, platform]: Array<string> = req.query.route as Array<string>;
 
@@ -29,7 +29,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
     return passport.authenticate(
       platform,
       {
-        failureRedirect: "/login",
+        failureRedirect: "/",
       },
       async (error: Error | null, data: any) => {
         if (error) {

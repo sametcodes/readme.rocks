@@ -35,9 +35,12 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
     return path;
   }
 
-  const total_text_width =
-    getTextWidth(subtitle, { fontSize: 16 }) +
-    getTextWidth(total, { fontSize: 24 });
+  const title_width = getTextWidth(title, { fontSize: 16 });
+  const subtitle_width = getTextWidth(subtitle, { fontSize: 16 });
+
+  const titles_width = Math.max(title_width, subtitle_width);
+
+  const total_text_width = titles_width + getTextWidth(total, { fontSize: 24 });
   const height = 110;
   const width = total_text_width + 100;
   const path_value = createDynamicSvgPath({ height, width, ratio: 0.5 });

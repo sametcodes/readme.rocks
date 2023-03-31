@@ -51,9 +51,10 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
   width,
   height,
   padding,
+  id,
 }) => (
   <>
-    <g filter="url(#filter0_d_39_272)">
+    <g filter={`url(#crispEdges_${id})`}>
       <rect
         className="dsvgui-container"
         width={width}
@@ -66,7 +67,7 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
     </g>
     <defs>
       <filter
-        id="filter0_d_39_272"
+        id={`cripsEdges_${id}`}
         x="-2"
         y="-1"
         width={width + padding}
