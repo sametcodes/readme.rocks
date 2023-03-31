@@ -5,7 +5,6 @@ import prisma from "@/services/prisma";
 
 type IConnectionWithPlatforms = {
   id: string;
-  expires_at: number;
   profile: { name: string; email: string; image: string } | null;
   platform: {
     id: string;
@@ -24,7 +23,6 @@ export default async function Connect() {
       where: { userId: session.user.id, type: "oauth" },
       select: {
         id: true,
-        expires_at: true,
         profile: { select: { name: true, email: true, image: true } },
         platform: {
           select: {
