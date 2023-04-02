@@ -15,6 +15,18 @@ export const authOptions = {
     GithubProvider({
       clientId: GITHUB_CLIENT_ID,
       clientSecret: GITHUB_CLIENT_SECRET,
+      authorization: {
+        params: {
+          scope: [
+            "read:user",
+            "user",
+            "user:email",
+            "gist",
+            "repo",
+            "project",
+          ].join(","),
+        },
+      },
       client: {
         redirect_uris: [`${process.env.NEXTAUTH_URL}/api/auth/callback/github`],
       },
