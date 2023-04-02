@@ -67,7 +67,7 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
         height={height}
         rx="20"
         fill="white"
-        shape-rendering="crispEdges"
+        shapeRendering="crispEdges"
       />
       {children}
     </g>
@@ -79,7 +79,7 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
         width={width + padding}
         height={height + padding}
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
         <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix
