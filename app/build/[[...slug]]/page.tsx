@@ -8,7 +8,7 @@ import NextImage from "next/image";
 import { SelectQuery } from "@/components/form/select";
 import Link from "next/link";
 
-export default async function EditQueryConfig({
+export default async function Build({
   params,
 }: {
   params: { slug: string[] };

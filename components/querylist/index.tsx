@@ -57,7 +57,7 @@ export default function QueryList({ platforms, configs }: IQueryList) {
                         ) ? (
                           <div className="flex gap-3">
                             <Link
-                              href={`/query/${query.id}`}
+                              href={`/build/${query.id}`}
                               className="cursor-pointer"
                             >
                               View/Edit
@@ -77,7 +77,7 @@ export default function QueryList({ platforms, configs }: IQueryList) {
                             </span>
                           </div>
                         ) : (
-                          <Link href={`/query/${query.id}`}>Create</Link>
+                          <Link href={`/build/${query.id}`}>Create</Link>
                         )}
                       </span>
                     </li>
