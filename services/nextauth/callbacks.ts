@@ -29,6 +29,7 @@ const signIn: CallbacksOptions["signIn"] = async ({
 
       const userActiveConnection = await prisma.connection.findFirst({
         where: { userId: user.id, type: "oauth", platformId: platform?.id },
+        select: { id: true, profile: { select: { id: true } } },
       });
 
       if (userActiveConnection) {
@@ -42,7 +43,7 @@ const signIn: CallbacksOptions["signIn"] = async ({
           },
         });
         await prisma.connectionProfile.update({
-          where: { id: userActiveConnection.userId },
+          where: { id: userActiveConnection.profile?.id },
           data: {
             name: user.name || profile?.name,
             email: user.email || profile?.email,
