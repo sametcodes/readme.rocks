@@ -39,7 +39,7 @@ export const SelectQuery = ({
 
     if (event.target.name === "queryId") {
       if (!isObjectID(values.queryId as string)) return;
-      router.push(`/query/${values.queryId}`);
+      router.push(`/build/${values.queryId}`);
     }
   };
 

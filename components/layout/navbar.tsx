@@ -21,12 +21,8 @@ type INavbarWithLogin = {
 
 const links = [
   {
-    title: "Queries",
-    href: "/query",
-  },
-  {
-    title: "Connect",
-    href: "/connect",
+    title: "Builder",
+    href: "/build",
   },
 ];
 
@@ -86,6 +82,9 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
                     <DropdownMenuItem>{link.title}</DropdownMenuItem>
                   </Link>
                 ))}
+                <DropdownMenuItem className="text-slate-500">
+                  <Link href="/connect">Connects</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => signOut()}
                   className="text-slate-500"
