@@ -1,23 +1,5 @@
 import { string, number, object, boolean } from "yup";
 
-export const getLanguageUsageSummary = object({
-  field: string()
-    .required()
-    .oneOf(["PUSHED_AT", "CREATED_AT", "UPDATED_AT", "STARGAZERS"])
-    .meta({
-      label: "Sort By",
-      placeholder: "Sort By",
-      description: "Sort by pushed at, created at, updated at, or stargazers.",
-    }),
-  direction: string().required().oneOf(["ASC", "DESC"]).meta({
-    label: "Sort Direction",
-    placeholder: "Sort Direction",
-    description: "Sort in ascending or descending order.",
-  }),
-})
-  .required()
-  .noUnknown(true);
-
 export const getRepositoryMilestone = object({
   repository_name: string().required().meta({
     label: "Repository Name",
