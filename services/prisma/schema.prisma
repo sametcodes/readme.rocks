@@ -97,9 +97,9 @@ model Connection {
     userId     String @db.ObjectId
     platformId String @db.ObjectId
 
-    refresh_token            String  @db.String
+    refresh_token            String?  @db.String
     access_token             String  @db.String
-    expires_at               Int
+    expires_at               Int?
     refresh_token_expires_at Int?
     type                     String
     token_type               String

@@ -191,7 +191,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       requestNewAccessToken(
         platformCode,
-        connection.refresh_token,
+        connection.refresh_token as string,
         async (
           err: { statusCode: number; data?: any },
           access_token: string,

@@ -23,7 +23,7 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
         </tspan>
       </text>
       <g className="status_bar">
-        <rect x="17" y="64" width={462} height="18" rx="5" fill="#E7E7E7" />
+        <rect x="17" y="64" width={462} height="18" rx="5" fill="#E0E0E0" />
         <rect
           x="17"
           y="64"
