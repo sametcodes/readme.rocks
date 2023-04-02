@@ -15,9 +15,21 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>readme.rocks ― readme stats</title>
-        <meta name="description" content="dev stats ― developer stats" />
-        <link rel="icon" href="/favicon.ico" />
+        <title>readme.rocks</title>
+        <meta
+          name="description"
+          content="Readme.rocks - Developer Stats on your GitHub profile"
+          key="desc"
+        />
+
+        <meta
+          property="og:description"
+          content="Display your coding stats from various platforms on your GitHub profile with Readme.rocks"
+        />
+        <meta property="og:type" content="website" />
+
+        <meta property="og:image" content="" />
+        <meta property="og:url" content="https://readme.rocks/" />
       </head>
       <body className="bg-light-lp-gradient bg-no-repeat dark:bg-dark-lp-gradient min-h-screen overflow-x-hidden">
         <Layout session={session}>{children}</Layout>
