@@ -5,10 +5,11 @@ import throat from "throat";
 
 // @ts-ignore
 import jsdoc from "jsdoc-api";
+import { PlatformCode } from "@prisma/client";
 
 type File = {
   directory: string;
-  platform_code: string;
+  platform_code: PlatformCode;
   js: string;
   ts: string;
 };
@@ -33,7 +34,7 @@ const getFiles = (path: string): Array<File> => {
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => ({
       directory: dirent.name + "/query",
-      platform_code: dirent.name,
+      platform_code: dirent.name as PlatformCode,
       js: process.cwd() + "/" + path + dirent.name + "/query/index.js",
       ts: process.cwd() + "/" + path + dirent.name + "/query/index.ts",
     }));
@@ -69,7 +70,7 @@ const migrate = async ({
   code,
 }: {
   docs: Array<JSDocMinified>;
-  code: string;
+  code: PlatformCode;
 }): Promise<void> => {
   let platform = await prisma.platform.findUnique({ where: { code } });
 

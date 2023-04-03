@@ -4,63 +4,39 @@ import * as stackoverflow from "./stackoverflow";
 import * as wakatime from "./wakatime";
 import * as devto from "./devto";
 import * as dailydev from "./dailydev";
-import { AnyObject } from "yup";
 
-export const getPlatformServices = (platform: string) => {
-  switch (platform) {
-    case "github":
-      return github.query;
-    case "stackoverflow":
-      return stackoverflow.query;
-    case "wakatime":
-      return wakatime.query;
-    case "codewars":
-      return codewars.query;
-    case "devto":
-      return devto.query;
-    case "dailydev":
-      return dailydev.query;
-    default:
-      return null;
-  }
+export const services = {
+  github: github.query,
+  stackoverflow: stackoverflow.query,
+  wakatime: wakatime.query,
+  codewars: codewars.query,
+  devto: devto.query,
+  dailydev: dailydev.query,
 };
 
-export const getPlatformTemplates = (platform: string) => {
-  switch (platform) {
-    case "github":
-      return github.view;
-    case "stackoverflow":
-      return stackoverflow.view;
-    case "wakatime":
-      return wakatime.view;
-    case "codewars":
-      return codewars.view;
-    case "devto":
-      return devto.view;
-    case "dailydev":
-      return dailydev.view;
-    default:
-      return null;
-  }
+export const templates = {
+  github: github.view,
+  stackoverflow: stackoverflow.view,
+  wakatime: wakatime.view,
+  codewars: codewars.view,
+  devto: devto.view,
+  dailydev: dailydev.view,
 };
 
-export const getPlatformValidations = (
-  platform: string
-): { query: AnyObject; view: AnyObject } | null => {
-  switch (platform) {
-    case "github":
-      return github.validations;
-    case "stackoverflow":
-      return stackoverflow.validations;
-    case "wakatime":
-      return wakatime.validations;
-    case "codewars":
-      return codewars.validations;
-    case "devto":
-      return devto.validations;
-    case "dailydev":
-      return dailydev.validations;
-    default:
-      return null;
-  }
+export const validations = {
+  github: github.validations,
+  stackoverflow: stackoverflow.validations,
+  wakatime: wakatime.validations,
+  codewars: codewars.validations,
+  devto: devto.validations,
+  dailydev: dailydev.validations,
+};
+
+export const samples = {
+  github: github.sample,
+  stackoverflow: stackoverflow.sample,
+  wakatime: wakatime.sample,
+  codewars: codewars.sample,
+  devto: devto.sample,
+  dailydev: dailydev.sample,
 };

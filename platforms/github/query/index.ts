@@ -28,52 +28,6 @@ export const getContributionsSummary: QueryService = async (
 };
 
 /**
- * @name getLanguageUsageSummary
- * @title Get language usage summary
- * @query_type Private
- * @cache_time 3600
- * @description Get a summary of your language usage in your contributions on repositories
- */
-export const getLanguageUsageSummary: QueryService = async (
-  connection,
-  config
-) => {
-  const { queryConfig } = config as any;
-
-  const query = `{ 
-    viewer { 
-      repositories(ownerAffiliations: [OWNER], first: 100, orderBy: {
-        field: ${queryConfig.field},
-        direction: ${queryConfig.direction}
-      }){
-        edges {
-          node {
-            id
-            name
-            languages(first: 100){
-              totalCount
-              totalSize
-              edges {
-                size
-                node {
-                  color
-                  name
-                  id
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }`;
-
-  const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
-};
-
-/**
  * @name getRepositoryMilestone
  * @title Get repository milestone
  * @query_type Private
