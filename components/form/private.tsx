@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef } from "react";
 import { buildFormWithYupSchema } from "./builder";
+import { mergeSchemas } from "@/utils";
 
 import { ValidationError, AnyObject } from "yup";
 import {
@@ -13,33 +14,56 @@ import {
 import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
 import { validations } from "@/platforms";
+import Link from "next/link";
+import NextImage from "next/image";
+import { useRouter } from "next/navigation";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
-  queryConfig:
+  queryConfigs:
     | (PlatformQueryConfig & {
         platform: Platform;
         platformQuery: PlatformQuery;
-      })
-    | undefined;
+      })[];
   connectionProfile: ConnectionProfile | null;
+  activeQueryConfigId: string | null;
   children?: React.ReactNode;
 };
 
 export default function PrivateConfigForm({
   platformQuery,
-  queryConfig,
+  queryConfigs,
   connectionProfile,
+  activeQueryConfigId,
   children,
 }: IConfigFormProps) {
+  const router = useRouter();
   const [errors, setErrors] = useState({});
   const [preview, setPreview] = useState({ data: "", loading: false });
 
   const $form = useRef<HTMLFormElement>(null);
   const $formHasChanged = useRef<boolean>(false);
 
+  const validation: { query: AnyObject; view: AnyObject } | null =
+    useMemo(() => {
+      const platformValidations = validations[platformQuery.platform.code];
+      return {
+        query:
+          platformValidations.query[
+            platformQuery.name as keyof typeof platformValidations.query
+          ],
+        view: platformValidations.view[
+          platformQuery.name as keyof typeof platformValidations.view
+        ],
+      };
+    }, [platformQuery.platform.code, platformQuery.name]);
+  const schema = useMemo(
+    () => mergeSchemas(validation?.query, validation?.view),
+    [validation]
+  );
+
   const [config, setConfig] = useState<PlatformQueryConfig | undefined>(
-    queryConfig
+    queryConfigs.find((c) => c.id === activeQueryConfigId) || undefined
   );
 
   const readValidationFormValues = (
@@ -72,17 +96,6 @@ export default function PrivateConfigForm({
     }, {});
   };
 
-  function mergeSchemas(...schemas: Array<any>) {
-    const [first, ...rest] = schemas;
-
-    const merged = rest.reduce(
-      (mergedSchemas, schema) => mergedSchemas.concat(schema),
-      first
-    );
-
-    return merged;
-  }
-
   const sendPreviewQueryRequest = useCallback(
     async (data: any) => {
       return fetch(`/api/preview/${platformQuery.id}`, {
@@ -95,6 +108,23 @@ export default function PrivateConfigForm({
     },
     [platformQuery.id]
   );
+
+  const onDelete = async (event: any) => {
+    event.preventDefault();
+    if (!$form.current) return;
+
+    return fetch(`/api/data/deletePlatformQueryConfig/${activeQueryConfigId}`, {
+      method: "GET",
+    })
+      .then((res) => res.json())
+      .then((result) => {
+        if (result.success) {
+          router.replace(`/build/${platformQuery.id}`);
+        } else {
+          alert("ERROR");
+        }
+      });
+  };
 
   const onPreview = async (event: any) => {
     event.preventDefault();
@@ -124,7 +154,7 @@ export default function PrivateConfigForm({
         .then((res) => res.json())
         .then((result) => {
           if (result.success) {
-            setConfig(result.data);
+            router.push(`/build/${platformQuery.id}/${result.data.id}`);
           } else {
             alert("ERROR");
           }
@@ -136,9 +166,7 @@ export default function PrivateConfigForm({
 
     return fetch(`/api/data/editPlatformQueryConfig/${config.id}`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     })
       .then((res) => res.json())
@@ -154,27 +182,16 @@ export default function PrivateConfigForm({
       });
   };
 
-  const validation = useMemo(() => {
-    return validations[platformQuery.platform.code];
-  }, [platformQuery.platform.code]);
-  if (!validation) return null;
-
   const readFormData = (data: FormData) => {
     try {
-      const [queryValidation, viewValidation]: [AnyObject, AnyObject] = [
-        validation.query[platformQuery.name as keyof typeof validation.query],
-        validation.view[platformQuery.name as keyof typeof validation.view],
-      ];
       const [query, view] = [
-        queryValidation &&
-          readValidationFormValues(queryValidation, "query", data),
-        viewValidation &&
-          readValidationFormValues(viewValidation, "view", data),
+        validation.query &&
+          readValidationFormValues(validation.query, "query", data),
+        validation.view &&
+          readValidationFormValues(validation.view, "view", data),
       ];
 
       const formDataValues = { ...(query || {}), ...(view || {}) };
-      const validations = [queryValidation, viewValidation].filter(Boolean);
-      const schema = mergeSchemas(...validations);
       schema.validateSync(formDataValues, { abortEarly: false });
 
       return {
@@ -208,6 +225,8 @@ export default function PrivateConfigForm({
     }
   };
 
+  if (!validation) return null;
+
   return (
     <div className="flex flex-col justify-center lg:items-start lg:flex-row gap-10 mt-10">
       <div className="flex flex-col gap-5 lg:min-h-[400px] lg:w-1/3">
@@ -234,13 +253,9 @@ export default function PrivateConfigForm({
                     </h3>
 
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(validation.query[
-                        platformQuery.name as keyof typeof validation.query
-                      ] &&
+                      {(validation.query &&
                         buildFormWithYupSchema(
-                          validation.query[
-                            platformQuery.name as keyof typeof validation.query
-                          ],
+                          validation.query,
                           "query",
                           config?.queryConfig,
                           errors
@@ -257,13 +272,9 @@ export default function PrivateConfigForm({
                       View parameters
                     </h3>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(validation.view[
-                        platformQuery.name as keyof typeof validation.view
-                      ] &&
+                      {(validation.view &&
                         buildFormWithYupSchema(
-                          validation.view[
-                            platformQuery.name as keyof typeof validation.view
-                          ],
+                          validation.view,
                           "view",
                           config?.viewConfig,
                           errors
@@ -278,36 +289,92 @@ export default function PrivateConfigForm({
               </>
             )}
 
-            <div className="flex flex-row gap-2">
-              <button
-                onClick={onPreview}
-                disabled={
-                  preview.loading ||
-                  Boolean(Object.keys(errors).length) ||
-                  !connectionProfile
-                }
-                className={cn(
-                  "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 hover:bg-slate-200",
-                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
-                  "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
-                )}
-              >
-                Preview
-              </button>
-              <button
-                type="submit"
-                disabled={preview.loading || !Boolean(preview.data)}
-                className={cn(
-                  "rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200",
-                  "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
-                  "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
-                )}
-              >
-                Save
-              </button>
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row gap-2">
+                <button
+                  onClick={onPreview}
+                  disabled={
+                    preview.loading ||
+                    Boolean(Object.keys(errors).length) ||
+                    !connectionProfile
+                  }
+                  className={cn(
+                    "rounded-lg py-2 px-4 bg-slate-100 border-[1px] border-slate-300 hover:bg-slate-200",
+                    "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
+                    "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
+                  )}
+                >
+                  Preview
+                </button>
+                <button
+                  type="submit"
+                  disabled={preview.loading || !Boolean(preview.data)}
+                  className={cn(
+                    "rounded-lg py-2 px-4 border-[1px] bg-slate-100 border-slate-300 hover:bg-slate-200",
+                    "disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed dark:disabled:bg-gray-700 dark:disabled:border-gray-600 dark:disabled:hover:bg-gray-700 ",
+                    "dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700"
+                  )}
+                >
+                  {activeQueryConfigId ? "Update" : "Create"}
+                </button>
+              </div>
+              {activeQueryConfigId && (
+                <button
+                  onClick={onDelete}
+                  className={cn(
+                    "rounded-lg py-2 px-4 border-[1px] border-red-500 bg-red-500 text-gray-100 hover:bg-red-100 hover:text-red-500",
+                    "dark:hover:bg-gray-700"
+                  )}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           </fieldset>
         </form>
+
+        <div className="flex flex-col gap-5">
+          <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-1 dark:text-gray-300 dark:border-b-gray-600">
+            Saved queries
+          </h2>
+          {queryConfigs
+            .sort((a: PlatformQueryConfig, b: PlatformQueryConfig) => {
+              if (a.id < b.id) {
+                return 1;
+              }
+              if (a.id > b.id) {
+                return -1;
+              }
+              return 0;
+            })
+            .map((queryConfig) => {
+              return (
+                <Link
+                  href={`/build/${platformQuery.id}/${queryConfig.id}`}
+                  key={queryConfig.id}
+                  className={cn(
+                    "opacity-60 hover:opacity-100 relative w-full",
+                    activeQueryConfigId === queryConfig.id && "opacity-100"
+                  )}
+                >
+                  <NextImage
+                    layout="responsive"
+                    objectFit="contain"
+                    src={`/api/view/${queryConfig.id}`}
+                    alt={queryConfig.id}
+                    width={100}
+                    height={100}
+                    unoptimized
+                  />
+                </Link>
+              );
+            })}
+          {queryConfigs.length === 0 && (
+            <p className="text-slate-400 dark:text-gray-300">
+              No saved queries.
+            </p>
+          )}
+        </div>
       </div>
 
       <div></div>
@@ -318,7 +385,10 @@ export default function PrivateConfigForm({
         </h2>
 
         {!preview.data &&
-          (config && connectionProfile && !preview.loading ? (
+          (config &&
+          connectionProfile &&
+          !preview.loading &&
+          activeQueryConfigId ? (
             <>
               <Image
                 src={`/api/view/${config.id}${

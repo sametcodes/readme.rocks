@@ -10,7 +10,8 @@ import { QueryService } from "@/platforms/types";
  */
 export const getContributionsSummary: QueryService = async (
   connection,
-  config
+  config,
+  secured
 ) => {
   const query = `{
     viewer{
@@ -32,6 +33,7 @@ export const getContributionsSummary: QueryService = async (
  * @title Get repository milestone
  * @query_type Private
  * @cache_time 60
+ * @for_public getPublicRepositoryMilestone
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getRepositoryMilestone: QueryService = async (
@@ -75,6 +77,7 @@ export const getRepositoryMilestone: QueryService = async (
  * @title Get public repository milestone
  * @query_type Public
  * @cache_time 60
+ * @for_secured getRepositoryMilestone
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
 export const getPublicRepositoryMilestone: QueryService = async (
