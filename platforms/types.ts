@@ -17,5 +17,6 @@ export type ServiceResponse = {
 
 export type QueryService = (
   connection: Connection,
-  config: PlatformQueryConfig
+  config: PlatformQueryConfig,
+  secured: boolean
 ) => Promise<ServiceResponse>;

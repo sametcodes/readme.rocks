@@ -5,8 +5,13 @@ import Link from "next/link";
 
 export default async function QueryList() {
   const platforms = await prisma.platform.findMany({
-    include: { queries: true },
+    include: {
+      queries: {
+        where: { publicQueryId: { isSet: false } },
+      },
+    },
   });
+
   const view = await Promise.all(
     platforms.map((platform) => PlatformQueries({ platform }, platform.id))
   );
@@ -71,9 +76,13 @@ const PlatformQueryView = async (
       <Link href={`/build/${query.id}`}>
         <div className="flex flex-col w-full justify-end items-end opacity-80 hover:opacity-100 cursor-pointer">
           <div>{view}</div>
-          <span className="text-sm max-w-[90%] mr-3 text-gray-400">
-            Click to use this query
-          </span>
+          <div className="flex w-[calc(100%-2rem)] justify-between mx-4">
+            <div className="flex gap-2">
+              {query.query_type === "Private" && (
+                <span className="text-sm text-gray-400">Auth required</span>
+              )}
+            </div>
+          </div>
         </div>
       </Link>
     </li>

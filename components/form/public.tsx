@@ -40,7 +40,7 @@ export default function PublicConfigForm({
 
       if (field.type === "number") {
         const num_value = data.get(prefix + "__" + field_key);
-        if (Number(num_value) !== NaN) {
+        if (Number.isFinite(Number(num_value))) {
           acc[field_key] = Number(num_value);
         }
       }

@@ -4,6 +4,7 @@ import * as ConfigForm from "@/components/form";
 import prisma from "@/services/prisma";
 
 import { PlatformQuery, ConnectionProfile, Platform } from "@prisma/client";
+import { cn } from "@/utils";
 import NextImage from "next/image";
 import Link from "next/link";
 
@@ -13,7 +14,11 @@ export default async function Build({ params }: { params: { id: string } }) {
 
   const query = await prisma.platformQuery.findUnique({
     where: { id: query_id },
-    include: { platform: true },
+    include: {
+      platform: true,
+      securedPlatformQuery: true,
+      publicPlatformQuery: true,
+    },
   });
 
   if (!query) return <p>Query not found</p>;
@@ -58,6 +63,27 @@ export default async function Build({ params }: { params: { id: string } }) {
         <blockquote className="text-slate-700 dark:text-gray-500">
           <p className="text-md">{query.description}</p>
         </blockquote>
+
+        <div>
+          <p className={cn("text-gray-500")}>
+            {query.publicPlatformQuery?.id && (
+              <Link
+                href={`/build/${query.publicPlatformQuery.id}`}
+                className="font-bold"
+              >
+                Switch to public query
+              </Link>
+            )}
+            {query.securedPlatformQuery?.id && (
+              <Link
+                href={`/build/${query.securedPlatformQuery.id}`}
+                className="font-bold"
+              >
+                Switch to secured query
+              </Link>
+            )}
+          </p>
+        </div>
       </div>
 
       {query_view === "public" && <ConfigForm.Public platformQuery={query} />}

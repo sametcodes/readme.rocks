@@ -35,9 +35,9 @@ model User {
 }
 
 model Platform {
-    id           String  @id @default(auto()) @map("_id") @db.ObjectId
+    id           String       @id @default(auto()) @map("_id") @db.ObjectId
     name         String
-    code         PlatformCode  @unique
+    code         PlatformCode @unique
     config       Json
     require_auth Boolean
 
@@ -53,8 +53,10 @@ enum QueryType {
 }
 
 model PlatformQuery {
-    id         String @id @default(auto()) @map("_id") @db.ObjectId
-    platformId String @db.ObjectId
+    id             String  @id @default(auto()) @map("_id") @db.ObjectId
+    platformId     String  @db.ObjectId
+    securedQueryId String? @unique @db.ObjectId
+    publicQueryId  String? @unique @db.ObjectId
 
     name        String
     title       String
@@ -64,6 +66,12 @@ model PlatformQuery {
 
     queryConfigs PlatformQueryConfig[]
     platform     Platform              @relation(fields: [platformId], references: [id])
+
+    securedPlatformQuery PlatformQuery? @relation("SecurePlatformQuery", fields: [securedQueryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    SecurePlatformQuery PlatformQuery? @relation("SecurePlatformQuery")
+
+    publicPlatformQuery  PlatformQuery? @relation("PublicPlatformQuery", fields: [publicQueryId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+    PublicPlatformQuery PlatformQuery? @relation("PublicPlatformQuery")
 }
 
 model PlatformQueryConfig {
@@ -106,7 +114,7 @@ model Connection {
     userId     String @db.ObjectId
     platformId String @db.ObjectId
 
-    refresh_token            String?  @db.String
+    refresh_token            String? @db.String
     access_token             String  @db.String
     expires_at               Int?
     refresh_token_expires_at Int?
