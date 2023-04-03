@@ -15,5 +15,5 @@ export default nextConnect()
   .use(setCacheControl)
   .get((req: NextApiRequest, res: NextApiResponse) => {
     const { services, templates, query, config } = res.locals;
-    return handlePlatformAPI(services, templates, query.name, config)(req, res);
+    return handlePlatformAPI(services, templates, query, config)(req, res);
   });

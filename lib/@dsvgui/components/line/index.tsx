@@ -50,9 +50,9 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
       <path
         d={path_value}
         stroke="url(#paint0_linear_135_79)"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <text
         fill="#000000"
@@ -102,14 +102,14 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
           y2="155.088"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#ffffff" />
-          <stop offset="0.141455" stop-color="#FF12E7" />
-          <stop offset="0.201455" stop-color="#FF5ecc" />
-          <stop offset="0.363128" stop-color="#FF9eeE" />
-          <stop offset="0.581288" stop-color="#FF0AAC" />
-          <stop offset="0.729526" stop-color="#FF046E" />
-          <stop offset="0.943128" stop-color="#FF9eeE" />
-          <stop offset="1" stop-color="#ffffff" />
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="0.141455" stopColor="#FF12E7" />
+          <stop offset="0.201455" stopColor="#FF5ecc" />
+          <stop offset="0.363128" stopColor="#FF9eeE" />
+          <stop offset="0.581288" stopColor="#FF0AAC" />
+          <stop offset="0.729526" stopColor="#FF046E" />
+          <stop offset="0.943128" stopColor="#FF9eeE" />
+          <stop offset="1" stopColor="#ffffff" />
         </linearGradient>
       </defs>
     </Document>

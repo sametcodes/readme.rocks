@@ -24,7 +24,7 @@ export default nextConnect()
     return handlePlatformAPI(
       services,
       templates,
-      query.name,
+      query,
       config,
       connection
     )(req, res);

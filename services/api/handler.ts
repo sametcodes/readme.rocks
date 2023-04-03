@@ -1,5 +1,5 @@
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
-import { Connection } from "@prisma/client";
+import { Connection, PlatformQuery } from "@prisma/client";
 import JSXRender from "@/utils/render";
 import { trimChars } from "@/utils";
 import { sendFallbackResponse } from "@/services/api/response";
@@ -7,7 +7,7 @@ import { sendFallbackResponse } from "@/services/api/response";
 type PlatformAPIHandler = (
   services: any,
   templates: any,
-  queryName: string,
+  query: PlatformQuery,
   config: any,
   connection?: Connection | null
 ) => NextApiHandler;
@@ -15,11 +15,16 @@ type PlatformAPIHandler = (
 const handlePlatformAPI: PlatformAPIHandler = (
   services,
   templates,
-  queryName,
+  query,
   config,
   connection
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
+    console.log(query);
+    const { name: queryName, query_type } = query;
+
+    console.log({ queryName });
+
     if (Object.keys(services).includes(queryName) === false)
       return sendFallbackResponse(res, {
         title: "Query not found",
@@ -41,12 +46,24 @@ const handlePlatformAPI: PlatformAPIHandler = (
         message: "The template is missing or invalid. This is not your fault.",
       });
 
+    if (!connection && query_type === "Private") {
+      return {
+        success: false,
+        fallback: {
+          title: "Authentication required",
+          message:
+            "This query requires authentication. Please connect your account on the site to use this query.",
+          code: 401,
+        },
+      };
+    }
+
     const response = await service(connection, config);
     if (response.success === false)
       return sendFallbackResponse(res, {
-        title: response?.fallback.title || "Service returned an error",
+        title: response?.fallback?.title || "Service returned an error",
         message:
-          response?.fallback.message ||
+          response?.fallback?.message ||
           "The service returned an error. Please check the provided parameters, and try again.",
       });
 
