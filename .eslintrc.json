@@ -1,3 +1,21 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals"
+  ],
+  "plugins": [
+    "react"
+  ],
+  "rules": {
+    "react/no-unknown-property": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
+  }
 }
