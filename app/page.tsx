@@ -16,7 +16,7 @@ export default function Index() {
         </div>
         <Link href="/build">
           <button className="h-11 px-5 mt-5 font-semibold rounded-lg border-purple-500 border-[1px] text-purple-500 hover:bg-gray-200 dark:hover:bg-gray-800 max-w-fit">
-            Open builder
+            Use now
           </button>
         </Link>
       </div>

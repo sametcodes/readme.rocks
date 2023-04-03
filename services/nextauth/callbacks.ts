@@ -1,4 +1,5 @@
 import prisma from "@/services/prisma";
+import { PlatformCode } from "@prisma/client";
 import { Awaitable, CallbacksOptions, Session } from "next-auth";
 
 const session: CallbacksOptions["session"] = ({
@@ -24,7 +25,7 @@ const signIn: CallbacksOptions["signIn"] = async ({
   try {
     if (account?.provider) {
       const platform = await prisma.platform.findFirst({
-        where: { code: account.provider },
+        where: { code: account.provider as PlatformCode },
       });
 
       const userActiveConnection = await prisma.connection.findFirst({

@@ -5,37 +5,11 @@ import prisma from "@/services/prisma";
 
 import { PlatformQuery, ConnectionProfile, Platform } from "@prisma/client";
 import NextImage from "next/image";
-import { SelectQuery } from "@/components/form/select";
 import Link from "next/link";
 
-export default async function Build({
-  params,
-}: {
-  params: { slug: string[] };
-}) {
-  const [query_id] = params.slug || [];
+export default async function Build({ params }: { params: { id: string } }) {
+  const query_id = params.id;
   const session = await getServerSession(authOptions);
-
-  const platforms = await prisma.platform.findMany({
-    include: { queries: true },
-  });
-
-  if (!query_id)
-    return (
-      <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
-        <div className="container text-center mb-5">
-          <SelectQuery
-            session={session}
-            platforms={platforms}
-            platformId={undefined}
-            queryId={undefined}
-          />
-          <p className="text-slate-400 dark:text-gray-500">
-            Login to see non-public and more queries.
-          </p>
-        </div>
-      </div>
-    );
 
   const query = await prisma.platformQuery.findUnique({
     where: { id: query_id },
@@ -65,13 +39,21 @@ export default async function Build({
 
   return (
     <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
-      <div className="container text-center mb-5">
-        <SelectQuery
-          platforms={platforms}
-          platformId={query.platformId}
-          queryId={query.id}
-          session={session}
-        />
+      <div className="flex items-center flex-col container text-center mb-5">
+        <p
+          className={
+            "text-4xl mr-2 font-bold text-slate-700 text-center w-fit bg-transparent dark:text-gray-200"
+          }
+        >
+          {query.platform.name}
+        </p>
+        <p
+          className={
+            "text-2xl border-b-slate-400 border-b-[1px] pb-1 mt-2 mb-3 bg-transparent text-slate-700 text-center w-fit dark:text-gray-200 dark:border-b-gray-500"
+          }
+        >
+          {query.title}
+        </p>
 
         <blockquote className="text-slate-700 dark:text-gray-500">
           <p className="text-md">{query.description}</p>

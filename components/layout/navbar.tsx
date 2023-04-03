@@ -21,7 +21,7 @@ type INavbarWithLogin = {
 
 const links = [
   {
-    title: "Builder",
+    title: "Build",
     href: "/build",
   },
 ];
