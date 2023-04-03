@@ -10,6 +10,15 @@ generator client {
     provider = "prisma-client-js"
 }
 
+enum PlatformCode {
+    codewars
+    dailydev
+    devto
+    github
+    stackoverflow
+    wakatime
+}
+
 model User {
     id            String    @id @default(auto()) @map("_id") @db.ObjectId
     uid           String?   @db.String
@@ -28,7 +37,7 @@ model User {
 model Platform {
     id           String  @id @default(auto()) @map("_id") @db.ObjectId
     name         String
-    code         String  @unique
+    code         PlatformCode  @unique
     config       Json
     require_auth Boolean
 

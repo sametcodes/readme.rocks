@@ -1,4 +1,4 @@
-import { Connection } from "@prisma/client";
+import { Connection, PlatformCode } from "@prisma/client";
 import prisma from "@/services/prisma";
 import { requestNewAccessToken } from "passport-oauth2-refresh";
 
@@ -7,18 +7,18 @@ import { Session } from "next-auth";
 type ISignIn = {
   token: any;
   session: Session;
-  platformCode: string;
+  platformCode: PlatformCode;
   profile: any;
 };
 
 type IGetConnection = {
   session: Session;
-  platformCode?: string;
+  platformCode?: PlatformCode;
 };
 
 type IDisconnect = {
   session: Session;
-  platformCode: string;
+  platformCode: PlatformCode;
 };
 
 type IUpdateConnection = {
