@@ -18,6 +18,15 @@ const nextConfig = {
     }
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: "/build",
+        destination: "/build/list",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
