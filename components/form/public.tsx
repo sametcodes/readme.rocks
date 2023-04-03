@@ -7,7 +7,7 @@ import { AnyObject, ValidationError } from "yup";
 import { Platform, PlatformQuery } from "@prisma/client";
 import { Image, CopyButton } from "@/components/ui";
 import { objectToQueryString } from "@/utils";
-import { getPlatformValidations } from "@/platforms";
+import { validations } from "@/platforms";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
@@ -65,15 +65,15 @@ export default function PublicConfigForm({
   }
 
   const validation = useMemo(() => {
-    return getPlatformValidations(platformQuery.platform.code);
+    return validations[platformQuery.platform.code];
   }, [platformQuery.platform.code]);
   if (!validation) return null;
 
   const readFormData = (data: FormData) => {
     try {
       const [queryValidation, viewValidation]: [AnyObject, AnyObject] = [
-        validation.query[platformQuery.name],
-        validation.view[platformQuery.name],
+        validation.query[platformQuery.name as keyof typeof validation.query],
+        validation.view[platformQuery.name as keyof typeof validation.view],
       ];
       const [query, view] = [
         queryValidation &&
@@ -149,9 +149,13 @@ export default function PublicConfigForm({
                   </h3>
 
                   <div className="flex flex-row gap-2 flex-wrap">
-                    {(validation.query[platformQuery.name] &&
+                    {(validation.query[
+                      platformQuery.name as keyof typeof validation.query
+                    ] &&
                       buildFormWithYupSchema(
-                        validation.query[platformQuery.name],
+                        validation.query[
+                          platformQuery.name as keyof typeof validation.query
+                        ],
                         "query",
                         {},
                         errors
@@ -168,9 +172,13 @@ export default function PublicConfigForm({
                     View parameters
                   </h3>
                   <div className="flex flex-row gap-2 flex-wrap">
-                    {(validation.view[platformQuery.name] &&
+                    {(validation.view[
+                      platformQuery.name as keyof typeof validation.view
+                    ] &&
                       buildFormWithYupSchema(
-                        validation.view[platformQuery.name],
+                        validation.view[
+                          platformQuery.name as keyof typeof validation.view
+                        ],
                         "view",
                         {},
                         errors

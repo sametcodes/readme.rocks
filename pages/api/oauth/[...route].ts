@@ -6,6 +6,7 @@ import passport from "passport";
 import nextConnect from "next-connect";
 import OAuthProviders from "@/services/oauth/providers";
 import actions from "@/services/oauth/actions";
+import { PlatformCode } from "@prisma/client";
 
 let redirects: { [key: string]: string } = {};
 
@@ -13,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);
   if (!session) return res.redirect("/");
 
-  const [action, platform]: Array<string> = req.query.route as Array<string>;
+  const [action, platform] = req.query.route as [string, PlatformCode];
 
   if (req.method !== "GET") return res.status(405).end();
 

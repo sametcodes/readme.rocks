@@ -6,20 +6,21 @@ export * from "@/services/data/platformQueryConfig/validations";
 export * from "@/services/data/user/validations";
 
 import { object } from "yup";
-import { getPlatformValidations } from "../../platforms/index";
+import { validations } from "../../platforms/index";
+import { PlatformCode } from "@prisma/client";
 
 export const shapeDataAPISchema = (
-  platformCode: string,
+  platformCode: PlatformCode,
   queryName: string,
   schema?: AnyObject
 ) => {
-  const validation = getPlatformValidations(platformCode);
+  const validation = validations[platformCode];
 
   if (!validation) throw new Error("No validation found to shape");
 
   const [queryValidation, viewValidation] = [
-    validation.query[queryName],
-    validation.view[queryName],
+    validation.query[queryName as keyof typeof validation.query],
+    validation.view[queryName as keyof typeof validation.view],
   ];
 
   const defaultSchema = object({}).required().noUnknown(true);

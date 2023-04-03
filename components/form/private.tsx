@@ -12,7 +12,7 @@ import {
 } from "@prisma/client";
 import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
-import { getPlatformValidations } from "@/platforms";
+import { validations } from "@/platforms";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
@@ -59,7 +59,7 @@ export default function PrivateConfigForm({
 
       if (field.type === "number") {
         const num_value = data.get(prefix + "__" + field_key);
-        if (Number(num_value) !== NaN) {
+        if (Number.isFinite(Number(num_value))) {
           acc[field_key] = Number(num_value);
         }
       }
@@ -155,15 +155,15 @@ export default function PrivateConfigForm({
   };
 
   const validation = useMemo(() => {
-    return getPlatformValidations(platformQuery.platform.code);
+    return validations[platformQuery.platform.code];
   }, [platformQuery.platform.code]);
   if (!validation) return null;
 
   const readFormData = (data: FormData) => {
     try {
       const [queryValidation, viewValidation]: [AnyObject, AnyObject] = [
-        validation.query[platformQuery.name],
-        validation.view[platformQuery.name],
+        validation.query[platformQuery.name as keyof typeof validation.query],
+        validation.view[platformQuery.name as keyof typeof validation.view],
       ];
       const [query, view] = [
         queryValidation &&
@@ -234,9 +234,13 @@ export default function PrivateConfigForm({
                     </h3>
 
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(validation.query[platformQuery.name] &&
+                      {(validation.query[
+                        platformQuery.name as keyof typeof validation.query
+                      ] &&
                         buildFormWithYupSchema(
-                          validation.query[platformQuery.name],
+                          validation.query[
+                            platformQuery.name as keyof typeof validation.query
+                          ],
                           "query",
                           config?.queryConfig,
                           errors
@@ -253,9 +257,13 @@ export default function PrivateConfigForm({
                       View parameters
                     </h3>
                     <div className="flex flex-row gap-2 flex-wrap">
-                      {(validation.view[platformQuery.name] &&
+                      {(validation.view[
+                        platformQuery.name as keyof typeof validation.view
+                      ] &&
                         buildFormWithYupSchema(
-                          validation.view[platformQuery.name],
+                          validation.view[
+                            platformQuery.name as keyof typeof validation.view
+                          ],
                           "view",
                           config?.viewConfig,
                           errors
