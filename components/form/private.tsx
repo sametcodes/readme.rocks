@@ -334,10 +334,9 @@ export default function PrivateConfigForm({
         </form>
 
         <div className="flex flex-col gap-5">
-          <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-2 dark:text-gray-300 dark:border-b-gray-600">
+          <h2 className="text-2xl text-slate-600 font-bold inline-block border-b-slate-300 border-b-[1px] pb-1 dark:text-gray-300 dark:border-b-gray-600">
             Saved queries
           </h2>
-
           {queryConfigs
             .sort((a: PlatformQueryConfig, b: PlatformQueryConfig) => {
               if (a.id < b.id) {
@@ -370,6 +369,11 @@ export default function PrivateConfigForm({
                 </Link>
               );
             })}
+          {queryConfigs.length === 0 && (
+            <p className="text-slate-400 dark:text-gray-300">
+              No saved queries.
+            </p>
+          )}
         </div>
       </div>
 
