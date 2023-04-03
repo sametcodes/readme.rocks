@@ -72,6 +72,22 @@ npm run lint:fix
 
 This project uses [Husky](https://typicode.github.io/husky/#/) to run the linting and formatting before every commit. If commits do not fit the conventional commit format, the commit will be rejected. Check the rules [here](https://www.conventionalcommits.org/en/v1.0.0/#specification).
 
+Here are possible commit headers with descriptions. Choose the one that fits the changes you made.
+
+```
+build: Changes related to the build system or external dependencies, such as updating a build script or adding/removing a package.
+config: Changes related to the configuration of the application, such as updating environment variables, modifying configuration files, or adjusting settings that alter the behavior of the application.
+docs: Updates or additions to the documentation, such as user guides, API documentation, or code comments.
+feat: New features or enhancements that add functionality to the application.
+fix: Bug fixes or patches that address issues in the codebase.
+perf: Performance improvements or optimizations, such as code refactoring to enhance execution speed or memory usage.
+refactor: Code changes that neither fix a bug nor add a feature but improve code quality, readability, or maintainability.
+revert: Reverting a previous commit or change, effectively undoing the changes made in that commit.
+style: Cosmetic changes to the code that do not affect its functionality, such as fixing indentation, removing whitespace, or updating code formatting.
+test: Changes related to testing, such as adding, updating, or removing test cases or updating testing frameworks.
+security: Changes related to security, such as fixing vulnerabilities or adding security features.
+```
+
 ### Scripts
 
 The metric methods require name and descriptions on the database records, and they are provided on as JSDoc comments on the methods. You can run the following command to migrate metric methods to the related database records.

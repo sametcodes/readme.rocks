@@ -21,10 +21,10 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
       <text
         fill="#646464"
         xmlSpace="preserve"
-        font-family="Manrope"
-        font-size="22"
-        font-weight="bold"
-        letter-spacing="0.1px"
+        fontFamily="Manrope"
+        fontSize="22"
+        fontWeight="bold"
+        letterSpacing="0.1px"
       >
         <tspan x="87" y="48.426">
           {title}
@@ -33,10 +33,10 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
       <text
         fill="#646464"
         xmlSpace="preserve"
-        font-family="Manrope"
-        font-size="12"
-        font-weight="400"
-        letter-spacing="0.1px"
+        fontFamily="Manrope"
+        fontSize="12"
+        fontWeight="400"
+        letterSpacing="0.1px"
       >
         {wrapText(
           message,
