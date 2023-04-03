@@ -16,12 +16,12 @@ _All your statistics at once._
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
 <br clear="left"/>
 
-## Milestones and sponsorship goals
+## Milestones
 
-<a href="https://github.com/sametcodes/devstats/milestone/2">
-<img src="https://readme.rocks/api/view/641b5dcfa6550999ac4331cf" />
-</a>
+[![](https://readme.rocks/api/view/642b5a788c097f48ca28ce58)](milestone/1)
+[![](https://readme.rocks/api/view/641b5dcfa6550999ac4331cf)](milestone/2)
 
+## Sponsors and goals
 <a href="https://github.com/sponsorships/d-fischer">
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
 </a>
