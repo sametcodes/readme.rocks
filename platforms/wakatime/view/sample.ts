@@ -1,6 +1,8 @@
 export const getAllTimeSinceToday = {
   result: {
-    text: "54 hours 32 minutes",
+    data: {
+      text: "54 hours 32 minutes",
+    },
   },
 };
 

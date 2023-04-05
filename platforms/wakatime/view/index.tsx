@@ -6,7 +6,7 @@ export const getAllTimeSinceToday: ViewComponent = (result, config) => {
   return (
     <Metrics
       icon={WakatimeIcon}
-      data={[{ title: "All time since today", value: result.text }]}
+      data={[{ title: "All time since today", value: result.data.text }]}
     />
   );
 };
