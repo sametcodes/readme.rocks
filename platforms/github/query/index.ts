@@ -86,7 +86,6 @@ export const getPublicRepositoryMilestone: QueryService = async (
 ) => {
   const { queryConfig } = config as any;
 
-  console.log(queryConfig);
   const login_field =
     queryConfig.is_organization === "true" ? "organization" : "user";
   const query = `{
