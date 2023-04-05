@@ -5,7 +5,7 @@ _All your statistics at once._
 ## Your development metrics
 ![](https://readme.rocks/api/view/641b5deaa6550999ac4331d0)
 ![](https://readme.rocks/api/view/641b5e30a6550999ac4331d2)
-![](https://readme.rocks/api/view/641b5e1aa6550999ac4331d1)
+![](https://readme.rocks/api/view/642dfbff39f5d6e5e5f45c3b)
 ![](https://readme.rocks/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
 ## Line stats
