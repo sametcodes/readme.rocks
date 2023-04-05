@@ -1,11 +1,9 @@
 export const getReputation = {
   result: {
-    data: {
-      items: [
-        {
-          reputation: 5123,
-        },
-      ],
-    },
+    items: [
+      {
+        reputation: 5123,
+      },
+    ],
   },
 };

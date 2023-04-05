@@ -18,7 +18,9 @@ export const listArticles: QueryService = async (connection, config) => {
   });
 
   const response = await request(`/api/articles?${queryString}`);
-  if ("error" in response) return response;
-
-  return { success: true, data: response };
+  if (response.length === 0)
+    throw new Error(
+      "No articles found for this user. Please check the username and try again."
+    );
+  return response;
 };

@@ -24,8 +24,8 @@ export const getContributionsSummary: QueryService = async (
   }`;
 
   const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
+
+  return response;
 };
 
 /**
@@ -68,8 +68,8 @@ export const getRepositoryMilestone: QueryService = async (
   }`;
 
   const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
+
+  return response;
 };
 
 /**
@@ -86,36 +86,42 @@ export const getPublicRepositoryMilestone: QueryService = async (
 ) => {
   const { queryConfig } = config as any;
 
-  const query = `{ 
-      ${queryConfig.is_organization ? "organization" : "user"}(login: "${
-    queryConfig.owner_name
-  }"){
-        repository(name: "${queryConfig.repository_name}"){
-          milestone(number: ${queryConfig.milestone_id}) {
-            id
-            title
-            dueOn
-            description
-            issues {
-              totalCount
-            }
-            pullRequests{
-              totalCount
-            }
-            closedIssues: issues(states: [CLOSED]) {
-              totalCount
-            }
-            closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
-              totalCount
-            }
+  const login_field =
+    queryConfig.is_organization === "true" ? "organization" : "user";
+  const query = `{
+    ${login_field}(login: "${queryConfig.owner_name}"){
+      repository(name: "${queryConfig.repository_name}"){
+        milestone(number: ${queryConfig.milestone_id}) {
+          id
+          title
+          dueOn
+          description
+          issues {
+            totalCount
+          }
+          pullRequests{
+            totalCount
+          }
+          closedIssues: issues(states: [CLOSED]) {
+            totalCount
+          }
+          closedPullRequests: pullRequests(states: [CLOSED, MERGED]){
+            totalCount
           }
         }
+      }
     }
   }`;
 
   const response = await request(query, connection);
-  if ("error" in response) return response;
-  return { success: true, data: response.data };
+
+  const { milestone } = response.data[login_field].repository;
+  if (!milestone)
+    throw new Error(
+      "The milestone you are looking for does not exist. Please check the provided parameters."
+    );
+
+  return response;
 };
 
 /**
@@ -154,17 +160,13 @@ export const getUserActiveSponsorGoal: QueryService = async (
   }`;
 
   const response = await request(query, connection);
-  if ("error" in response) return response;
-
-  if (!response.data.data.user.sponsorsListing.activeGoal) {
-    return {
-      success: false,
-      fallback: {
-        title: "No active sponsor goal",
-        message:
-          "This user has no active sponsor goal, or the user is not a GitHub Sponsors member.",
-      },
-    };
+  if (!response.data.user.sponsorsListing) {
+    throw new Error("This user is not a GitHub Sponsors member.");
   }
-  return { success: true, data: response.data };
+  if (!response.data.user.sponsorsListing.activeGoal)
+    throw new Error(
+      "This user has no active sponsor goal, or the user is not a GitHub Sponsors member."
+    );
+
+  return response;
 };

@@ -20,10 +20,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
   connection
 ) => {
   return async function (req: NextApiRequest, res: NextApiResponse) {
-    console.log(query);
     const { name: queryName, query_type } = query;
-
-    console.log({ queryName });
 
     if (Object.keys(services).includes(queryName) === false)
       return sendFallbackResponse(res, {
@@ -58,16 +55,21 @@ const handlePlatformAPI: PlatformAPIHandler = (
       };
     }
 
-    const response = await service(connection, config);
-    if (response.success === false)
-      return sendFallbackResponse(res, {
-        title: response?.fallback?.title || "Service returned an error",
-        message:
-          response?.fallback?.message ||
-          "The service returned an error. Please check the provided parameters, and try again.",
-      });
+    let response;
+    try {
+      response = await service(connection, config);
+    } catch (err) {
+      if (err instanceof Error) {
+        return sendFallbackResponse(res, {
+          title: "Service error",
+          message:
+            err?.message ||
+            "The service returned an error. Please check the provided parameters, and try again.",
+        });
+      }
+    }
 
-    const templateOutput = await template(response.data, config);
+    const templateOutput = await template(response, config);
     if (!templateOutput)
       return sendFallbackResponse(res, {
         title: "Template is not implemented",
