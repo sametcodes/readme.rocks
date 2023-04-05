@@ -1,6 +1,5 @@
 export const listArticles = {
   result: {
-    success: true,
     data: {
       page: {
         edges: [
