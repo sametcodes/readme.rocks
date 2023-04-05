@@ -187,7 +187,7 @@ const ConnectAccount = ({
                 connection to your {platformQuery.platform.name} account.
               </p>
               <a
-                href={`/api/oauth/connect/${platformQuery.platform.code}?redirect=${process.env.NEXT_PUBLIC_SITE_URL}/query/${platformQuery.id}`}
+                href={`/api/oauth/connect/${platformQuery.platform.code}?redirect=${process.env.NEXT_PUBLIC_SITE_URL}/build/${platformQuery.id}`}
                 className="bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 border rounded-lg py-2 px-4"
               >
                 Connect your {platformQuery.platform.name} account
