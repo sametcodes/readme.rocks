@@ -6,7 +6,7 @@ export const getRepositoryMilestone = object({
     placeholder: "Repository Name",
     description: "The name of the repository.",
   }),
-  milestone_id: number().required().meta({
+  milestone_id: number().required().min(1).meta({
     label: "Milestone ID",
     placeholder: "Milestone ID",
     description:
@@ -30,7 +30,7 @@ export const getPublicRepositoryMilestone = object({
     placeholder: "repository",
     description: "The name of the repository.",
   }),
-  milestone_id: number().required().meta({
+  milestone_id: number().required().min(1).meta({
     label: "Milestone ID",
     placeholder: "40",
     description:

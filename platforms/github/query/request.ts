@@ -46,17 +46,6 @@ export default function request(query: string, connection: Connection) {
         throw new Error(res.errors[0].message);
       }
 
-      return { success: true, data: res };
-    })
-    .catch((err) => {
-      return {
-        success: false,
-        data: null,
-        error: {
-          error: true,
-          message: err.message,
-          code: 500,
-        },
-      };
+      return res;
     });
 }

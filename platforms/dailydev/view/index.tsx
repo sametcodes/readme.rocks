@@ -4,6 +4,7 @@ import { convertDateToReadableFormat } from "@/lib/@dsvgui/utils";
 import getImageSize from "image-size";
 
 export const listArticles: ViewComponent = async (result, config) => {
+  console.log(result);
   const promise_thumbnails = result.data.page.edges.map(
     async (article: any, key: number) => {
       const response = await fetch(article.node.image);

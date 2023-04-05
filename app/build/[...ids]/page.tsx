@@ -66,7 +66,11 @@ export default async function Build({ params }: { params: { ids: string[] } }) {
   const schema = mergeSchemas(validation.query, validation.view);
   const allowMultipleCreate = Object.keys(schema?.fields || {}).length > 0;
 
-  if (allowMultipleCreate === false && !query_config_id) {
+  if (
+    allowMultipleCreate === false &&
+    !query_config_id &&
+    queryConfigs.length
+  ) {
     return redirect(`/build/${query_id}/${queryConfigs[0].id}`);
   }
 

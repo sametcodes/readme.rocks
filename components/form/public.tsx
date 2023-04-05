@@ -120,7 +120,10 @@ export default function PublicConfigForm({
   const onSubmit = async (event: any) => {
     event.preventDefault();
     if (!$form.current) return;
+
     const formData = readFormData(new FormData($form.current));
+    if (!formData) return;
+
     const query_string = objectToQueryString(
       Object.assign({}, formData, { id: platformQuery.id })
     );
