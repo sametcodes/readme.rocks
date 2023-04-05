@@ -114,10 +114,11 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
 };
 
 export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
-  const { milestone } =
-    (config.queryConfig as any).is_organization === "true"
-      ? result.data.organization.repository
-      : result.data.user.repository;
+  const { queryConfig } = config as any;
+
+  const login_field =
+    queryConfig.is_organization === "true" ? "organization" : "user";
+  const { milestone } = result.data[login_field].repository;
 
   const completed_jobs_count =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;

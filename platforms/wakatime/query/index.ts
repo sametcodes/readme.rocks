@@ -17,9 +17,7 @@ export const getAllTimeSinceToday: QueryService = async (
     "/users/current/all_time_since_today",
     connection
   );
-  if ("error" in response) return response;
-
-  return { success: true, data: response.data.data };
+  return response;
 };
 
 /**
@@ -36,7 +34,5 @@ export const getTimeWithRange: QueryService = async (connection, config) => {
     `/users/current/summaries?${query_string}`,
     connection
   );
-  if ("error" in response) return response;
-
-  return { success: true, data: response.data };
+  return response;
 };

@@ -19,19 +19,10 @@ export default function request(path: string): Promise<any> {
         throw new Error(res.error_message);
       }
 
-      return {
-        success: true,
-        data: res,
-      };
-    })
-    .catch((err) => {
-      return {
-        success: false,
-        error: {
-          error: true,
-          message: err.message,
-          code: err.code,
-        },
-      };
+      if (res.success === false) {
+        throw new Error(res.message);
+      }
+
+      return res;
     });
 }

@@ -3,7 +3,7 @@ import { Metrics } from "@/lib/@dsvgui";
 import { StackOverflowIcon } from "@/lib/@dsvgui/icons";
 
 export const getReputation: ViewComponent = (result, platform) => {
-  const [{ reputation }] = result.data.items;
+  const [{ reputation }] = result.items;
 
   return (
     <Metrics
