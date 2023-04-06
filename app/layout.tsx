@@ -29,7 +29,7 @@ export default async function RootLayout({
         <meta property="og:type" content="website" />
         <meta
           property="og:image"
-          content="https://readme.rocks/assets/meta-img.jpeg"
+          content={`${process.env.NEXT_PUBLIC_SITE_URL}/assets/meta-img.jpeg`}
         />
         <meta property="og:url" content="https://readme.rocks/" />
 
@@ -43,7 +43,7 @@ export default async function RootLayout({
         />
         <meta
           name="twitter:image"
-          content="https://readme.rocks/assets/meta-img.jpeg"
+          content={`${process.env.NEXT_PUBLIC_SITE_URL}/assets/meta-img.jpeg`}
         />
       </head>
       <body className="bg-light-lp-gradient bg-no-repeat dark:bg-dark-lp-gradient min-h-screen overflow-x-hidden">
