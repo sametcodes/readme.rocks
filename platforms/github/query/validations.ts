@@ -49,3 +49,5 @@ export const getUserActiveSponsorGoal = object({
 })
   .required()
   .noUnknown(true);
+
+export const getUserCommitStreak = object().required().noUnknown(true);

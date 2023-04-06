@@ -170,3 +170,38 @@ export const getUserActiveSponsorGoal: QueryService = async (
 
   return response;
 };
+
+/**
+ * @name getUserCommitStreak
+ * @title Get your commit streak
+ * @query_type Private
+ * @cache_time 86400
+ * @description Show your commit streak.
+ */
+export const getUserCommitStreak: QueryService = async (connection, config) => {
+  const query = `{
+      viewer{
+        contributionsCollection {
+          commitContributionsByRepository {
+            repository {
+              nameWithOwner
+            }
+            contributions(first: 100, orderBy: {field: OCCURRED_AT, direction: DESC}) {
+              nodes {
+                occurredAt
+              }
+            }
+          }
+        }
+      }
+    }`;
+
+  const response = await request(query, connection);
+  if (
+    !response.data.viewer.contributionsCollection
+      .commitContributionsByRepository
+  )
+    throw new Error("You have no commit contributions.");
+
+  return response;
+};

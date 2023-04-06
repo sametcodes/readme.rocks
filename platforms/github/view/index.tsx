@@ -262,3 +262,42 @@ export const getUserActiveSponsorGoal: ViewComponent = (result, config) => {
     />
   );
 };
+
+export const getUserCommitStreak: ViewComponent = (result, config) => {
+  const dates = new Set<string>();
+
+  result.data.viewer.contributionsCollection.commitContributionsByRepository.forEach(
+    (repo: any) => {
+      repo.contributions.nodes.forEach((commit: any) => {
+        const date = new Date(commit.occurredAt).toISOString().split("T")[0];
+        dates.add(date);
+      });
+    }
+  );
+
+  const sortedDates = Array.from(dates).sort();
+  let streak = 0;
+  let currentStreak = 0;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const previousDate = new Date(sortedDates[i - 1]);
+    const currentDate = new Date(sortedDates[i]);
+    const dayDifference =
+      (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (dayDifference === 1) {
+      currentStreak++;
+    } else {
+      currentStreak = 0;
+    }
+
+    streak = Math.max(streak, currentStreak);
+  }
+
+  return (
+    <Metrics
+      icon={GithubIcon}
+      data={[{ title: "Commit Streak", value: streak }]}
+    />
+  );
+};
