@@ -28,7 +28,7 @@ export const Flock: React.FC<IFlock> = ({
   const subtitleFontSize = subtitle ? 12 : 0;
   const padding = 25;
 
-  const head_start = { x: title ? 10 : 0, y: title ? 25 : 5 };
+  const head_start = { x: title ? 10 : 0, y: title ? 25 : 10 };
   const box_start = {
     x: 25,
     y: head_start.y + titleFontSize + subtitleFontSize + padding / 2,
