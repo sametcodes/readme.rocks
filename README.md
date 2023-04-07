@@ -12,13 +12,13 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/642220d0c3f0ffcbcafd573f)
 
 ## Your latest `daily.dev` and `dev.to` articles
-<img align="left" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
-<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
+<img align="left" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" />
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" />
 <br clear="left"/>
 
 ## Contributors
 
-<img width="100%" src="https://readme.rocks/api/view/642fa65c44fe9bdabf4bc1a4" />
+<img width="700" src="https://readme.rocks/api/view/642fa65c44fe9bdabf4bc1a4" />
 
 ## Milestones
 
@@ -29,6 +29,8 @@ _All your statistics at once._
 <a href="https://github.com/sponsorships/d-fischer">
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
 </a>
+
+<img width="700" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=ljharb&viewConfig%5Btitle%5D=My%20sponsors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20sponsoring%20me.&viewConfig%5Bitems_per_row%5D=15&id=64300f9e4160c69275201776" />
 
 ### Running locally
 
