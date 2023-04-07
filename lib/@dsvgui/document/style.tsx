@@ -36,17 +36,19 @@ export const Style: React.FC = () => {
             text{ font-family: 'Manrope', 'Open Sans', 'Segoe UI', Ubuntu, 'Helvetica Neue', Sans-Serif; fill: #32373e; }
             text.title{ fill: #32373e; }
             text.subtitle{ fill: #9c9c9c; }
-            .dsvgui-container{
-              fill: #fbfbfb;
-            }
+            .dsvgui-container{ fill: #fbfbfb; }
             stop[offset='0']{ stop-color: #fbfbfb; }
             stop[offset='1']{ stop-color: #fbfbfb; }
+            .border{ stroke: #ddd; }
             @media (prefers-color-scheme: dark) {
               .dsvgui-container { fill: #32373e }
               stop[offset='0']{ stop-color: #32373e; }
               stop[offset='1']{ stop-color: #32373e; }
               text { fill: #eeeeee }
               .icon{ fill: #eeeeee }
+              text.title{ fill: #fff; }
+              text.subtitle{ fill: #9c9c9c; }
+              .border{ stroke: #555; }
             }
         `}</style>
     </defs>
