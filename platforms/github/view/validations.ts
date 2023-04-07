@@ -19,7 +19,7 @@ export const getContributors = object({
     placeholder: "Subtitle",
     description: "Subtitle of the widget",
   }),
-  items_per_row: number().default(20).meta({
+  items_per_row: number().min(5).max(25).default(20).meta({
     label: "Items per row",
     placeholder: "Items per row",
     description: "Number of items per row. Default is 20.",
