@@ -351,3 +351,47 @@ export const getContributors: ViewComponent = async (result, config) => {
     />
   );
 };
+
+export const getUserSponsorList: ViewComponent = async (result, config) => {
+  const { title, subtitle, items_per_row } = config.viewConfig as any;
+
+  const { nodes: sponsors } = result.data.user.sponsorshipsAsMaintainer;
+
+  const promise_thumbnails: IFlock["members"] = sponsors.map(
+    async (sponsor: any, key: number) => {
+      const url = new URL(sponsor.sponsorEntity.avatarUrl);
+      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      url.search = qs.stringify({ ...params, s: "128" });
+
+      const response = await fetch(url.toString());
+      const arrayBuffer = await response.arrayBuffer();
+
+      const buffer = Buffer.from(arrayBuffer);
+      const imageData = getImageSize(buffer);
+
+      return {
+        value: buffer.toString("base64"),
+        width: imageData.width,
+        height: imageData.height,
+      };
+    }
+  );
+
+  const thumbnails = await Promise.all(promise_thumbnails);
+
+  const members: IFlock["members"] = sponsors.map(
+    (sponsor: any, key: number) => ({
+      image: thumbnails[key],
+      caption: sponsor.sponsorEntity.login,
+    })
+  );
+
+  return (
+    <Flock
+      title={title}
+      subtitle={subtitle}
+      items_per_row={items_per_row}
+      members={members}
+    />
+  );
+};
