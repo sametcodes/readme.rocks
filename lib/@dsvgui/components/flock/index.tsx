@@ -35,10 +35,13 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const titleWidth = title
-    ? getTextWidth(title, { fontSize: titleFontSize })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
     : 0;
   const subtitleWidth = subtitle
-    ? getTextWidth(subtitle, { fontSize: subtitleFontSize })
+    ? getTextWidth(subtitle.trim(), {
+        fontSize: subtitleFontSize,
+        ratio: 0.465,
+      })
     : 0;
 
   const documentWidth =
@@ -58,13 +61,12 @@ export const Flock: React.FC<IFlock> = ({
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="title"
-          xmlSpace="preserve"
-          fontFamily="Roboto"
+          fontFamily="Manrope"
           fontSize={titleFontSize}
           fontWeight="500"
         >
           <tspan x={head_start.x} y={head_start.y}>
-            {title}
+            {title.trim()}
           </tspan>
         </text>
       )}
@@ -72,13 +74,12 @@ export const Flock: React.FC<IFlock> = ({
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="subtitle"
-          xmlSpace="preserve"
-          fontFamily="Roboto"
+          fontFamily="Manrope"
           fontSize={subtitleFontSize}
           fontWeight="400"
         >
           <tspan x={head_start.x} y={head_start.y + titleFontSize}>
-            {subtitle}
+            {subtitle.trim()}
           </tspan>
         </text>
       )}
