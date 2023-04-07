@@ -35,10 +35,13 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const titleWidth = title
-    ? getTextWidth(title, { fontSize: titleFontSize })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
     : 0;
   const subtitleWidth = subtitle
-    ? getTextWidth(subtitle, { fontSize: subtitleFontSize })
+    ? getTextWidth(subtitle.trim(), {
+        fontSize: subtitleFontSize,
+        ratio: 0.465
+      })
     : 0;
 
   const documentWidth =
@@ -51,20 +54,19 @@ export const Flock: React.FC<IFlock> = ({
   const documentHeight =
     head_start.y + titleFontSize + subtitleFontSize + numRows * gap;
 
+  const document_id = Math.random().toString(36).substr(2, 9);
   return (
     <Document w={documentWidth} h={documentHeight} padding={10}>
       {title && (
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="title"
-          xmlSpace="preserve"
-          fontFamily="Roboto"
+          fontFamily="Manrope"
           fontSize={titleFontSize}
           fontWeight="500"
-          letterSpacing="-0.02em"
         >
           <tspan x={head_start.x} y={head_start.y}>
-            {title}
+            {title.trim()}
           </tspan>
         </text>
       )}
@@ -72,14 +74,12 @@ export const Flock: React.FC<IFlock> = ({
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="subtitle"
-          xmlSpace="preserve"
-          fontFamily="Roboto"
+          fontFamily="Manrope"
           fontSize={subtitleFontSize}
           fontWeight="400"
-          letterSpacing="-0.02em"
         >
           <tspan x={head_start.x} y={head_start.y + titleFontSize}>
-            {subtitle}
+            {subtitle.trim()}
           </tspan>
         </text>
       )}
@@ -94,26 +94,26 @@ export const Flock: React.FC<IFlock> = ({
               cx={box_start.x + gap * col}
               cy={box_start.y + row * gap}
               r="15.5"
-              fill={`url(#member${index})`}
+              fill={`url(#member${document_id}${index})`}
               stroke="#ddd"
             />
             <defs>
               <pattern
                 xmlns="http://www.w3.org/2000/svg"
-                id={`member${index}`}
+                id={`member${document_id}${index}`}
                 patternContentUnits="objectBoundingBox"
                 width="1"
                 height="1"
               >
                 <use
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  xlinkHref={`#image${index}`}
+                  xlinkHref={`#image${document_id}${index}`}
                   transform="scale(0.00217391)"
                 />
               </pattern>
               <image
                 xmlns="http://www.w3.org/2000/svg"
-                id={`image${index}`}
+                id={`image${document_id}${index}`}
                 width="460"
                 height="460"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
