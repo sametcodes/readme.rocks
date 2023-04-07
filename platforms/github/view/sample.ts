@@ -1123,7 +1123,68 @@ export const getContributors = {
   config: {
     viewConfig: {
       title: "Our contributors",
-      subtitle: "We are grateful to all of our contributors",
+      subtitle: "We are grateful.",
+      items_per_row: 20,
+    },
+  },
+};
+
+export const getUserSponsorList = {
+  result: {
+    data: {
+      user: {
+        sponsorshipsAsMaintainer: {
+          totalCount: 5,
+          nodes: [
+            {
+              sponsorEntity: {
+                login: "eserozvataf",
+                name: "Eser Ozvataf",
+                avatarUrl:
+                  "https://avatars.githubusercontent.com/u/866558?u=b22a39f91f830670029edf4a75a4917d167e3477&v=4",
+              },
+            },
+            {
+              sponsorEntity: {
+                login: "MrPeker",
+                name: "Mehmet Ali Peker",
+                avatarUrl:
+                  "https://avatars.githubusercontent.com/u/23459375?u=a134e27718baa73c41da5534b6d02b10bc88065a&v=4",
+              },
+            },
+            {
+              sponsorEntity: {
+                login: "ImYrS",
+                name: "秋酿",
+                avatarUrl:
+                  "https://avatars.githubusercontent.com/u/44287632?u=9685045ebfa4354c434053ee5e527b106ee59d34&v=4",
+              },
+            },
+            {
+              sponsorEntity: {
+                login: "LydiaMorris",
+                name: "XavierMTest",
+                avatarUrl:
+                  "https://avatars.githubusercontent.com/u/50951276?v=4",
+              },
+            },
+            {
+              sponsorEntity: {
+                login: "frankenslime",
+                name: "Garret",
+                avatarUrl:
+                  "https://avatars.githubusercontent.com/u/124593259?v=4",
+              },
+            },
+          ],
+        },
+      },
+    },
+  },
+  config: {
+    viewConfig: {
+      title: "Sponsors",
+      subtitle: "Thank you for sponsoring me.",
       items_per_row: 20,
     },
   },

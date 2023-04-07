@@ -202,3 +202,43 @@ export const getContributors: QueryService = async (connection, config) => {
   const response = await request(query, connection);
   return response;
 };
+
+/**
+ * @name getUserSponsorList
+ * @title Get list of sponsors of a user
+ * @query_type Public
+ * @cache_time 3600
+ * @description Get the list of contributors of a repository. Only the most contributed 100 contributors are returned.
+ */
+export const getUserSponsorList: QueryService = async (connection, config) => {
+  const { queryConfig } = config as any;
+  const { username } = queryConfig as { username: string };
+
+  const query = `{
+    user(login: "${username}") {
+      sponsorshipsAsMaintainer(first: 100) {
+        totalCount
+        nodes {
+          sponsorEntity {
+            ... on User {
+              login
+              name
+              avatarUrl
+            }
+            ... on Organization {
+              login
+              name
+              avatarUrl
+            }
+          }
+        }
+      }
+    }
+  }`;
+
+  const response = await request(query, connection);
+  if (response.data.user.sponsorshipsAsMaintainer.totalCount === 0) {
+    throw new Error("You must have at least one sponsor to use this query.");
+  }
+  return response;
+};

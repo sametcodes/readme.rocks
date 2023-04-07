@@ -20,6 +20,7 @@ export type IArticle = {
 };
 
 export const Article: React.FC<IArticle> = ({ articles }) => {
+  const document_id = Math.random().toString(36).substr(2, 9);
   return (
     <Document w={398} h={100 * articles.length} padding={10}>
       <g clipPath="url(#clip_borders)">
@@ -120,33 +121,33 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                   </g>
                 </g>
 
-                <g clipPath={`url(#clip_image_${key})`}>
+                <g clipPath={`url(#clip_image_${document_id}${key})`}>
                   <rect
                     width={500}
                     height={500}
-                    fill={`url(#pattern_${key})`}
+                    fill={`url(#pattern_${document_id}${key})`}
                   />
                 </g>
               </g>
 
               <defs>
-                <clipPath id={`clip_image_${key}`}>
+                <clipPath id={`clip_image_${document_id}${key}`}>
                   <rect width={100} height={100} fill="white" />
                 </clipPath>
                 <pattern
-                  id={`pattern_${key}`}
+                  id={`pattern_${document_id}${key}`}
                   patternContentUnits="objectBoundingBox"
                   width="1"
                   height="1"
                 >
                   <use
                     xmlnsXlink="http://www.w3.org/1999/xlink"
-                    xlinkHref={`#image_${key}`}
+                    xlinkHref={`#image_${document_id}${key}`}
                     transform={`matrix(0.000837427 0 0 0.000814996 -0.172454 0)`}
                   />
                 </pattern>
                 <image
-                  id={`image_${key}`}
+                  id={`image_${document_id}${key}`}
                   transform={`translate(50 -130)`}
                   width={article.thumbnail.width}
                   height={500}
