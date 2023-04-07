@@ -35,12 +35,12 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize, ratio: 0.53 })
     : 0;
   const subtitleWidth = subtitle
     ? getTextWidth(subtitle.trim(), {
         fontSize: subtitleFontSize,
-        ratio: 0.465
+        ratio: 0.465,
       })
     : 0;
 
@@ -91,6 +91,7 @@ export const Flock: React.FC<IFlock> = ({
           <>
             <circle
               xmlns="http://www.w3.org/2000/svg"
+              className="border"
               cx={box_start.x + gap * col}
               cy={box_start.y + row * gap}
               r="15.5"
