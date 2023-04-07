@@ -174,7 +174,7 @@ export const getUserActiveSponsorGoal: QueryService = async (
 /**
  * @name getContributors
  * @title Get contribuors of a repository
- * @query_type Private
+ * @query_type Public
  * @cache_time 3600
  * @description Get the list of contributors of a repository. Only the most contributed 100 contributors are returned.
  */
