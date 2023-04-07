@@ -18,7 +18,7 @@ _All your statistics at once._
 
 ## Contributors
 
-<img width="700" src="https://readme.rocks/api/view/642fa65c44fe9bdabf4bc1a4" />
+<img width="700" src="https://readme.rocks/api/view?queryConfig%5Bowner_name%5D=facebook&queryConfig%5Brepository_name%5D=react&viewConfig%5Btitle%5D=Our%20contributors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20all%20your%20contributions.%20We%20appreciate%20that.&viewConfig%5Bitems_per_row%5D=15&id=642f70a3104ae4fd80d6efac" />
 
 ## Milestones
 
