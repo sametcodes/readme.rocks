@@ -26,12 +26,12 @@ export const Flock: React.FC<IFlock> = ({
 
   const titleFontSize = title ? 16 : 0;
   const subtitleFontSize = subtitle ? 12 : 0;
-  const padding = 20;
+  const padding = 25;
 
   const head_start = { x: title ? 10 : 0, y: title ? 25 : 5 };
   const box_start = {
     x: 25,
-    y: head_start.y + titleFontSize + subtitleFontSize + padding,
+    y: head_start.y + titleFontSize + subtitleFontSize + padding / 2,
   };
 
   const titleWidth = title
@@ -42,9 +42,14 @@ export const Flock: React.FC<IFlock> = ({
     : 0;
 
   const documentWidth =
-    15 + Math.max(titleWidth, subtitleWidth, items_per_row * gap);
+    15 +
+    Math.max(
+      titleWidth,
+      subtitleWidth,
+      (members.length > items_per_row ? items_per_row : members.length) * gap
+    );
   const documentHeight =
-    head_start.y + titleFontSize + subtitleFontSize + numRows * gap + 10;
+    head_start.y + titleFontSize + subtitleFontSize + numRows * gap;
 
   return (
     <Document w={documentWidth} h={documentHeight} padding={10}>

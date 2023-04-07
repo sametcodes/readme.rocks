@@ -170,3 +170,35 @@ export const getUserActiveSponsorGoal: QueryService = async (
 
   return response;
 };
+
+/**
+ * @name getContributors
+ * @title Get contribuors of a repository
+ * @query_type Private
+ * @cache_time 3600
+ * @description Get the list of contributors of a repository. Only the most contributed 100 contributors are returned.
+ */
+export const getContributors: QueryService = async (connection, config) => {
+  const { queryConfig } = config as any;
+
+  const { owner_name, repository_name } = queryConfig as {
+    owner_name: string;
+    repository_name: string;
+  };
+  const query = `{
+    repository(owner: "${owner_name}", name: "${repository_name}") {
+      name
+      mentionableUsers(first: 100) {
+        totalCount
+        nodes {
+          login
+          name
+          avatarUrl
+        }
+      }
+    }
+  }`;
+
+  const response = await request(query, connection);
+  return response;
+};
