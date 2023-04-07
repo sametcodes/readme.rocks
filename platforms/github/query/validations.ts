@@ -49,3 +49,20 @@ export const getUserActiveSponsorGoal = object({
 })
   .required()
   .noUnknown(true);
+
+export const getUserCommitStreak = object().required().noUnknown(true);
+
+export const getContributors = object({
+  owner_name: string().required().meta({
+    label: "Owner username",
+    placeholder: "Owner",
+    description: "The name of the owner of the repository.",
+  }),
+  repository_name: string().required().meta({
+    label: "Repository Name",
+    placeholder: "Repository Name",
+    description: "The name of the repository.",
+  }),
+})
+  .required()
+  .noUnknown(true);
