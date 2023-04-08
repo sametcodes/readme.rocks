@@ -1,6 +1,6 @@
 import { ViewComponent } from "@/platforms/types";
 import { WakatimeIcon } from "@/lib/@dsvgui/icons";
-import { Metrics, Line } from "@/lib/@dsvgui";
+import { Metrics, Line, BarStats, IBarStats } from "@/lib/@dsvgui";
 
 export const getAllTimeSinceToday: ViewComponent = (result, config) => {
   return (
@@ -20,6 +20,29 @@ export const getTimeWithRange: ViewComponent = (result, config) => {
       subtitle={subtitle}
       points={points}
       total={result.cumulative_total.text}
+    />
+  );
+};
+
+export const getMostUsedLanguages: ViewComponent = (result, config) => {
+  const { language_count } = config.viewConfig as any;
+
+  const total_seconds = result.data.languages
+    .slice(0, language_count)
+    .reduce((acc: number, el: any) => acc + el.total_seconds, 0);
+
+  const value: IBarStats["value"] = result.data.languages
+    .slice(0, language_count)
+    .map((lang: any) => ({
+      name: lang.name,
+      percent: (lang.total_seconds / total_seconds) * 100,
+    }));
+
+  return (
+    <BarStats
+      title="Most used languages by Wakatime"
+      subtitle="in the last 7 days"
+      value={value}
     />
   );
 };

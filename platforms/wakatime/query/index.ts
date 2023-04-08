@@ -36,3 +36,19 @@ export const getTimeWithRange: QueryService = async (connection, config) => {
   );
   return response;
 };
+
+/**
+ * @name getMostUsedLanguages
+ * @title Get most used languages
+ * @query_type Private
+ * @cache_time 3600
+ * @description Get your most used languages in wakatime with a specific date range.
+ */
+export const getMostUsedLanguages: QueryService = async (
+  connection,
+  config
+) => {
+  const { range } = config.queryConfig as any;
+  const response = await request(`/users/current/stats/${range}`, connection);
+  return response;
+};
