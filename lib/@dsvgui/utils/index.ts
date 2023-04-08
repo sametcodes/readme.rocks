@@ -79,3 +79,13 @@ export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
 
   return `${month} ${day} '${year}`;
 };
+
+export function stringToColorCode(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash += str.charCodeAt(i);
+  }
+
+  const color = ((hash * 123456789) % 0xffffff).toString(16);
+  return "#" + "0".repeat(6 - color.length) + color;
+}
