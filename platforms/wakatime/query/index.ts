@@ -1,6 +1,6 @@
 import { QueryService } from "@/platforms/types";
 import request from "@/platforms/wakatime/query/request";
-import { objectToQueryString } from "../../../utils/index";
+import { objectToQueryString } from "@/utils/index";
 
 /**
  * @name getAllTimeSinceToday

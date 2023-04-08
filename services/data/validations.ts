@@ -6,7 +6,7 @@ export * from "@/services/data/platformQueryConfig/validations";
 export * from "@/services/data/user/validations";
 
 import { object } from "yup";
-import { validations } from "../../platforms/index";
+import { validations } from "@/platforms";
 import { PlatformCode } from "@prisma/client";
 
 export const shapeDataAPISchema = (

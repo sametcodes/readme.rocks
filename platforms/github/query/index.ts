@@ -1,5 +1,5 @@
-import request from "@/platforms/github/query/request";
 import { QueryService } from "@/platforms/types";
+import request from "@/platforms/github/query/request";
 
 /**
  * @name getContributionsSummary
