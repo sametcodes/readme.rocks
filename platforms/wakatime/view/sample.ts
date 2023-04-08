@@ -227,6 +227,48 @@ export const getMostUsedLanguages = {
           total_seconds: 1.228185,
         },
       ],
+      projects: [
+        {
+          decimal: "24.25",
+          digital: "24:15",
+          hours: 24,
+          minutes: 15,
+          name: "readme.rocks",
+          percent: 67.15,
+          text: "24 hrs 15 mins",
+          total_seconds: 87351.808764,
+        },
+        {
+          decimal: "1.47",
+          digital: "1:28",
+          hours: 1,
+          minutes: 28,
+          name: "fuckregex",
+          percent: 4.1,
+          text: "1 hr 28 mins",
+          total_seconds: 53336.622722,
+        },
+        {
+          decimal: "1.32",
+          digital: "1:19",
+          hours: 1,
+          minutes: 19,
+          name: "test",
+          percent: 3.68,
+          text: "1 hr 19 mins",
+          total_seconds: 4788.783251,
+        },
+        {
+          decimal: "0.10",
+          digital: "0:06",
+          hours: 0,
+          minutes: 6,
+          name: "gladian-wallet-test",
+          percent: 0.31,
+          text: "6 mins",
+          total_seconds: 403.736246,
+        },
+      ],
       modified_at: "2023-04-07T22:18:28Z",
       operating_systems: [
         {
@@ -252,9 +294,12 @@ export const getMostUsedLanguages = {
   config: {
     queryConfig: {
       range: "last_7_days",
+      projects: "all",
     },
     viewConfig: {
       language_count: 6,
     },
   },
 };
+
+export const getMostRecentProjects = getMostUsedLanguages;
