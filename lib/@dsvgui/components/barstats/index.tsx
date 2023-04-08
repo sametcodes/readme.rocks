@@ -9,14 +9,20 @@ export type IBarStats = {
     percent: number;
     color: string;
   }[];
+  items_per_row?: number;
 };
 
-export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
+export const BarStats: React.FC<IBarStats> = ({
+  title,
+  subtitle,
+  value,
+  items_per_row = 2,
+}) => {
   const width = 330;
   const total_bar_width = 330 - 50;
   const legend_my = 20;
 
-  const height = 105 + Math.ceil(value.length / 2) * legend_my;
+  const height = 105 + Math.ceil(value.length / items_per_row) * legend_my;
 
   let temp_bar_width = 0;
   return (
@@ -78,8 +84,9 @@ export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
             <g id="legends">
               <g id="row">
                 {value.map((item, index) => {
-                  const x = 32 + (index % 2 ? 150 : 0);
-                  const y = 95 + Math.floor(index / 2) * legend_my + 5;
+                  const x = 32 + (index % items_per_row ? 150 : 0);
+                  const y =
+                    95 + Math.floor(index / items_per_row) * legend_my + 5;
                   return (
                     <g id={`legend${index}`} key={index}>
                       <circle
