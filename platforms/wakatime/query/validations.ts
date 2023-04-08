@@ -23,3 +23,41 @@ export const getTimeWithRange = object({
 })
   .required()
   .noUnknown(true);
+
+export const getMostUsedLanguages = object({
+  range: string()
+    .required()
+    .oneOf([
+      "last_7_days",
+      "last_30_days",
+      "last_6_months",
+      "last_year",
+      "all_time",
+    ])
+    .meta({
+      label: "Time range",
+      placeholder: "Range",
+      description: "The range of time to get data for",
+    }),
+})
+  .required()
+  .noUnknown(true);
+
+export const getMostRecentProjects = object({
+  range: string()
+    .required()
+    .oneOf([
+      "last_7_days",
+      "last_30_days",
+      "last_6_months",
+      "last_year",
+      "all_time",
+    ])
+    .meta({
+      label: "Time range",
+      placeholder: "Range",
+      description: "The range of time to get data for",
+    }),
+})
+  .required()
+  .noUnknown(true);
