@@ -8,13 +8,18 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/642dfbff39f5d6e5e5f45c3b)
 ![](https://readme.rocks/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
+## Recent projects and used languages
+
+![](https://readme.rocks/api/view/6431b08616981eaebfd030f9)
+![](https://readme.rocks/api/view/6431b559ddde9c1558a16fe6)
+
 ## Line stats
 ![](https://readme.rocks/api/view/642220d0c3f0ffcbcafd573f)
 
 ## Your latest `daily.dev` and `dev.to` articles
-<img align="left" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" />
+
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" />
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" />
-<br clear="left"/>
 
 ## Contributors
 
