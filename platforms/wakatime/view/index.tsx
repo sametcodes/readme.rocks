@@ -43,6 +43,7 @@ export const getMostUsedLanguages: ViewComponent = (result, config) => {
   const value: IBarStats["value"] = result.data.languages
     .slice(0, language_count)
     .map((lang: any) => ({
+      key: lang.name,
       name: lang.name,
       percent: (lang.total_seconds / total_seconds) * 100,
     }));
@@ -83,6 +84,7 @@ export const getMostRecentProjects: ViewComponent = (result, config) => {
     0
   );
   const value: IBarStats["value"] = projects.map((project: any) => ({
+    key: project.name,
     name: `${project.name} (${project.text})`,
     percent: (project.total_seconds / total_seconds) * 100,
   }));

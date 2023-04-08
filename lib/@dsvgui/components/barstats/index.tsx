@@ -5,9 +5,9 @@ export type IBarStats = {
   title: string;
   subtitle?: string;
   value: {
+    key: string;
     name: string;
     percent: number;
-    color: string;
   }[];
   items_per_row?: number;
 };
@@ -67,7 +67,6 @@ export const BarStats: React.FC<IBarStats> = ({
                   ? (array[index - 1].percent / 100) * total_bar_width
                   : 0;
                 temp_bar_width += prev_bar_width;
-
                 return (
                   <g id={`bar${index}`} key={index}>
                     <rect
@@ -75,7 +74,7 @@ export const BarStats: React.FC<IBarStats> = ({
                       width={bar_width}
                       height="10"
                       transform={`translate(${temp_bar_width + 25}, 70)`}
-                      fill={stringToColorCode(item.name)}
+                      fill={stringToColorCode(item.key)}
                     />
                   </g>
                 );
@@ -93,7 +92,7 @@ export const BarStats: React.FC<IBarStats> = ({
                         cx={x}
                         cy={y}
                         r="6"
-                        fill={stringToColorCode(item.name)}
+                        fill={stringToColorCode(item.key)}
                       />
                       <text
                         xmlSpace="preserve"
