@@ -1,5 +1,5 @@
 import { QueryService } from "@/platforms/types";
-import request from "./request";
+import request from "@/platforms/dailydev/query/request";
 
 /**
  * @name listArticles

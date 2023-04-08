@@ -1,6 +1,6 @@
 import React from "react";
 import { Document } from "@/lib/@dsvgui";
-import { wrapText } from "../../utils/index";
+import { wrapText } from "@/lib/@dsvgui/utils/index";
 
 type IFallback = {
   title: string;

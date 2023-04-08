@@ -1,5 +1,5 @@
 import { Document } from "@/lib/@dsvgui";
-import { getTextWidth } from "../../utils/index";
+import { getTextWidth } from "@/lib/@dsvgui/utils/index";
 
 type ILine = {
   title: string;
