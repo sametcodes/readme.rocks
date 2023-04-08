@@ -250,8 +250,11 @@ export const getMostUsedLanguages = {
     },
   },
   config: {
+    queryConfig: {
+      range: "last_7_days",
+    },
     viewConfig: {
-      language_count: 15,
+      language_count: 6,
     },
   },
 };

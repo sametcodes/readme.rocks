@@ -25,6 +25,15 @@ export const getTimeWithRange: ViewComponent = (result, config) => {
 };
 
 export const getMostUsedLanguages: ViewComponent = (result, config) => {
+  const subtitles = {
+    last_7_days: "Last 7 days",
+    last_30_days: "Last 30 days",
+    last_6_months: "Last 6 months",
+    last_year: "Last year",
+    all_time: "All time",
+  };
+
+  const range: keyof typeof subtitles = (config.queryConfig as any).range;
   const { language_count } = config.viewConfig as any;
 
   const total_seconds = result.data.languages
@@ -41,7 +50,7 @@ export const getMostUsedLanguages: ViewComponent = (result, config) => {
   return (
     <BarStats
       title="Most used languages by Wakatime"
-      subtitle="in the last 7 days"
+      subtitle={subtitles[range]}
       value={value}
     />
   );

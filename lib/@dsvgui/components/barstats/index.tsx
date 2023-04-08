@@ -16,7 +16,7 @@ export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
   const total_bar_width = 330 - 50;
   const legend_my = 20;
 
-  const height = 110 + Math.ceil(value.length / 2) * legend_my;
+  const height = 105 + Math.ceil(value.length / 2) * legend_my;
 
   let temp_bar_width = 0;
   return (
@@ -49,12 +49,12 @@ export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
                 fontWeight="600"
                 letterSpacing="0px"
               >
-                <tspan x="24" y="56.83">
+                <tspan x="24" y="58.83">
                   {subtitle}
                 </tspan>
               </text>
             </g>
-            <g id="bars">
+            <g id="bars" shapeRendering="crispEdges">
               {value.map((item, index, array) => {
                 const bar_width = (item.percent / 100) * total_bar_width;
                 const prev_bar_width = array[index - 1]
@@ -65,6 +65,7 @@ export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
                 return (
                   <g id={`bar${index}`} key={index}>
                     <rect
+                      style={{ transition: "all 0.5s ease" }}
                       width={bar_width}
                       height="10"
                       transform={`translate(${temp_bar_width + 25}, 70)`}
@@ -78,7 +79,7 @@ export const BarStats: React.FC<IBarStats> = ({ title, subtitle, value }) => {
               <g id="row">
                 {value.map((item, index) => {
                   const x = 32 + (index % 2 ? 150 : 0);
-                  const y = 95 + Math.floor(index / 2) * legend_my;
+                  const y = 95 + Math.floor(index / 2) * legend_my + 5;
                   return (
                     <g id={`legend${index}`} key={index}>
                       <circle
