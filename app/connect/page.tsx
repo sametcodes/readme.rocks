@@ -5,7 +5,6 @@ import prisma from "@/services/prisma";
 
 type IConnectionWithPlatforms = {
   id: string;
-  expires_at: number;
   profile: { name: string; email: string; image: string } | null;
   platform: {
     id: string;
@@ -24,7 +23,6 @@ export default async function Connect() {
       where: { userId: session.user.id, type: "oauth" },
       select: {
         id: true,
-        expires_at: true,
         profile: { select: { name: true, email: true, image: true } },
         platform: {
           select: {
@@ -60,9 +58,11 @@ export default async function Connect() {
   return (
     <div className="flex container mx-auto flex-col">
       <div className="mb-5">
-        <h1 className="text-3xl font-bold my-3 text-slate-700">Connected</h1>
+        <h1 className="text-3xl font-bold my-3 text-slate-700 dark:text-gray-300">
+          Connections
+        </h1>
         <blockquote className="text-slate-700">
-          <p className="text-md">
+          <p className="text-md dark:text-gray-400">
             Connect your accounts to fetch data from platforms.
           </p>
         </blockquote>
@@ -70,7 +70,7 @@ export default async function Connect() {
 
       {session && (
         <div className="mt-[40px]">
-          <h2 className="text-2xl font-bold text-slate-700">
+          <h2 className="text-2xl font-bold text-slate-700 dark:text-gray-300">
             Connected Platforms (
             {connectionWithPlatforms.length + noAuthRequiredPlatforms.length})
           </h2>
@@ -79,7 +79,7 @@ export default async function Connect() {
               <div key={connection.id} className="mt-6">
                 <div className="flex justify-between">
                   <div className="flex flex-col">
-                    <h2 className="text-xl inline-block">
+                    <h2 className="text-xl inline-block dark:text-gray-300">
                       {connection.platform.name}
                     </h2>
                     <span className="text-sm text-slate-400">
@@ -101,13 +101,17 @@ export default async function Connect() {
               <div key={platform.id} className="mt-6">
                 <div className="flex justify-between">
                   <div className="flex flex-col">
-                    <h2 className="text-xl inline-block">{platform.name}</h2>
+                    <h2 className="text-xl inline-block dark:text-gray-300">
+                      {platform.name}
+                    </h2>
                     <span className="text-sm text-slate-400">
                       {platform._count.queries} available{" "}
                       {platform._count.queries === 1 ? "query" : "queries"}
                     </span>
                   </div>
-                  <p className="text-lg text-slate-400">No auth required</p>
+                  <p className="text-lg text-slate-400 dark:text-gray-500">
+                    No auth required
+                  </p>
                 </div>
               </div>
             );
@@ -116,7 +120,7 @@ export default async function Connect() {
       )}
 
       <div className="mt-[40px]">
-        <h2 className="text-2xl font-bold text-slate-700">
+        <h2 className="text-2xl font-bold text-slate-700 dark:text-gray-300">
           All platforms ({allPlatforms.length})
         </h2>
         {allPlatforms.map((platform) => {

@@ -18,10 +18,6 @@ export const getReputation: QueryService = async (connection, config) => {
   };
 
   const response = await request("/me", connection, params);
-  if ("error" in response) return response;
 
-  return {
-    success: true,
-    data: response,
-  };
+  return response;
 };

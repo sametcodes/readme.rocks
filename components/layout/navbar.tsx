@@ -21,21 +21,17 @@ type INavbarWithLogin = {
 
 const links = [
   {
-    title: "Queries",
-    href: "/query",
-  },
-  {
-    title: "Connect",
-    href: "/connect",
+    title: "Build",
+    href: "/build",
   },
 ];
 
 export default function NavbarWithLogin({ session }: INavbarWithLogin) {
   const segment = useSelectedLayoutSegment();
   return (
-    <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4">
+    <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4 dark:border-b-gray-500">
       <Link href="/" className="items-center space-x-2 md:flex">
-        <span className="text-2xl font-bold sm:inline-block">devstats</span>
+        <span className="text-2xl font-bold sm:inline-block">readme.rocks</span>
       </Link>
       <nav className="flex gap-6">
         {links.map((link, index) => (
@@ -43,8 +39,9 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
             key={index}
             href={link.href}
             className={cn(
-              "items-center text-lg font-semibold text-slate-400 sm:text-sm hidden sm:flex",
-              link.href.startsWith(`/${segment}`) && "text-slate-900"
+              "items-center text-lg text-slate-600 sm:text-sm hidden sm:flex dark:text-gray-400",
+              link.href.startsWith(`/${segment}`) &&
+                "text-slate-900 font-semibold dark:text-gray-200"
             )}
           >
             {link.title}
@@ -52,15 +49,15 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
         ))}
         {!session ? (
           <div
-            className="text-lg font-semibold text-slate-400 sm:text-sm cursor-pointer hover:text-slate-700"
+            className="text-lg font-semibold text-slate-700 sm:text-sm cursor-pointer hover:text-slate-700 dark:text-gray-300 hover:dark:text-gray-500"
             onClick={() => signIn("github")}
           >
-            Login
+            Login with GitHub
           </div>
         ) : (
           <Link href="/connect" className="cursor-pointer flex items-center">
             <DropdownMenu>
-              <DropdownMenuTrigger className="text-lg font-semibol text-slate-600 cursor-pointer sm:text-sm hover:text-slate-800 flex items-center">
+              <DropdownMenuTrigger className="text-lg font-semibol text-slate-600 cursor-pointer sm:text-sm hover:text-slate-800 flex items-center dark:text-gray-300 dark:hover:text-gray-400">
                 <Image
                   src={session.user.image}
                   alt={session.user.name}
@@ -68,7 +65,7 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
                   height={40}
                   className="rounded-full mr-2"
                 />
-                {session.user.name}
+                <span className="ml-2">{session.user.name}</span>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -85,6 +82,9 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
                     <DropdownMenuItem>{link.title}</DropdownMenuItem>
                   </Link>
                 ))}
+                <DropdownMenuItem className="text-slate-500">
+                  <Link href="/connect">Connects</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => signOut()}
                   className="text-slate-500"

@@ -33,7 +33,23 @@ export const Style: React.FC = () => {
                 src: url('${Manrope700}') format('woff2');
                 unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
             }
-            text{ font-family: 'Manrope', 'Open Sans', 'Segoe UI', Ubuntu, 'Helvetica Neue', Sans-Serif; }
+            text{ font-family: 'Manrope', 'Open Sans', 'Segoe UI', Ubuntu, 'Helvetica Neue', Sans-Serif; fill: #32373e; }
+            text.title{ fill: #32373e; font-weight: bolder; }
+            text.subtitle{ fill: #9c9c9c; }
+            .dsvgui-container{ fill: #fbfbfb; }
+            stop[offset='0']{ stop-color: #fbfbfb; }
+            stop[offset='1']{ stop-color: #fbfbfb; }
+            .border{ stroke: #ddd; }
+            @media (prefers-color-scheme: dark) {
+              .dsvgui-container { fill: #32373e }
+              stop[offset='0']{ stop-color: #32373e; }
+              stop[offset='1']{ stop-color: #32373e; }
+              text { fill: #eeeeee }
+              .icon{ fill: #eeeeee }
+              text.title{ fill: #fff; }
+              text.subtitle{ fill: #9c9c9c; }
+              .border{ stroke: #555; }
+            }
         `}</style>
     </defs>
   );
@@ -44,27 +60,29 @@ export const BoxShadow: React.FC<IBoxShadow> = ({
   width,
   height,
   padding,
+  id,
 }) => (
   <>
-    <g filter="url(#filter0_d_39_272)">
+    <g filter={`url(#crispEdges_${id})`}>
       <rect
+        className="dsvgui-container"
         width={width}
         height={height}
         rx="20"
         fill="white"
-        shape-rendering="crispEdges"
+        shapeRendering="crispEdges"
       />
       {children}
     </g>
     <defs>
       <filter
-        id="filter0_d_39_272"
+        id={`crispEdges_${id}`}
         x="-2"
         y="-1"
         width={width + padding}
         height={height + padding}
         filterUnits="userSpaceOnUse"
-        color-interpolation-filters="sRGB"
+        colorInterpolationFilters="sRGB"
       >
         <feFlood floodOpacity="0" result="BackgroundImageFix" />
         <feColorMatrix

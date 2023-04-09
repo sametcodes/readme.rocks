@@ -1,9 +1,14 @@
-import { Pie } from "@nivo/pie";
-
+import {
+  Progress,
+  IProgress,
+  Metrics,
+  Flock,
+  IFlock,
+} from "@/lib/@dsvgui/components";
 import { GithubIcon } from "@/lib/@dsvgui/icons";
-import { Metrics } from "@/lib/@dsvgui/components";
-import { Style as SVGStyle } from "@/lib/@dsvgui/document";
 import { ViewComponent } from "@/platforms/types";
+import getImageSize from "image-size";
+import qs from "qs";
 
 export const getContributionsSummary: ViewComponent = (result, config) => {
   const {
@@ -24,377 +29,369 @@ export const getContributionsSummary: ViewComponent = (result, config) => {
   );
 };
 
-export const getLanguageUsageSummary: ViewComponent = (result, config) => {
-  const viewConfig = config.viewConfig as any;
-
-  const CenteredMetric = ({
-    dataWithArc,
-    centerX,
-    centerY,
-  }: {
-    dataWithArc: any;
-    centerX: number;
-    centerY: number;
-  }) => {
-    return (
-      <text
-        x={centerX}
-        y={centerY}
-        textAnchor="middle"
-        dominantBaseline="central"
-        style={{
-          fontSize: "28px",
-          fontWeight: 600,
-          fontFamily: "sans-serif",
-        }}
-      >
-        Languages
-      </text>
-    );
-  };
-
-  const resolveLanguages = (response: any) => {
-    const languages: any = {};
-    let total = 0;
-    response.data.viewer.repositories.edges.forEach((node: any) => {
-      node.node.languages.edges.forEach((edge: any) => {
-        const { color, name } = edge.node;
-        total += edge.size;
-        if (languages[name.toLowerCase()]) {
-          languages[name.toLowerCase()].value += edge.size;
-        } else {
-          languages[name.toLowerCase()] = {
-            id: name.toLowerCase(),
-            label: name,
-            value: edge.size,
-            color,
-          };
-        }
-      });
-    });
-    return Object.values(languages)
-      .map((language: any) => {
-        language.value = language.value / total;
-        return language;
-      })
-      .sort((a: any, b: any) => b.value - a.value)
-      .slice(0, viewConfig.first_n);
-  };
-  const languages = resolveLanguages(result);
-
-  return (
-    <>
-      <Pie
-        innerRadius={0.8}
-        enableArcLabels={false}
-        arcLinkLabel={(d: any) => `${d.id} (${d.formattedValue})`}
-        layers={[
-          "arcs",
-          "arcLabels",
-          "arcLinkLabels",
-          "legends",
-          CenteredMetric,
-        ]}
-        data={languages}
-        width={600}
-        height={400}
-        valueFormat=".0%"
-        margin={{ top: 50, right: 100, bottom: 70, left: 100 }}
-        padAngle={0.7}
-        cornerRadius={3}
-        activeOuterRadiusOffset={8}
-        borderWidth={1}
-        colors={{ datum: "data.color" }}
-        borderColor={{
-          from: "color",
-          modifiers: [["darker", 0.2]],
-        }}
-        arcLinkLabelsSkipAngle={10}
-        arcLinkLabelsTextColor="#333333"
-        arcLinkLabelsThickness={2}
-        arcLinkLabelsColor={{ from: "color" }}
-        arcLabelsSkipAngle={10}
-        arcLabelsTextColor={{
-          from: "color",
-          modifiers: [["darker", 2]],
-        }}
-        legends={[
-          {
-            anchor: "bottom",
-            direction: "row",
-            justify: false,
-            translateX: 0,
-            translateY: 56,
-            itemsSpacing: 0,
-            itemWidth: 100,
-            itemHeight: 18,
-            itemTextColor: "#999",
-            itemDirection: "left-to-right",
-            itemOpacity: 1,
-            symbolSize: 18,
-            symbolShape: "square",
-          },
-        ]}
-      />
-    </>
-  );
-};
-
 export const getRepositoryMilestone: ViewComponent = (result, config) => {
   const { milestone } = result.data.viewer.repository;
 
-  const total = 462;
   const completed_jobs_count =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;
   const total_jobs_count =
     milestone.pullRequests.totalCount + milestone.issues.totalCount;
-  const percent_in_bar = Math.floor(
-    (completed_jobs_count / total_jobs_count) * total
-  );
-  const percent_in_text = Math.floor(
-    (completed_jobs_count / total_jobs_count) * 100
-  );
+  const percent_in_text =
+    Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
   const dueDate =
-    milestone.dueOn &&
-    new Date(milestone.dueOn).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    (milestone.dueOn &&
+      "Due by " +
+        new Date(milestone.dueOn).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })) ||
+    "No due date";
+
+  const Icons = {
+    Pie: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M8 1.3C4.3 1.3 1.3 4.3 1.3 8s3 6.7 6.7 6.7 6.7-3 6.7-6.7S11.7 1.3 8 1.3z m0 6.7V3.3c2.7 0 4.7 2 4.7 4.7h-4.7z"
+      />
+    ),
+    PR: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M12.7 10.1V5.3C12.7 4.3 12 2.7 10 2.7V1.3l-2.7 2 2.7 2V4c1.2 0 1.3 1 1.3 1.3v4.8c-1 0.3-1.7 1.2-1.6 2.2 0 1.3 1 2.3 2.3 2.4s2.3-1 2.3-2.4c0-1.1-0.7-1.9-1.6-2.2z m-0.7 3.2c-0.6 0-1-0.4-1-1s0.4-1 1-1 1 0.4 1 1-0.4 1-1 1zM6.3 3.7C6.3 2.4 5.3 1.3 4 1.3S1.7 2.4 1.7 3.7c0 1.1 0.7 1.9 1.6 2.2v4.2c-1 0.3-1.7 1.2-1.6 2.2C1.7 13.6 2.7 14.7 4 14.7s2.3-1 2.3-2.4c0-1.1-0.7-1.9-1.6-2.2V5.9C5.6 5.6 6.3 4.7 6.3 3.7z m-3.3 0C3 3.1 3.4 2.7 4 2.7s1 0.4 1 1S4.6 4.7 4 4.7s-1-0.4-1-1z m2 8.6c0 0.6-0.4 1-1 1s-1-0.4-1-1S3.4 11.3 4 11.3s1 0.4 1 1z"
+      />
+    ),
+    Issue: (
+      <g>
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.1)"
+          d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+        ></path>
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.1)"
+          d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"
+        ></path>
+      </g>
+    ),
+    Calendar: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M12.7 14.7H3.3C2.6 14.7 2 14.1 2 13.3V4C2 3.3 2.6 2.7 3.3 2.7H4.7V1.3H6V2.7H10V1.3H11.3V2.7H12.7C13.4 2.7 14 3.3 14 4V13.3C14 14.1 13.4 14.7 12.7 14.7ZM3.3 6.7V13.3H12.7V6.7H3.3ZM3.3 4V5.3H12.7V4H3.3Z"
+      />
+    ),
+  };
+
+  const metrics: IProgress["metrics"] = [
+    {
+      text: `%${percent_in_text} completed`,
+      icon: Icons.Pie,
+    },
+    {
+      text: dueDate,
+      icon: Icons.Calendar,
+    },
+    {
+      text: `${milestone.closedIssues.totalCount}/${milestone.issues.totalCount} issues solved`,
+      icon: Icons.Issue,
+    },
+    {
+      text: `${milestone.closedPullRequests.totalCount}/${milestone.pullRequests.totalCount} PRs closed`,
+      icon: Icons.PR,
+    },
+  ];
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="497"
-      height="165"
-      viewBox="0 0 497 165"
-      fill="none"
-    >
-      <SVGStyle />
-      <style>{`text{ font-weight: 300 }`}</style>
-      <path
-        d="M249.354 133.25C249.354 132.838 249.456 132.433 249.65 132.081C249.843 131.728 250.12 131.442 250.451 131.252C250.782 131.063 251.153 130.978 251.524 131.006C251.895 131.035 252.252 131.176 252.556 131.414C252.86 131.652 253.099 131.978 253.247 132.357C253.395 132.735 253.446 133.151 253.395 133.56C253.344 133.969 253.192 134.354 252.957 134.673C252.722 134.993 252.412 135.235 252.061 135.372V140.628C252.512 140.805 252.893 141.153 253.136 141.611C253.378 142.069 253.467 142.607 253.386 143.131C253.305 143.654 253.059 144.129 252.693 144.471C252.327 144.814 251.863 145.001 251.384 145.001C250.905 145.001 250.441 144.814 250.075 144.471C249.708 144.129 249.463 143.654 249.382 143.131C249.301 142.607 249.389 142.069 249.632 141.611C249.874 141.153 250.255 140.805 250.707 140.628V135.372C250.311 135.217 249.968 134.93 249.726 134.549C249.484 134.169 249.353 133.715 249.354 133.25ZM254.476 133.073L256.638 130.677C256.67 130.642 256.71 130.618 256.754 130.608C256.798 130.599 256.843 130.604 256.884 130.623C256.926 130.642 256.961 130.674 256.986 130.715C257.01 130.756 257.024 130.805 257.023 130.854V132.5H257.926C258.524 132.5 259.098 132.763 259.521 133.232C259.944 133.701 260.182 134.337 260.182 135V140.628C260.633 140.805 261.014 141.153 261.257 141.611C261.499 142.069 261.588 142.607 261.507 143.131C261.426 143.654 261.181 144.129 260.814 144.471C260.448 144.814 259.984 145.001 259.505 145.001C259.026 145.001 258.562 144.814 258.196 144.471C257.829 144.129 257.584 143.654 257.503 143.131C257.422 142.607 257.511 142.069 257.753 141.611C257.996 141.153 258.376 140.805 258.828 140.628V135C258.828 134.735 258.733 134.48 258.564 134.293C258.395 134.105 258.165 134 257.926 134H257.023V135.646C257.024 135.696 257.01 135.744 256.986 135.785C256.961 135.826 256.926 135.858 256.884 135.877C256.843 135.896 256.798 135.901 256.754 135.892C256.71 135.882 256.67 135.858 256.638 135.823L254.476 133.427C254.455 133.404 254.438 133.376 254.427 133.346C254.416 133.315 254.41 133.283 254.41 133.25C254.41 133.217 254.416 133.185 254.427 133.154C254.438 133.124 254.455 133.096 254.476 133.073ZM251.384 132.5C251.204 132.5 251.032 132.579 250.905 132.72C250.778 132.86 250.707 133.051 250.707 133.25C250.707 133.449 250.778 133.64 250.905 133.78C251.032 133.921 251.204 134 251.384 134C251.563 134 251.735 133.921 251.862 133.78C251.989 133.64 252.061 133.449 252.061 133.25C252.061 133.051 251.989 132.86 251.862 132.72C251.735 132.579 251.563 132.5 251.384 132.5ZM251.384 142C251.204 142 251.032 142.079 250.905 142.22C250.778 142.36 250.707 142.551 250.707 142.75C250.707 142.949 250.778 143.14 250.905 143.28C251.032 143.421 251.204 143.5 251.384 143.5C251.563 143.5 251.735 143.421 251.862 143.28C251.989 143.14 252.061 142.949 252.061 142.75C252.061 142.551 251.989 142.36 251.862 142.22C251.735 142.079 251.563 142 251.384 142ZM258.828 142.75C258.828 142.949 258.899 143.14 259.026 143.28C259.153 143.421 259.325 143.5 259.505 143.5C259.684 143.5 259.857 143.421 259.983 143.28C260.11 143.14 260.182 142.949 260.182 142.75C260.182 142.551 260.11 142.36 259.983 142.22C259.857 142.079 259.684 142 259.505 142C259.325 142 259.153 142.079 259.026 142.22C258.899 142.36 258.828 142.551 258.828 142.75Z"
-        fill="#636363"
-      />
-      <text fill="#636363">
-        <tspan x="271.461" y="144" fontSize={17}>
-          <tspan fontWeight={500}>
-            {milestone.closedPullRequests.totalCount}/
-            {milestone.pullRequests.totalCount}
-          </tspan>{" "}
-          PRs closed
-        </tspan>
-      </text>
-      <g clip-path="url(#clip0_114_277)">
-        <path
-          d="M24.25 139.5C24.6105 139.5 24.9563 139.342 25.2112 139.061C25.4662 138.779 25.6094 138.398 25.6094 138C25.6094 137.602 25.4662 137.221 25.2112 136.939C24.9563 136.658 24.6105 136.5 24.25 136.5C23.8895 136.5 23.5437 136.658 23.2888 136.939C23.0338 137.221 22.8906 137.602 22.8906 138C22.8906 138.398 23.0338 138.779 23.2888 139.061C23.5437 139.342 23.8895 139.5 24.25 139.5Z"
-          fill="#636363"
-        />
-        <path
-          d="M24.25 130C26.1728 130 28.0169 130.843 29.3765 132.343C30.7362 133.843 31.5 135.878 31.5 138C31.5 140.122 30.7362 142.157 29.3765 143.657C28.0169 145.157 26.1728 146 24.25 146C22.3272 146 20.4831 145.157 19.1235 143.657C17.7638 142.157 17 140.122 17 138C17 135.878 17.7638 133.843 19.1235 132.343C20.4831 130.843 22.3272 130 24.25 130ZM18.3594 138C18.3594 139.724 18.98 141.377 20.0847 142.596C21.1894 143.815 22.6877 144.5 24.25 144.5C25.8123 144.5 27.3106 143.815 28.4153 142.596C29.52 141.377 30.1406 139.724 30.1406 138C30.1406 136.276 29.52 134.623 28.4153 133.404C27.3106 132.185 25.8123 131.5 24.25 131.5C22.6877 131.5 21.1894 132.185 20.0847 133.404C18.98 134.623 18.3594 136.276 18.3594 138Z"
-          fill="#636363"
-        />
-      </g>
-      <text fill="#636363" fontFamily="Roboto">
-        <tspan x="40.5625" y="144" fontSize={17}>
-          <tspan fontWeight={500}>
-            {milestone.closedIssues.totalCount}/{milestone.issues.totalCount}
-          </tspan>{" "}
-          issues solved
-        </tspan>
-      </text>
-      <path
-        d="M253.268 103C253.446 103 253.618 103.079 253.744 103.22C253.87 103.36 253.941 103.551 253.941 103.75V105H258.434V103.75C258.434 103.551 258.505 103.36 258.631 103.22C258.757 103.079 258.929 103 259.107 103C259.286 103 259.458 103.079 259.584 103.22C259.71 103.36 259.781 103.551 259.781 103.75V105H260.904C261.772 105 262.477 105.784 262.477 106.75V117.25C262.477 117.714 262.311 118.159 262.016 118.487C261.721 118.816 261.321 119 260.904 119H251.471C251.054 119 250.654 118.816 250.359 118.487C250.064 118.159 249.898 117.714 249.898 117.25V106.75C249.898 105.784 250.603 105 251.471 105H252.594V103.75C252.594 103.551 252.665 103.36 252.791 103.22C252.917 103.079 253.089 103 253.268 103ZM251.246 110.5V117.25C251.246 117.388 251.347 117.5 251.471 117.5H260.904C260.964 117.5 261.021 117.474 261.063 117.427C261.105 117.38 261.129 117.316 261.129 117.25V110.5H251.246ZM260.904 106.5H251.471C251.411 106.5 251.354 106.526 251.312 106.573C251.27 106.62 251.246 106.684 251.246 106.75V109H261.129V106.75C261.129 106.684 261.105 106.62 261.063 106.573C261.021 106.526 260.964 106.5 260.904 106.5Z"
-        fill="#636363"
-      />
-      <text fill="#636363">
-        <tspan x="272.359" y="117" fontSize={17}>
-          {dueDate ? (
-            <>
-              Due by <tspan fontWeight={500}>{dueDate}</tspan>
-            </>
-          ) : (
-            "No due date"
-          )}
-        </tspan>
-      </text>
-      <g clip-path="url(#clip1_114_277)">
-        <path
-          d="M25 104C23.6155 104 22.2622 104.411 21.111 105.18C19.9599 105.949 19.0627 107.042 18.5328 108.321C18.003 109.6 17.8644 111.008 18.1345 112.366C18.4046 113.723 19.0713 114.971 20.0503 115.95C21.0292 116.929 22.2765 117.595 23.6344 117.865C24.9922 118.136 26.3997 117.997 27.6788 117.467C28.9579 116.937 30.0511 116.04 30.8203 114.889C31.5895 113.738 32 112.384 32 111C32 109.143 31.2625 107.363 29.9498 106.05C28.637 104.737 26.8565 104 25 104ZM25 117C23.4087 117 21.8826 116.368 20.7574 115.243C19.6321 114.117 19 112.591 19 111C19 109.409 19.6321 107.883 20.7574 106.757C21.8826 105.632 23.4087 105 25 105V111L29.2667 115.267C28.7047 115.822 28.0385 116.262 27.3063 116.559C26.5741 116.856 25.7903 117.006 25 117Z"
-          fill="#636363"
-          stroke="#636363"
-        />
-      </g>
-      <text fill="#636363">
-        <tspan x="43" y="117" fontSize={17}>
-          %<tspan fontWeight={500}>{percent_in_text}</tspan> complete
-        </tspan>
-      </text>
-      <g>
-        <rect x="17" y="64" width={total} height="18" rx="5" fill="#E7E7E7" />
-        <rect
-          x="17"
-          y="64"
-          width={percent_in_bar}
-          height="18"
-          rx="5"
-          fill="#2DA44E"
-        />
-      </g>
-      <text fill="#5E5E5E">
-        <tspan x="17" y="40.7539" fontWeight={700} fontSize={25}>
-          {milestone.title}
-        </tspan>
-      </text>
-      <defs>
-        <clipPath id="clip0_114_277">
-          <rect
-            width="14.5"
-            height="16"
-            fill="white"
-            transform="translate(17 130)"
-          />
-        </clipPath>
-        <clipPath id="clip1_114_277">
-          <rect
-            width="16"
-            height="16"
-            fill="white"
-            transform="translate(17 103)"
-          />
-        </clipPath>
-      </defs>
-    </svg>
+    <Progress
+      title={milestone.title}
+      percent={percent_in_text}
+      metrics={metrics}
+    />
   );
 };
 
 export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
-  const { milestone } =
-    (config.queryConfig as any).is_organization === "true"
-      ? result.data.organization.repository
-      : result.data.user.repository;
+  const { queryConfig } = config as any;
 
-  const total = 462;
+  const login_field =
+    queryConfig.is_organization === "true" ? "organization" : "user";
+  const { milestone } = result.data[login_field].repository;
+
   const completed_jobs_count =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;
   const total_jobs_count =
     milestone.pullRequests.totalCount + milestone.issues.totalCount;
-  const percent_in_bar = Math.floor(
-    (completed_jobs_count / total_jobs_count) * total
-  );
-  const percent_in_text = Math.floor(
-    (completed_jobs_count / total_jobs_count) * 100
-  );
+  const percent_in_text =
+    Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
   const dueDate =
-    milestone.dueOn &&
-    new Date(milestone.dueOn).toLocaleDateString("en-US", {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
-    });
+    (milestone.dueOn &&
+      "Due by " +
+        new Date(milestone.dueOn).toLocaleDateString("en-US", {
+          month: "long",
+          day: "numeric",
+          year: "numeric",
+        })) ||
+    "No due date";
+
+  const Icons = {
+    Pie: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M8 1.3C4.3 1.3 1.3 4.3 1.3 8s3 6.7 6.7 6.7 6.7-3 6.7-6.7S11.7 1.3 8 1.3z m0 6.7V3.3c2.7 0 4.7 2 4.7 4.7h-4.7z"
+      />
+    ),
+    PR: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M12.7 10.1V5.3C12.7 4.3 12 2.7 10 2.7V1.3l-2.7 2 2.7 2V4c1.2 0 1.3 1 1.3 1.3v4.8c-1 0.3-1.7 1.2-1.6 2.2 0 1.3 1 2.3 2.3 2.4s2.3-1 2.3-2.4c0-1.1-0.7-1.9-1.6-2.2z m-0.7 3.2c-0.6 0-1-0.4-1-1s0.4-1 1-1 1 0.4 1 1-0.4 1-1 1zM6.3 3.7C6.3 2.4 5.3 1.3 4 1.3S1.7 2.4 1.7 3.7c0 1.1 0.7 1.9 1.6 2.2v4.2c-1 0.3-1.7 1.2-1.6 2.2C1.7 13.6 2.7 14.7 4 14.7s2.3-1 2.3-2.4c0-1.1-0.7-1.9-1.6-2.2V5.9C5.6 5.6 6.3 4.7 6.3 3.7z m-3.3 0C3 3.1 3.4 2.7 4 2.7s1 0.4 1 1S4.6 4.7 4 4.7s-1-0.4-1-1z m2 8.6c0 0.6-0.4 1-1 1s-1-0.4-1-1S3.4 11.3 4 11.3s1 0.4 1 1z"
+      />
+    ),
+    Issue: (
+      <g>
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.1)"
+          d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"
+        ></path>
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.1)"
+          d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"
+        ></path>
+      </g>
+    ),
+    Calendar: (
+      <path
+        className="icon"
+        fill="#555"
+        transform="translate(0 -16) scale(1.2)"
+        d="M12.7 14.7H3.3C2.6 14.7 2 14.1 2 13.3V4C2 3.3 2.6 2.7 3.3 2.7H4.7V1.3H6V2.7H10V1.3H11.3V2.7H12.7C13.4 2.7 14 3.3 14 4V13.3C14 14.1 13.4 14.7 12.7 14.7ZM3.3 6.7V13.3H12.7V6.7H3.3ZM3.3 4V5.3H12.7V4H3.3Z"
+      />
+    ),
+  };
+
+  const metrics: IProgress["metrics"] = [
+    {
+      text: `%${percent_in_text} completed`,
+      icon: Icons.Pie,
+    },
+    {
+      text: dueDate,
+      icon: Icons.Calendar,
+    },
+    {
+      text: `${milestone.closedIssues.totalCount}/${milestone.issues.totalCount} issues solved`,
+      icon: Icons.Issue,
+    },
+    {
+      text: `${milestone.closedPullRequests.totalCount}/${milestone.pullRequests.totalCount} PRs closed`,
+      icon: Icons.PR,
+    },
+  ];
 
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="497"
-      height="165"
-      viewBox="0 0 497 165"
-      fill="none"
-    >
-      <SVGStyle />
-      <style>{`text{ font-weight: 300 }`}</style>
+    <Progress
+      title={milestone.title}
+      percent={percent_in_text}
+      metrics={metrics}
+    />
+  );
+};
+
+export const getUserActiveSponsorGoal: ViewComponent = (result, config) => {
+  const { user } = result.data;
+
+  const Icons = {
+    TargetArrow: (
       <path
-        d="M249.354 133.25C249.354 132.838 249.456 132.433 249.65 132.081C249.843 131.728 250.12 131.442 250.451 131.252C250.782 131.063 251.153 130.978 251.524 131.006C251.895 131.035 252.252 131.176 252.556 131.414C252.86 131.652 253.099 131.978 253.247 132.357C253.395 132.735 253.446 133.151 253.395 133.56C253.344 133.969 253.192 134.354 252.957 134.673C252.722 134.993 252.412 135.235 252.061 135.372V140.628C252.512 140.805 252.893 141.153 253.136 141.611C253.378 142.069 253.467 142.607 253.386 143.131C253.305 143.654 253.059 144.129 252.693 144.471C252.327 144.814 251.863 145.001 251.384 145.001C250.905 145.001 250.441 144.814 250.075 144.471C249.708 144.129 249.463 143.654 249.382 143.131C249.301 142.607 249.389 142.069 249.632 141.611C249.874 141.153 250.255 140.805 250.707 140.628V135.372C250.311 135.217 249.968 134.93 249.726 134.549C249.484 134.169 249.353 133.715 249.354 133.25ZM254.476 133.073L256.638 130.677C256.67 130.642 256.71 130.618 256.754 130.608C256.798 130.599 256.843 130.604 256.884 130.623C256.926 130.642 256.961 130.674 256.986 130.715C257.01 130.756 257.024 130.805 257.023 130.854V132.5H257.926C258.524 132.5 259.098 132.763 259.521 133.232C259.944 133.701 260.182 134.337 260.182 135V140.628C260.633 140.805 261.014 141.153 261.257 141.611C261.499 142.069 261.588 142.607 261.507 143.131C261.426 143.654 261.181 144.129 260.814 144.471C260.448 144.814 259.984 145.001 259.505 145.001C259.026 145.001 258.562 144.814 258.196 144.471C257.829 144.129 257.584 143.654 257.503 143.131C257.422 142.607 257.511 142.069 257.753 141.611C257.996 141.153 258.376 140.805 258.828 140.628V135C258.828 134.735 258.733 134.48 258.564 134.293C258.395 134.105 258.165 134 257.926 134H257.023V135.646C257.024 135.696 257.01 135.744 256.986 135.785C256.961 135.826 256.926 135.858 256.884 135.877C256.843 135.896 256.798 135.901 256.754 135.892C256.71 135.882 256.67 135.858 256.638 135.823L254.476 133.427C254.455 133.404 254.438 133.376 254.427 133.346C254.416 133.315 254.41 133.283 254.41 133.25C254.41 133.217 254.416 133.185 254.427 133.154C254.438 133.124 254.455 133.096 254.476 133.073ZM251.384 132.5C251.204 132.5 251.032 132.579 250.905 132.72C250.778 132.86 250.707 133.051 250.707 133.25C250.707 133.449 250.778 133.64 250.905 133.78C251.032 133.921 251.204 134 251.384 134C251.563 134 251.735 133.921 251.862 133.78C251.989 133.64 252.061 133.449 252.061 133.25C252.061 133.051 251.989 132.86 251.862 132.72C251.735 132.579 251.563 132.5 251.384 132.5ZM251.384 142C251.204 142 251.032 142.079 250.905 142.22C250.778 142.36 250.707 142.551 250.707 142.75C250.707 142.949 250.778 143.14 250.905 143.28C251.032 143.421 251.204 143.5 251.384 143.5C251.563 143.5 251.735 143.421 251.862 143.28C251.989 143.14 252.061 142.949 252.061 142.75C252.061 142.551 251.989 142.36 251.862 142.22C251.735 142.079 251.563 142 251.384 142ZM258.828 142.75C258.828 142.949 258.899 143.14 259.026 143.28C259.153 143.421 259.325 143.5 259.505 143.5C259.684 143.5 259.857 143.421 259.983 143.28C260.11 143.14 260.182 142.949 260.182 142.75C260.182 142.551 260.11 142.36 259.983 142.22C259.857 142.079 259.684 142 259.505 142C259.325 142 259.153 142.079 259.026 142.22C258.899 142.36 258.828 142.551 258.828 142.75Z"
-        fill="#636363"
+        className="icon"
+        fill="#555"
+        transform="translate(0 -18)"
+        d="M21.6 6.4a0.6 0.6 0 0 1-0.2 0.6l-2.4 2.4A0.6 0.6 0 0 1 18.6 9.6h-3.4l-1.6 1.6a1.8 1.8 0 1 1-0.8-0.8L14.4 8.8V5.4a0.6 0.6 0 0 1 0.2-0.4l2.4-2.4A0.6 0.6 0 0 1 18 3V6h3a0.6 0.6 0 0 1 0.6 0.4ZM19.6 7.2H17.4a0.6 0.6 0 0 1-0.6-0.6V4.4l-1.2 1.2V8.4h2.8l1.2-1.2Zm1.5 1.8C21.4 10 21.6 11 21.6 12a9.6 9.6 0 1 1-6.6-9.1l-1 0.9a8.4 8.4 0 1 0 6.2 6.2l0.9-1ZM17.9 10.8A6 6 0 1 1 13.2 6.1v1.3A4.8 4.8 0 1 0 16.6 10.8H17.9Z"
       />
-      <text fill="#636363">
-        <tspan x="271.461" y="144" fontSize={17}>
-          <tspan fontWeight={500}>
-            {milestone.closedPullRequests.totalCount}/
-            {milestone.pullRequests.totalCount}
-          </tspan>{" "}
-          PRs closed
-        </tspan>
-      </text>
-      <g clip-path="url(#clip0_114_277)">
-        <path
-          d="M24.25 139.5C24.6105 139.5 24.9563 139.342 25.2112 139.061C25.4662 138.779 25.6094 138.398 25.6094 138C25.6094 137.602 25.4662 137.221 25.2112 136.939C24.9563 136.658 24.6105 136.5 24.25 136.5C23.8895 136.5 23.5437 136.658 23.2888 136.939C23.0338 137.221 22.8906 137.602 22.8906 138C22.8906 138.398 23.0338 138.779 23.2888 139.061C23.5437 139.342 23.8895 139.5 24.25 139.5Z"
-          fill="#636363"
-        />
-        <path
-          d="M24.25 130C26.1728 130 28.0169 130.843 29.3765 132.343C30.7362 133.843 31.5 135.878 31.5 138C31.5 140.122 30.7362 142.157 29.3765 143.657C28.0169 145.157 26.1728 146 24.25 146C22.3272 146 20.4831 145.157 19.1235 143.657C17.7638 142.157 17 140.122 17 138C17 135.878 17.7638 133.843 19.1235 132.343C20.4831 130.843 22.3272 130 24.25 130ZM18.3594 138C18.3594 139.724 18.98 141.377 20.0847 142.596C21.1894 143.815 22.6877 144.5 24.25 144.5C25.8123 144.5 27.3106 143.815 28.4153 142.596C29.52 141.377 30.1406 139.724 30.1406 138C30.1406 136.276 29.52 134.623 28.4153 133.404C27.3106 132.185 25.8123 131.5 24.25 131.5C22.6877 131.5 21.1894 132.185 20.0847 133.404C18.98 134.623 18.3594 136.276 18.3594 138Z"
-          fill="#636363"
-        />
-      </g>
-      <text fill="#636363" fontFamily="Roboto">
-        <tspan x="40.5625" y="144" fontSize={17}>
-          <tspan fontWeight={500}>
-            {milestone.closedIssues.totalCount}/{milestone.issues.totalCount}
-          </tspan>{" "}
-          issues solved
-        </tspan>
-      </text>
-      <path
-        d="M253.268 103C253.446 103 253.618 103.079 253.744 103.22C253.87 103.36 253.941 103.551 253.941 103.75V105H258.434V103.75C258.434 103.551 258.505 103.36 258.631 103.22C258.757 103.079 258.929 103 259.107 103C259.286 103 259.458 103.079 259.584 103.22C259.71 103.36 259.781 103.551 259.781 103.75V105H260.904C261.772 105 262.477 105.784 262.477 106.75V117.25C262.477 117.714 262.311 118.159 262.016 118.487C261.721 118.816 261.321 119 260.904 119H251.471C251.054 119 250.654 118.816 250.359 118.487C250.064 118.159 249.898 117.714 249.898 117.25V106.75C249.898 105.784 250.603 105 251.471 105H252.594V103.75C252.594 103.551 252.665 103.36 252.791 103.22C252.917 103.079 253.089 103 253.268 103ZM251.246 110.5V117.25C251.246 117.388 251.347 117.5 251.471 117.5H260.904C260.964 117.5 261.021 117.474 261.063 117.427C261.105 117.38 261.129 117.316 261.129 117.25V110.5H251.246ZM260.904 106.5H251.471C251.411 106.5 251.354 106.526 251.312 106.573C251.27 106.62 251.246 106.684 251.246 106.75V109H261.129V106.75C261.129 106.684 261.105 106.62 261.063 106.573C261.021 106.526 260.964 106.5 260.904 106.5Z"
-        fill="#636363"
-      />
-      <text fill="#636363">
-        <tspan x="272.359" y="117" fontSize={17}>
-          {dueDate ? (
-            <>
-              Due by <tspan fontWeight={500}>{dueDate}</tspan>
-            </>
-          ) : (
-            "No due date"
-          )}
-        </tspan>
-      </text>
-      <g clip-path="url(#clip1_114_277)">
-        <path
-          d="M25 104C23.6155 104 22.2622 104.411 21.111 105.18C19.9599 105.949 19.0627 107.042 18.5328 108.321C18.003 109.6 17.8644 111.008 18.1345 112.366C18.4046 113.723 19.0713 114.971 20.0503 115.95C21.0292 116.929 22.2765 117.595 23.6344 117.865C24.9922 118.136 26.3997 117.997 27.6788 117.467C28.9579 116.937 30.0511 116.04 30.8203 114.889C31.5895 113.738 32 112.384 32 111C32 109.143 31.2625 107.363 29.9498 106.05C28.637 104.737 26.8565 104 25 104ZM25 117C23.4087 117 21.8826 116.368 20.7574 115.243C19.6321 114.117 19 112.591 19 111C19 109.409 19.6321 107.883 20.7574 106.757C21.8826 105.632 23.4087 105 25 105V111L29.2667 115.267C28.7047 115.822 28.0385 116.262 27.3063 116.559C26.5741 116.856 25.7903 117.006 25 117Z"
-          fill="#636363"
-          stroke="#636363"
-        />
-      </g>
-      <text fill="#636363">
-        <tspan x="43" y="117" fontSize={17}>
-          %<tspan fontWeight={500}>{percent_in_text}</tspan> complete
-        </tspan>
-      </text>
+    ),
+    Sponsors: (
       <g>
-        <rect x="17" y="64" width={total} height="18" rx="5" fill="#E7E7E7" />
-        <rect
-          x="17"
-          y="64"
-          width={percent_in_bar}
-          height="18"
-          rx="5"
-          fill="#2DA44E"
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M7 14s-1 0-1-1 1-4 5-4 5 3 5 4-1 1-1 1H7z m4-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"
+        />
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M5.2 14A2.2 2.2 0 0 1 5 13c0-1.4 0.7-2.8 1.9-3.7A6.3 6.3 0 0 0 5 9c-4 0-5 3-5 4s1 1 1 1h4.2z"
+        />
+        <path
+          className="icon"
+          fill="#555"
+          transform="translate(0 -16) scale(1.2)"
+          d="M4.5 8a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z"
         />
       </g>
-      <text fill="#5E5E5E">
-        <tspan x="17" y="40.7539" fontWeight={700} fontSize={25}>
-          {milestone.title}
-        </tspan>
-      </text>
-      <defs>
-        <clipPath id="clip0_114_277">
-          <rect
-            width="14.5"
-            height="16"
-            fill="white"
-            transform="translate(17 130)"
-          />
-        </clipPath>
-        <clipPath id="clip1_114_277">
-          <rect
-            width="16"
-            height="16"
-            fill="white"
-            transform="translate(17 103)"
-          />
-        </clipPath>
-      </defs>
-    </svg>
+    ),
+  };
+
+  const metrics: IProgress["metrics"] = [
+    {
+      text: `%${user.sponsorsListing.activeGoal.percentComplete} reached`,
+      icon: Icons.TargetArrow,
+    },
+    {
+      text: `${user.sponsors.totalCount} total sponsors`,
+      icon: Icons.Sponsors,
+    },
+  ];
+
+  return (
+    <Progress
+      title={user.sponsorsListing.activeGoal.title}
+      percent={user.sponsorsListing.activeGoal.percentComplete}
+      metrics={metrics}
+    />
+  );
+};
+
+export const getUserCommitStreak: ViewComponent = (result, config) => {
+  const dates = new Set<string>();
+
+  result.data.viewer.contributionsCollection.commitContributionsByRepository.forEach(
+    (repo: any) => {
+      repo.contributions.nodes.forEach((commit: any) => {
+        const date = new Date(commit.occurredAt).toISOString().split("T")[0];
+        dates.add(date);
+      });
+    }
+  );
+
+  const sortedDates = Array.from(dates).sort();
+  let streak = 0;
+  let currentStreak = 0;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const previousDate = new Date(sortedDates[i - 1]);
+    const currentDate = new Date(sortedDates[i]);
+    const dayDifference =
+      (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (dayDifference === 1) {
+      currentStreak++;
+    } else {
+      currentStreak = 0;
+    }
+
+    streak = Math.max(streak, currentStreak);
+  }
+
+  return (
+    <Metrics
+      icon={GithubIcon}
+      data={[{ title: "Commit Streak", value: streak }]}
+    />
+  );
+};
+
+export const getContributors: ViewComponent = async (result, config) => {
+  const { title, subtitle, items_per_row } = config.viewConfig as any;
+
+  const contributors = result.data.repository.mentionableUsers.nodes;
+
+  const promise_thumbnails: IFlock["members"] = contributors.map(
+    async (contributor: any, key: number) => {
+      const url = new URL(contributor.avatarUrl);
+      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      url.search = qs.stringify({ ...params, s: "128" });
+
+      const response = await fetch(url.toString());
+      const arrayBuffer = await response.arrayBuffer();
+
+      const buffer = Buffer.from(arrayBuffer);
+      const imageData = getImageSize(buffer);
+
+      return {
+        value: buffer.toString("base64"),
+        width: imageData.width,
+        height: imageData.height,
+      };
+    }
+  );
+
+  const thumbnails = await Promise.all(promise_thumbnails);
+
+  const members: IFlock["members"] = contributors.map(
+    (contributor: any, key: number) => ({
+      image: thumbnails[key],
+      caption: contributor.login,
+    })
+  );
+
+  return (
+    <Flock
+      title={title}
+      subtitle={subtitle}
+      items_per_row={items_per_row}
+      members={members}
+    />
+  );
+};
+
+export const getUserSponsorList: ViewComponent = async (result, config) => {
+  const { title, subtitle, items_per_row } = config.viewConfig as any;
+
+  const { nodes: sponsors } = result.data.user.sponsorshipsAsMaintainer;
+
+  const promise_thumbnails: IFlock["members"] = sponsors.map(
+    async (sponsor: any, key: number) => {
+      const url = new URL(sponsor.sponsorEntity.avatarUrl);
+      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      url.search = qs.stringify({ ...params, s: "128" });
+
+      const response = await fetch(url.toString());
+      const arrayBuffer = await response.arrayBuffer();
+
+      const buffer = Buffer.from(arrayBuffer);
+      const imageData = getImageSize(buffer);
+
+      return {
+        value: buffer.toString("base64"),
+        width: imageData.width,
+        height: imageData.height,
+      };
+    }
+  );
+
+  const thumbnails = await Promise.all(promise_thumbnails);
+
+  const members: IFlock["members"] = sponsors.map(
+    (sponsor: any, key: number) => ({
+      image: thumbnails[key],
+      caption: sponsor.sponsorEntity.login,
+    })
+  );
+
+  return (
+    <Flock
+      title={title}
+      subtitle={subtitle}
+      items_per_row={items_per_row}
+      members={members}
+    />
   );
 };

@@ -8,8 +8,8 @@ type ILayout = {
 
 export default function Layout({ session, children }: ILayout) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <header className="container sticky top-0 z-40 bg-white mx-auto">
+    <div className="flex flex-col">
+      <header className="container sticky top-0 z-40 mx-auto backdrop-blur-md">
         <NavbarWithLogin session={session} />
       </header>
       <main>{children}</main>

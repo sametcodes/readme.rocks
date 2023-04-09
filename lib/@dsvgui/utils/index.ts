@@ -51,8 +51,10 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
   return lines.map(cb);
 };
 
-type IConvertDateFormat = (isoTimestamp: string) => string;
-export const convertDateFormat: IConvertDateFormat = (isoTimestamp) => {
+type IConvertDateToReadbleFormat = (isoTimestamp: string) => string;
+export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
+  isoTimestamp
+) => {
   const months = [
     "Jan",
     "Feb",
@@ -77,3 +79,13 @@ export const convertDateFormat: IConvertDateFormat = (isoTimestamp) => {
 
   return `${month} ${day} '${year}`;
 };
+
+export function stringToColorCode(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash += str.charCodeAt(i);
+  }
+
+  const color = ((hash * 123456789) % 0xffffff).toString(16);
+  return "#" + "0".repeat(6 - color.length) + color;
+}

@@ -5,10 +5,11 @@ import throat from "throat";
 
 // @ts-ignore
 import jsdoc from "jsdoc-api";
+import { PlatformCode } from "@prisma/client";
 
 type File = {
   directory: string;
-  platform_code: string;
+  platform_code: PlatformCode;
   js: string;
   ts: string;
 };
@@ -33,7 +34,7 @@ const getFiles = (path: string): Array<File> => {
     .filter((dirent) => dirent.isDirectory())
     .map((dirent) => ({
       directory: dirent.name + "/query",
-      platform_code: dirent.name,
+      platform_code: dirent.name as PlatformCode,
       js: process.cwd() + "/" + path + dirent.name + "/query/index.js",
       ts: process.cwd() + "/" + path + dirent.name + "/query/index.ts",
     }));
@@ -69,7 +70,7 @@ const migrate = async ({
   code,
 }: {
   docs: Array<JSDocMinified>;
-  code: string;
+  code: PlatformCode;
 }): Promise<void> => {
   let platform = await prisma.platform.findUnique({ where: { code } });
 
@@ -98,12 +99,16 @@ const migrate = async ({
       const title = doc.tags.find((tag) => tag.title === "title");
       const query_type = doc.tags.find((tag) => tag.title === "query_type");
       const cache_time = doc.tags.find((tag) => tag.title === "cache_time");
+      const for_secured = doc.tags.find((tag) => tag.title === "for_secured");
+      const for_public = doc.tags.find((tag) => tag.title === "for_public");
 
       return {
         name: doc.name,
         description: doc.description,
         title: title?.text as string,
         query_type: query_type?.text as QueryType,
+        for_secured: for_secured?.text,
+        for_public: for_public?.text,
         cache_time: Number((cache_time?.text as string) || 86400),
       };
     })
@@ -134,31 +139,44 @@ const migrate = async ({
       },
     });
 
+    let data: any = {
+      name: query.name,
+      title: query.title,
+      query_type: query.query_type,
+      cache_time: query.cache_time,
+      description: query.description,
+      platform: { connect: { id: platform.id } },
+    };
+
+    if (query.for_secured) {
+      const secured_query = await prisma.platformQuery.findFirst({
+        where: { name: query.for_secured, platformId: platform.id },
+      });
+      if (!secured_query)
+        throw new Error(
+          `Secured query ${query.for_secured} not found for ${code}:${query.name}`
+        );
+      data.securedPlatformQuery = { connect: { id: secured_query.id } };
+    }
+
+    if (query.for_public) {
+      const public_query = await prisma.platformQuery.findFirst({
+        where: { name: query.for_public, platformId: platform.id },
+      });
+      if (!public_query)
+        throw new Error(
+          `Public query ${query.for_public} not found for ${code}:${query.name}`
+        );
+      data.publicPlatformQuery = { connect: { id: public_query.id } };
+    }
+
     if (existingQuery) {
       await prisma.platformQuery.update({
         where: { id: existingQuery.id },
-        data: {
-          name: query.name,
-          title: query.title,
-          query_type: query.query_type,
-          cache_time: query.cache_time,
-          description: query.description,
-          platform: {
-            connect: { id: platform.id },
-          },
-        },
+        data,
       });
     } else {
-      await prisma.platformQuery.create({
-        data: {
-          name: query.name,
-          title: query.title,
-          query_type: query.query_type,
-          cache_time: query.cache_time,
-          description: query.description,
-          platform: { connect: { id: platform.id } },
-        },
-      });
+      await prisma.platformQuery.create({ data });
     }
   }
 };

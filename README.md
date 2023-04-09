@@ -1,26 +1,30 @@
-# devstats
+# readme.rocks
 
 _All your statistics at once._
 
 ## Your development metrics
-![](https://devstats.co/api/view/641b5deaa6550999ac4331d0)
-![](https://devstats.co/api/view/641b5e30a6550999ac4331d2)
-![](https://devstats.co/api/view/641b5e1aa6550999ac4331d1)
-![](https://devstats.co/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
+![](https://readme.rocks/api/view/641b5deaa6550999ac4331d0)
+![](https://readme.rocks/api/view/641b5e30a6550999ac4331d2)
+![](https://readme.rocks/api/view/642dfbff39f5d6e5e5f45c3b)
+![](https://readme.rocks/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
 ## Line stats
-![](https://devstats.co/api/view/642220d0c3f0ffcbcafd573f)
+![](https://readme.rocks/api/view/642220d0c3f0ffcbcafd573f)
 
 ## Your latest `daily.dev` and `dev.to` articles
-<img align="left" src="https://devstats.co/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
-<img src="https://devstats.co/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
+<img align="left" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
 <br clear="left"/>
 
 ## Milestones
 
-> <a href="https://github.com/sametcodes/devstats/milestone/2">
-> <img src="https://devstats.co/api/view/641b5dcfa6550999ac4331cf" />
-> </a>
+[![](https://readme.rocks/api/view/642b5a788c097f48ca28ce58)](milestone/1)
+[![](https://readme.rocks/api/view/641b5dcfa6550999ac4331cf)](milestone/2)
+
+## Sponsors and goals
+<a href="https://github.com/sponsorships/d-fischer">
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
+</a>
 
 ### Running locally
 
@@ -67,6 +71,22 @@ npm run lint:fix
 ### Commit linting
 
 This project uses [Husky](https://typicode.github.io/husky/#/) to run the linting and formatting before every commit. If commits do not fit the conventional commit format, the commit will be rejected. Check the rules [here](https://www.conventionalcommits.org/en/v1.0.0/#specification).
+
+Here are possible commit headers with descriptions. Choose the one that fits the changes you made.
+
+```
+build: Changes related to the build system or external dependencies, such as updating a build script or adding/removing a package.
+config: Changes related to the configuration of the application, such as updating environment variables, modifying configuration files, or adjusting settings that alter the behavior of the application.
+docs: Updates or additions to the documentation, such as user guides, API documentation, or code comments.
+feat: New features or enhancements that add functionality to the application.
+fix: Bug fixes or patches that address issues in the codebase.
+perf: Performance improvements or optimizations, such as code refactoring to enhance execution speed or memory usage.
+refactor: Code changes that neither fix a bug nor add a feature but improve code quality, readability, or maintainability.
+revert: Reverting a previous commit or change, effectively undoing the changes made in that commit.
+style: Cosmetic changes to the code that do not affect its functionality, such as fixing indentation, removing whitespace, or updating code formatting.
+test: Changes related to testing, such as adding, updating, or removing test cases or updating testing frameworks.
+security: Changes related to security, such as fixing vulnerabilities or adding security features.
+```
 
 ### Scripts
 

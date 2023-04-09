@@ -1,5 +1,5 @@
 import { Document } from "@/lib/@dsvgui";
-import { getTextWidth } from "../../utils/index";
+import { getTextWidth } from "@/lib/@dsvgui/utils/index";
 
 type ILine = {
   title: string;
@@ -35,9 +35,12 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
     return path;
   }
 
-  const total_text_width =
-    getTextWidth(subtitle, { fontSize: 16 }) +
-    getTextWidth(total, { fontSize: 24 });
+  const title_width = getTextWidth(title, { fontSize: 16 });
+  const subtitle_width = getTextWidth(subtitle, { fontSize: 16 });
+
+  const titles_width = Math.max(title_width, subtitle_width);
+
+  const total_text_width = titles_width + getTextWidth(total, { fontSize: 24 });
   const height = 110;
   const width = total_text_width + 100;
   const path_value = createDynamicSvgPath({ height, width, ratio: 0.5 });
@@ -47,9 +50,9 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
       <path
         d={path_value}
         stroke="url(#paint0_linear_135_79)"
-        stroke-width="3"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="3"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <text
         fill="#000000"
@@ -99,14 +102,14 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
           y2="155.088"
           gradientUnits="userSpaceOnUse"
         >
-          <stop offset="0" stop-color="#ffffff" />
-          <stop offset="0.141455" stop-color="#FF12E7" />
-          <stop offset="0.201455" stop-color="#FF5ecc" />
-          <stop offset="0.363128" stop-color="#FF9eeE" />
-          <stop offset="0.581288" stop-color="#FF0AAC" />
-          <stop offset="0.729526" stop-color="#FF046E" />
-          <stop offset="0.943128" stop-color="#FF9eeE" />
-          <stop offset="1" stop-color="#ffffff" />
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="0.141455" stopColor="#FF12E7" />
+          <stop offset="0.201455" stopColor="#FF5ecc" />
+          <stop offset="0.363128" stopColor="#FF9eeE" />
+          <stop offset="0.581288" stopColor="#FF0AAC" />
+          <stop offset="0.729526" stopColor="#FF046E" />
+          <stop offset="0.943128" stopColor="#FF9eeE" />
+          <stop offset="1" stopColor="#ffffff" />
         </linearGradient>
       </defs>
     </Document>
