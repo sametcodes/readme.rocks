@@ -16,6 +16,10 @@ const nextConfig = {
         fs: false,
       };
     }
+    config.module.rules.push({
+      test: /\.(stories|test|spec).(jsx|tsx|js|ts)$/,
+      loader: "ignore-loader",
+    });
     return config;
   },
   async redirects() {
