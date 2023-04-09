@@ -18,11 +18,6 @@ const nextConfig = {
         fs: false,
       };
     }
-    config.plugins.push(
-      new webpack.IgnorePlugin({
-        resourceRegExp: /\.stories\.tsx$/,
-      })
-    );
     return config;
   },
   async redirects() {
