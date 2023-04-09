@@ -5,7 +5,6 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run prisma:generate && next build",
-    "build:staging": "env-cmd -f .env.staging npm run build && env-cmd -f .env.staging npm run start",
     "start": "next start",
     "lint:tsc": "tsc --noemit",
     "lint:next": "next lint --max-warnings=0",
