@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: { appDir: true },
@@ -16,10 +18,11 @@ const nextConfig = {
         fs: false,
       };
     }
-    config.module.rules.push({
-      test: /\.(stories|test|spec).(jsx|tsx|js|ts)$/,
-      loader: "ignore-loader",
-    });
+    config.plugins.push(
+      new webpack.IgnorePlugin({
+        resourceRegExp: /\.stories\.tsx$/,
+      })
+    );
     return config;
   },
   async redirects() {
