@@ -37,7 +37,7 @@ declare module "next-auth" {
 
 // change unstable_getServerSession returning type
 declare module "next-auth/next" {
-  export function unstable_getServerSession(
+  export function getServerSession(
     ...args: Parameters<typeof getServerSession>
   ): Promise<Session | null>;
 }

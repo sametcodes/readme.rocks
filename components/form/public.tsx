@@ -83,6 +83,8 @@ export default function PublicConfigForm({
       ];
 
       const formDataValues = { ...(query || {}), ...(view || {}) };
+      if (Object.keys(formDataValues).length === 0)
+        return { queryConfig: query || {}, viewConfig: view || {} };
       const validations = [queryValidation, viewValidation].filter(Boolean);
       const schema = mergeSchemas(...validations);
       schema.validateSync(formDataValues, { abortEarly: false });

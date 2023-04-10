@@ -192,8 +192,10 @@ export default function PrivateConfigForm({
       ];
 
       const formDataValues = { ...(query || {}), ...(view || {}) };
-      schema.validateSync(formDataValues, { abortEarly: false });
+      if (Object.keys(formDataValues).length === 0)
+        return { queryConfig: query || {}, viewConfig: view || {} };
 
+      schema.validateSync(formDataValues, { abortEarly: false });
       return {
         queryConfig: query || {},
         viewConfig: view || {},

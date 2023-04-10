@@ -8,13 +8,22 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/642dfbff39f5d6e5e5f45c3b)
 ![](https://readme.rocks/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
 
+## Recent projects and used languages
+
+![](https://readme.rocks/api/view/6431b08616981eaebfd030f9)
+![](https://readme.rocks/api/view/6431b559ddde9c1558a16fe6)
+
 ## Line stats
 ![](https://readme.rocks/api/view/642220d0c3f0ffcbcafd573f)
 
 ## Your latest `daily.dev` and `dev.to` articles
-<img align="left" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" width="48%" />
-<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" width="48%" />
-<br clear="left"/>
+
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" />
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" />
+
+## Contributors
+
+<img width="700" src="https://readme.rocks/api/view?queryConfig%5Bowner_name%5D=facebook&queryConfig%5Brepository_name%5D=react&viewConfig%5Btitle%5D=Our%20contributors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20all%20your%20contributions.%20We%20appreciate%20that.&viewConfig%5Bitems_per_row%5D=15&id=642f70a3104ae4fd80d6efac" />
 
 ## Milestones
 
@@ -25,6 +34,8 @@ _All your statistics at once._
 <a href="https://github.com/sponsorships/d-fischer">
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
 </a>
+
+<img width="700" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=ljharb&viewConfig%5Btitle%5D=My%20sponsors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20sponsoring%20me.&viewConfig%5Bitems_per_row%5D=15&id=64300f9e4160c69275201776" />
 
 ### Running locally
 
