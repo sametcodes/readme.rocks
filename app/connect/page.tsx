@@ -1,5 +1,6 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { redirect } from "next/navigation";
 
 import prisma from "@/services/prisma";
 
@@ -17,6 +18,8 @@ type IConnectionWithPlatforms = {
 export default async function Connect() {
   const session = await getServerSession(authOptions);
   let connectionWithPlatforms: IConnectionWithPlatforms[] = [];
+
+  if (!session) redirect("/");
 
   if (session) {
     connectionWithPlatforms = await prisma.connection.findMany({
