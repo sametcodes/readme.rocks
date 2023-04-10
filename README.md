@@ -27,8 +27,7 @@ _All your statistics at once._
 
 ## Milestones
 
-[![](https://readme.rocks/api/view/642b5a788c097f48ca28ce58)](milestone/1)
-[![](https://readme.rocks/api/view/641b5dcfa6550999ac4331cf)](milestone/2)
+[![](https://readme.rocks/api/view/6434324683b8f4f727a83c32)](milestone/3)
 
 ## Sponsors and goals
 <a href="https://github.com/sponsorships/d-fischer">
