@@ -1,8 +1,11 @@
-import { Style, BoxShadow, IDocumentProps } from "@/lib/@dsvgui";
+import { Style, BoxShadow, IDocumentProps, Branding } from "@/lib/@dsvgui";
+import { getTextWidth } from "../utils/index";
 
 export const Document: React.FC<IDocumentProps> = (props) => {
   const { w, h, padding = 0, ...rest } = props;
   const document_id = Math.random().toString(36).substr(2, 9);
+
+  const brand = "readme.rocks";
 
   return (
     <svg
@@ -17,6 +20,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
       <BoxShadow width={w} height={h} padding={padding} id={document_id}>
         {props.children}
       </BoxShadow>
+      <Branding x={w - getTextWidth(brand, { fontSize: 8 }) - 20} y={h - 5} />
     </svg>
   );
 };
