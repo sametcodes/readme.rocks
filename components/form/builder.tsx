@@ -29,6 +29,10 @@ export const buildFormWithYupSchema = (
       ),
     };
 
+    if (field.spec.default) {
+      fieldProps = { ...fieldProps, defaultValue: field.spec.default };
+    }
+
     if (initialValues && initialValues[fieldName]) {
       fieldProps = { ...fieldProps, defaultValue: initialValues[fieldName] };
     }

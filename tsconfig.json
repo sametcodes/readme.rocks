@@ -39,9 +39,7 @@
     "pages/api/github",
     "services/prisma/schema.prisma",
     ".lintstagedrc.js",
-    ".next/types/**/*.ts",
-    "/Users/samet/Documents/GitHub/readme.rocks/.next/types/**/*.ts",
-    "/Users/fzehra/Documents/GitHub/readme.rocks/.next/types/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"
