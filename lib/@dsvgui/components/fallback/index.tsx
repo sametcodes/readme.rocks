@@ -11,7 +11,7 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
   const width = 450;
 
   return (
-    <Document w={width} h={110} padding={10}>
+    <Document w={width} h={110}>
       <path
         className="icon"
         xmlns="http://www.w3.org/2000/svg"
