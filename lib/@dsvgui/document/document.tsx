@@ -1,5 +1,6 @@
 import { ReactNode, SVGAttributes } from "react";
-import { Style, Container } from "@/lib/@dsvgui";
+import { Style, Container, Branding } from "@/lib/@dsvgui";
+import { getTextWidth } from "../utils";
 
 export type IDocumentProps = SVGAttributes<SVGElement> & {
   children?: ReactNode;
@@ -15,6 +16,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
 
   const padding = rest.padding ?? 30;
   const margin = rest.margin ?? 10;
+  const brand = "readme.rocks";
 
   return (
     <svg
@@ -37,6 +39,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
       >
         {props.children}
       </Container>
+      <Branding x={w - getTextWidth(brand, { fontSize: 8 }) - 20} y={h - 5} />
     </svg>
   );
 };

@@ -39,6 +39,7 @@ export const Style: React.FC = () => {
             stop[offset='0']{ stop-color: #fbfbfb; }
             stop[offset='1']{ stop-color: #fbfbfb; }
             .border{ stroke: #ddd; }
+            #dsvguibranding { fill: #aaa; }
             @media (prefers-color-scheme: dark) {
               .dsvgui-container { fill: #32373e }
               stop[offset='0']{ stop-color: #32373e; }
