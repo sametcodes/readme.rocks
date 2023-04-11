@@ -8,13 +8,14 @@ export type IDocumentProps = SVGAttributes<SVGElement> & {
   h: number;
   padding?: number;
   margin?: number;
+  useBranding?: boolean;
 };
 
 export const Document: React.FC<IDocumentProps> = (props) => {
-  const { w, h, ...rest } = props;
+  const { w, h, useBranding = true, ...rest } = props;
   const document_id = Math.random().toString(36).substr(2, 9);
 
-  const padding = rest.padding ?? 30;
+  const padding = rest.padding ?? 40;
   const margin = rest.margin ?? 10;
   const brand = "readme.rocks";
 
@@ -39,7 +40,12 @@ export const Document: React.FC<IDocumentProps> = (props) => {
       >
         {props.children}
       </Container>
-      <Branding x={w - getTextWidth(brand, { fontSize: 8 }) - 20} y={h - 5} />
+      {useBranding && (
+        <Branding
+          x={w - getTextWidth(brand, { fontSize: 8 }) + padding / 2}
+          y={h + padding - 5}
+        />
+      )}
     </svg>
   );
 };

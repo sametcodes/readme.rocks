@@ -39,7 +39,7 @@ export const Style: React.FC = () => {
             stop[offset='0']{ stop-color: #fbfbfb; }
             stop[offset='1']{ stop-color: #fbfbfb; }
             .border{ stroke: #ddd; }
-            #dsvguibranding { fill: #aaa; }
+            #dsvguibranding { fill: #bbbbbb; }
             @media (prefers-color-scheme: dark) {
               .dsvgui-container { fill: #32373e }
               stop[offset='0']{ stop-color: #32373e; }
@@ -49,6 +49,7 @@ export const Style: React.FC = () => {
               text.title{ fill: #fff; }
               text.subtitle{ fill: #9c9c9c; }
               .border{ stroke: #555; }
+              #dsvguibranding { fill: #666666; }
             }
         `}</style>
     </defs>

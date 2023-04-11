@@ -35,7 +35,12 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
   const container_width = title_width + thumbnail_width + inner_padding;
 
   return (
-    <Document w={container_width} h={100 * articles.length} padding={0}>
+    <Document
+      w={container_width}
+      h={100 * articles.length}
+      padding={0}
+      useBranding={false}
+    >
       <g clipPath="url(#clip_borders)">
         {articles.map((article, key: number) => {
           const yOffset = 100 * key;
