@@ -83,7 +83,9 @@ export const BarStats: React.FC<IBarStats> = ({
               <g id="row">
                 {value.map((item, index) => {
                   const circle_size = 6;
-                  const x = circle_size + (index % items_per_row ? 150 : 0);
+                  const x =
+                    circle_size +
+                    (index % items_per_row ? width / items_per_row : 0);
                   const y =
                     80 + Math.floor(index / items_per_row) * legend_my + 5;
                   return (
@@ -96,16 +98,14 @@ export const BarStats: React.FC<IBarStats> = ({
                       />
                       <text
                         xmlSpace="preserve"
-                        fontFamily="Manrope"
-                        fontSize="12"
-                        fill="#5E5E5E"
-                        letterSpacing="0px"
+                        fontSize="14"
+                        fill="#7e7e7e"
+                        x={x + 15}
+                        y={y + 5}
                       >
-                        <tspan x={x + 15} y={y + 4}>
-                          {item.name}{" "}
-                          <tspan fontWeight="bolder">
-                            %{item.percent.toFixed(2)}
-                          </tspan>
+                        <tspan>{item.name} </tspan>
+                        <tspan fontWeight="bolder">
+                          %{item.percent.toFixed(0)}{" "}
                         </tspan>
                       </text>
                     </g>
