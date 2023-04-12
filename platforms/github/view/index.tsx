@@ -317,7 +317,7 @@ export const getContributors: ViewComponent = async (result, config) => {
     async (contributor: any, key: number) => {
       const url = new URL(contributor.avatarUrl);
       let params = qs.parse(url.search, { ignoreQueryPrefix: true });
-      url.search = qs.stringify({ ...params, s: "128" });
+      url.search = qs.stringify({ ...params, s: "64" });
 
       const response = await fetch(url.toString());
       const arrayBuffer = await response.arrayBuffer();
@@ -361,7 +361,7 @@ export const getUserSponsorList: ViewComponent = async (result, config) => {
     async (sponsor: any, key: number) => {
       const url = new URL(sponsor.sponsorEntity.avatarUrl);
       let params = qs.parse(url.search, { ignoreQueryPrefix: true });
-      url.search = qs.stringify({ ...params, s: "128" });
+      url.search = qs.stringify({ ...params, s: "64" });
 
       const response = await fetch(url.toString());
       const arrayBuffer = await response.arrayBuffer();
