@@ -9,6 +9,8 @@ type ILine = {
 };
 
 export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
+  const document_padding = 40;
+
   function createDynamicSvgPath({
     height,
     width,
@@ -22,11 +24,23 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
     const x_gap = width / points.length;
     let x = 0;
     let path =
-      "M " + x + " " + (height - (points[0] / max_value) * height * ratio);
+      "M " +
+      x +
+      " " +
+      (height +
+        document_padding / 2 -
+        5 -
+        (points[0] / max_value) * height * ratio);
     for (let i = 0; i <= points.length; i++) {
       x += x_gap;
       path +=
-        " L " + x + " " + (height - (points[i] / max_value) * height * ratio);
+        " L " +
+        x +
+        " " +
+        (height +
+          document_padding / 2 -
+          5 -
+          (points[i] / max_value) * height * ratio);
     }
 
     return path;
@@ -43,7 +57,7 @@ export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
   const path_value = createDynamicSvgPath({ height, width, ratio: 0.7 });
 
   return (
-    <Document w={width} h={height}>
+    <Document w={width} h={height} padding={document_padding}>
       <path
         d={path_value}
         stroke="url(#paint0_linear_135_79)"
