@@ -21,48 +21,48 @@ export const Flock: React.FC<IFlock> = ({
   items_per_row,
   members,
 }) => {
-  let gap = 35;
+  const circleSize = 50;
+  const circleGap = 5;
   const numRows = Math.ceil(members.length / items_per_row);
 
-  const titleFontSize = title ? 16 : 0;
-  const subtitleFontSize = subtitle ? 12 : 0;
-  const padding = 25;
+  const titleFontSize = title ? 22 : 0;
+  const subtitleFontSize = subtitle ? 16 : 0;
 
-  const head_start = { x: title ? 10 : 0, y: title ? 25 : 10 };
+  const head_start = { x: 0, y: 20 };
   const box_start = {
-    x: 25,
-    y: head_start.y + titleFontSize + subtitleFontSize + padding / 2,
+    x: circleSize / 2,
+    y: head_start.y + titleFontSize + subtitleFontSize + circleSize / 2,
   };
 
   const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize, ratio: 0.53 })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
     : 0;
   const subtitleWidth = subtitle
     ? getTextWidth(subtitle.trim(), {
         fontSize: subtitleFontSize,
-        ratio: 0.465,
       })
     : 0;
 
-  const documentWidth =
-    15 +
-    Math.max(
-      titleWidth,
-      subtitleWidth,
-      (members.length > items_per_row ? items_per_row : members.length) * gap
-    );
+  const documentWidth = Math.max(
+    titleWidth,
+    subtitleWidth,
+    (members.length > items_per_row ? items_per_row : members.length) *
+      (circleSize + circleGap)
+  );
   const documentHeight =
-    head_start.y + titleFontSize + subtitleFontSize + numRows * gap;
+    head_start.y +
+    titleFontSize +
+    subtitleFontSize +
+    numRows * (circleSize + circleGap);
 
   const document_id = Math.random().toString(36).substr(2, 9);
   return (
-    <Document w={documentWidth} h={documentHeight} padding={10}>
+    <Document w={documentWidth} h={documentHeight}>
       {title && (
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="title"
           fontFamily="Manrope"
-          fontSize={titleFontSize}
           fontWeight="500"
         >
           <tspan x={head_start.x} y={head_start.y}>
@@ -75,7 +75,6 @@ export const Flock: React.FC<IFlock> = ({
           xmlns="http://www.w3.org/2000/svg"
           className="subtitle"
           fontFamily="Manrope"
-          fontSize={subtitleFontSize}
           fontWeight="400"
         >
           <tspan x={head_start.x} y={head_start.y + titleFontSize}>
@@ -92,9 +91,9 @@ export const Flock: React.FC<IFlock> = ({
             <circle
               xmlns="http://www.w3.org/2000/svg"
               className="border"
-              cx={box_start.x + gap * col}
-              cy={box_start.y + row * gap}
-              r="15.5"
+              cx={box_start.x + col * (circleSize + circleGap)}
+              cy={box_start.y + row * (circleSize + circleGap)}
+              r={circleSize / 2}
               fill={`url(#member${document_id}${index})`}
               stroke="#ddd"
             />
