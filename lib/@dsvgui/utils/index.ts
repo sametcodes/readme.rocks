@@ -25,14 +25,14 @@ type IWrapText = (
     fontSize: number;
     maxLines?: number;
   },
-  cb: (value: string, index: number, array: string[]) => JSX.Element
-) => JSX.Element[];
+  cb: (value: string, index: number, array: Array<string>) => JSX.Element
+) => Array<JSX.Element>;
 
 export const wrapText: IWrapText = (inputText, options, cb) => {
   const maxLineWidth = options.maxLineWidth;
   const words = inputText.split(" ");
 
-  const lines: string[] = [];
+  const lines: Array<string> = [];
   let currentLine = words[0];
 
   for (let i = 1; i < words.length; i++) {

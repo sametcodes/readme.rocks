@@ -13,7 +13,7 @@ export type IDocumentProps = SVGAttributes<SVGElement> & {
 
 export const Document: React.FC<IDocumentProps> = (props) => {
   const { w, h, useBranding = true, ...rest } = props;
-  const document_id = Math.random().toString(36).substr(2, 9);
+  const documentId = Math.random().toString(36).substr(2, 9);
 
   const padding = rest.padding ?? 40;
   const margin = rest.margin ?? 10;
@@ -36,7 +36,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
         height={h}
         margin={margin}
         padding={padding}
-        id={document_id}
+        id={documentId}
       >
         {props.children}
       </Container>

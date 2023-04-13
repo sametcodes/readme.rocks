@@ -16,14 +16,18 @@ import NextImage from "next/image";
 import Link from "next/link";
 import { AnyObject } from "yup";
 
-export default async function Build({ params }: { params: { ids: string[] } }) {
+export default async function Build({
+  params,
+}: {
+  params: { ids: Array<string> };
+}) {
   if (!params.ids || Array.isArray(params.ids) === false)
     return <p>Invalid params</p>;
-  const [query_id, query_config_id] = params.ids;
+  const [queryId, queryConfigId] = params.ids;
   const session = await getServerSession(authOptions);
 
   const query = await prisma.platformQuery.findUnique({
-    where: { id: query_id },
+    where: { id: queryId },
     include: {
       platform: true,
       securedPlatformQuery: true,
@@ -33,16 +37,18 @@ export default async function Build({ params }: { params: { ids: string[] } }) {
 
   if (!query) return <p>Query not found</p>;
 
-  let queryConfigs: (PlatformQueryConfig & {
-    platform: Platform;
-    platformQuery: PlatformQuery;
-  })[] = [];
+  let queryConfigs: Array<
+    PlatformQueryConfig & {
+      platform: Platform;
+      platformQuery: PlatformQuery;
+    }
+  > = [];
   let connectionProfile: ConnectionProfile | null = null;
 
   if (session) {
     queryConfigs = await prisma.platformQueryConfig.findMany({
       where: {
-        platformQueryId: query_id,
+        platformQueryId: queryId,
         userId: session.user.id,
       },
       include: { platform: true, platformQuery: true },
@@ -66,15 +72,11 @@ export default async function Build({ params }: { params: { ids: string[] } }) {
   const schema = mergeSchemas(validation.query, validation.view);
   const allowMultipleCreate = Object.keys(schema?.fields || {}).length > 0;
 
-  if (
-    allowMultipleCreate === false &&
-    !query_config_id &&
-    queryConfigs.length
-  ) {
-    return redirect(`/build/${query_id}/${queryConfigs[0].id}`);
+  if (allowMultipleCreate === false && !queryConfigId && queryConfigs.length) {
+    return redirect(`/build/${queryId}/${queryConfigs[0].id}`);
   }
 
-  const query_view = query.query_type.toLowerCase();
+  const queryView = query.query_type.toLowerCase();
 
   return (
     <div className="flex mx-auto flex-col justify-center lg:w-2/3 px-8 lg:px-0">
@@ -120,14 +122,14 @@ export default async function Build({ params }: { params: { ids: string[] } }) {
         </div>
       </div>
 
-      {query_view === "public" && <ConfigForm.Public platformQuery={query} />}
-      {query_view === "private" && (
+      {queryView === "public" && <ConfigForm.Public platformQuery={query} />}
+      {queryView === "private" && (
         <>
           <ConfigForm.Private
             platformQuery={query}
             connectionProfile={connectionProfile}
             queryConfigs={queryConfigs || []}
-            activeQueryConfigId={query_config_id}
+            activeQueryConfigId={queryConfigId}
           >
             <ConnectAccount
               platformQuery={query}

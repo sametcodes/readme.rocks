@@ -18,13 +18,17 @@ import { IConnectionWithPlatforms } from "@/app/connect/page";
 
 type IConnects = {
   session: Session | null;
-  connectionWithPlatforms: IConnectionWithPlatforms[];
-  noAuthRequiredPlatforms: (Platform & {
-    _count: { queries: number };
-  })[];
-  allPlatforms: (Platform & {
-    _count: { queries: number };
-  })[];
+  connectionWithPlatforms: Array<IConnectionWithPlatforms>;
+  noAuthRequiredPlatforms: Array<
+    Platform & {
+      _count: { queries: number };
+    }
+  >;
+  allPlatforms: Array<
+    Platform & {
+      _count: { queries: number };
+    }
+  >;
 };
 
 export const Connects: React.FC<IConnects> = ({

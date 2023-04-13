@@ -42,13 +42,13 @@ const strategy = new OAuth2Strategy(
     callbackURL: `${process.env.NEXTAUTH_URL}/api/oauth/callback/wakatime`,
     scope: "email,read_stats,read_logged_time",
   },
-  function (
+  (
     accessToken: string,
     refreshToken: string,
     params: any,
     profile: any,
     cb: (error: null, profile: any) => void
-  ) {
+  ) => {
     return cb(null, {
       token: {
         access_token: accessToken,

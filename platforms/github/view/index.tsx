@@ -32,12 +32,12 @@ export const getContributionsSummary: ViewComponent = (result, config) => {
 export const getRepositoryMilestone: ViewComponent = (result, config) => {
   const { milestone } = result.data.viewer.repository;
 
-  const completed_jobs_count =
+  const completedJobsCount =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;
-  const total_jobs_count =
+  const totalJobsCount =
     milestone.pullRequests.totalCount + milestone.issues.totalCount;
-  const percent_in_text =
-    Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
+  const percentInText =
+    Math.floor((completedJobsCount / totalJobsCount) * 100) || 0;
   const dueDate =
     (milestone.dueOn &&
       "Due by " +
@@ -93,7 +93,7 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
 
   const metrics: IProgress["metrics"] = [
     {
-      text: `%${percent_in_text} completed`,
+      text: `%${percentInText} completed`,
       icon: Icons.Pie,
     },
     {
@@ -113,7 +113,7 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
   return (
     <Progress
       title={milestone.title}
-      percent={percent_in_text}
+      percent={percentInText}
       metrics={metrics}
     />
   );
@@ -122,16 +122,16 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
 export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
   const { queryConfig } = config as any;
 
-  const login_field =
+  const loginField =
     queryConfig.is_organization === "true" ? "organization" : "user";
-  const { milestone } = result.data[login_field].repository;
+  const { milestone } = result.data[loginField].repository;
 
-  const completed_jobs_count =
+  const completedJobsCount =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;
-  const total_jobs_count =
+  const totalJobsCount =
     milestone.pullRequests.totalCount + milestone.issues.totalCount;
-  const percent_in_text =
-    Math.floor((completed_jobs_count / total_jobs_count) * 100) || 0;
+  const percentInText =
+    Math.floor((completedJobsCount / totalJobsCount) * 100) || 0;
   const dueDate =
     (milestone.dueOn &&
       "Due by " +
@@ -187,7 +187,7 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
 
   const metrics: IProgress["metrics"] = [
     {
-      text: `%${percent_in_text} completed`,
+      text: `%${percentInText} completed`,
       icon: Icons.Pie,
     },
     {
@@ -207,7 +207,7 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
   return (
     <Progress
       title={milestone.title}
-      percent={percent_in_text}
+      percent={percentInText}
       metrics={metrics}
     />
   );
@@ -313,10 +313,10 @@ export const getContributors: ViewComponent = async (result, config) => {
 
   const contributors = result.data.repository.mentionableUsers.nodes;
 
-  const promise_thumbnails: IFlock["members"] = contributors.map(
+  const promisedThumbnails: IFlock["members"] = contributors.map(
     async (contributor: any, key: number) => {
       const url = new URL(contributor.avatarUrl);
-      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      const params = qs.parse(url.search, { ignoreQueryPrefix: true });
       url.search = qs.stringify({ ...params, s: "64" });
 
       const response = await fetch(url.toString());
@@ -333,7 +333,7 @@ export const getContributors: ViewComponent = async (result, config) => {
     }
   );
 
-  const thumbnails = await Promise.all(promise_thumbnails);
+  const thumbnails = await Promise.all(promisedThumbnails);
 
   const members: IFlock["members"] = contributors.map(
     (contributor: any, key: number) => ({
@@ -357,10 +357,10 @@ export const getUserSponsorList: ViewComponent = async (result, config) => {
 
   const { nodes: sponsors } = result.data.user.sponsorshipsAsMaintainer;
 
-  const promise_thumbnails: IFlock["members"] = sponsors.map(
+  const promisedThumbnails: IFlock["members"] = sponsors.map(
     async (sponsor: any, key: number) => {
       const url = new URL(sponsor.sponsorEntity.avatarUrl);
-      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      const params = qs.parse(url.search, { ignoreQueryPrefix: true });
       url.search = qs.stringify({ ...params, s: "64" });
 
       const response = await fetch(url.toString());
@@ -377,7 +377,7 @@ export const getUserSponsorList: ViewComponent = async (result, config) => {
     }
   );
 
-  const thumbnails = await Promise.all(promise_thumbnails);
+  const thumbnails = await Promise.all(promisedThumbnails);
 
   const members: IFlock["members"] = sponsors.map(
     (sponsor: any, key: number) => ({

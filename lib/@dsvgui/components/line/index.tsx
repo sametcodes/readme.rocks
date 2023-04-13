@@ -5,61 +5,65 @@ type ILine = {
   title: string;
   subtitle: string;
   total: string;
-  points: number[];
+  points: Array<number>;
 };
 
 export const Line: React.FC<ILine> = ({ title, subtitle, total, points }) => {
-  const document_padding = 40;
+  const documentPadding = 40;
 
   function createDynamicSvgPath({
-    height,
-    width,
+    lineHeight,
+    lineWidth,
     ratio,
   }: {
-    height: number;
-    width: number;
+    lineHeight: number;
+    lineWidth: number;
     ratio: number;
   }): string {
-    const max_value = Math.max(...points);
-    const x_gap = width / points.length;
+    const maxValue = Math.max(...points);
+    const xGap = lineWidth / points.length;
     let x = 0;
     let path =
       "M " +
       x +
       " " +
-      (height +
-        document_padding / 2 -
+      (lineHeight +
+        documentPadding / 2 -
         5 -
-        (points[0] / max_value) * height * ratio);
+        (points[0] / maxValue) * lineHeight * ratio);
     for (let i = 0; i <= points.length; i++) {
-      x += x_gap;
+      x += xGap;
       path +=
         " L " +
         x +
         " " +
-        (height +
-          document_padding / 2 -
+        (lineHeight +
+          documentPadding / 2 -
           5 -
-          (points[i] / max_value) * height * ratio);
+          (points[i] / maxValue) * lineHeight * ratio);
     }
 
     return path;
   }
 
-  const title_width = getTextWidth(title, { fontSize: 16 });
-  const subtitle_width = getTextWidth(subtitle, { fontSize: 16 });
+  const titleWidth = getTextWidth(title, { fontSize: 16 });
+  const subtitleWidth = getTextWidth(subtitle, { fontSize: 16 });
 
-  const titles_width = Math.max(title_width, subtitle_width);
+  const titlesWidth = Math.max(titleWidth, subtitleWidth);
 
-  const total_text_width = titles_width + getTextWidth(total, { fontSize: 24 });
+  const totalTextWidth = titlesWidth + getTextWidth(total, { fontSize: 24 });
   const height = 90;
-  const width = total_text_width + 100;
-  const path_value = createDynamicSvgPath({ height, width, ratio: 0.7 });
+  const width = totalTextWidth + 100;
+  const pathValue = createDynamicSvgPath({
+    lineHeight: height,
+    lineWidth: width,
+    ratio: 0.7,
+  });
 
   return (
-    <Document w={width} h={height} padding={document_padding}>
+    <Document w={width} h={height} padding={documentPadding}>
       <path
-        d={path_value}
+        d={pathValue}
         stroke="url(#paint0_linear_135_79)"
         strokeWidth="3"
         strokeLinecap="round"

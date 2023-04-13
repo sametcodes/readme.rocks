@@ -1,12 +1,14 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { availableOAuthProviders } from "@/services/oauth/providers";
+import {
+  availableOAuthProviders,
+  getProvider,
+} from "@/services/oauth/providers";
 import actions from "@/services/oauth/actions";
 import { Connection } from "@prisma/client";
 import prisma from "@/services/prisma";
 
 import passport from "passport";
 import refresh from "passport-oauth2-refresh";
-import { getProvider } from "@/services/oauth/providers";
 import { sendFallbackResponse } from "@/services/api/response";
 
 export const validateAccessToken = async (

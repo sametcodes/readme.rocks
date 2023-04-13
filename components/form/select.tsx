@@ -12,9 +12,11 @@ export const SelectQuery = ({
   queryId,
   session,
 }: {
-  platforms: (Platform & {
-    queries: PlatformQuery[];
-  })[];
+  platforms: Array<
+    Platform & {
+      queries: Array<PlatformQuery>;
+    }
+  >;
   platformId: string | undefined;
   queryId: string | undefined;
   session?: Session | null;

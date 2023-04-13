@@ -6,9 +6,6 @@ import { validatePublicRequest } from "@/middlewares/api/public";
 import { setCacheControl } from "@/middlewares/api/cache";
 import handlePlatformAPI from "@/services/api/handler";
 
-/**
- * This is the handler for the public API endpoint.
- **/
 export default nextConnect()
   .use(validatePublicRequest)
   .use(resolveHandler)

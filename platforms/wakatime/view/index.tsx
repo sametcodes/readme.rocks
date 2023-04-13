@@ -36,7 +36,7 @@ export const getMostUsedLanguages: ViewComponent = (result, config) => {
   const range: keyof typeof subtitles = (config.queryConfig as any).range;
   const { language_count } = config.viewConfig as any;
 
-  const total_seconds = result.data.languages
+  const totalSeconds = result.data.languages
     .slice(0, language_count)
     .reduce((acc: number, el: any) => acc + el.total_seconds, 0);
 
@@ -45,7 +45,7 @@ export const getMostUsedLanguages: ViewComponent = (result, config) => {
     .map((lang: any) => ({
       key: lang.name,
       name: lang.name,
-      percent: (lang.total_seconds / total_seconds) * 100,
+      percent: (lang.total_seconds / totalSeconds) * 100,
     }));
 
   return (
@@ -79,14 +79,14 @@ export const getMostRecentProjects: ViewComponent = (result, config) => {
     );
   }
 
-  const total_seconds = projects.reduce(
+  const totalSeconds = projects.reduce(
     (acc: number, el: any) => acc + el.total_seconds,
     0
   );
   const value: IBarStats["value"] = projects.map((project: any) => ({
     key: project.name,
     name: `${project.name} (${project.text})`,
-    percent: (project.total_seconds / total_seconds) * 100,
+    percent: (project.total_seconds / totalSeconds) * 100,
   }));
 
   return (
