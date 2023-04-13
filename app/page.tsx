@@ -43,6 +43,11 @@ export default function Index() {
       <div className="container mx-auto w-full lg:w-3/4 my-4 px-[50px] lg:px-0 min-h-[800px] flex">
         <LandingBrowserLeft />
       </div>
+      <div className="bg-gray-150 py-12">
+        <div className="container mx-auto w-full lg:w-3/4 block lg:px-0">
+          <p className="text-xl text-gray-700 text-center">readme.rocks</p>
+        </div>
+      </div>
     </>
   );
 }
