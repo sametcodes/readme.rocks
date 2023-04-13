@@ -1,19 +1,19 @@
 "use client";
 import NextImage from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { cn } from "@/utils";
 
 export const LandingBrowserRight = () => {
   return (
     <>
       <div className="pt-20 w-full">
-        <h2 className="text-4xl font-bold text-gray-800">Components</h2>
-        <p className="text-2xl my-5 text-gray-600">
+        <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200">
+          Components
+        </h2>
+        <p className="text-2xl my-5 text-gray-600 dark:text-gray-400">
           Get your statistics from various platforms.
-          <br />
-          Currently supported platforms:
         </p>
-        <ul className="text-xl list-disc list-inside text-gray-600">
+        <ul className="text-2xl list-disc list-inside text-gray-600 dark:text-gray-400">
           <li>Github</li>
           <li>Wakatime</li>
           <li>Codewars</li>
@@ -37,12 +37,26 @@ export const LandingBrowserRight = () => {
 };
 
 export const LandingBrowserLeft = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(
+    window.matchMedia("(prefers-color-scheme: dark)").matches
+  );
 
   const onClick = (event: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
     event.preventDefault();
     setDarkMode(!darkMode);
   };
+
+  useEffect(() => {
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => setDarkMode(event.matches));
+
+    return () => {
+      window
+        .matchMedia("(prefers-color-scheme: dark)")
+        .removeEventListener("change", (event) => setDarkMode(event.matches));
+    };
+  }, []);
 
   return (
     <>
@@ -62,13 +76,11 @@ export const LandingBrowserLeft = () => {
         />
       </div>
       <div className="pt-20 w-full">
-        <h2 className="text-4xl font-bold text-gray-800">
-          Light and dark mode
+        <h2 className="text-4xl font-bold text-gray-800 dark:text-gray-200">
+          Light and dark mode support
         </h2>
-        <p className="text-2xl my-5 text-gray-600">
-          Get your statistics from various platforms.
-          <br />
-          Currently supported platforms:
+        <p className="text-2xl my-5 text-gray-600 dark:text-gray-400">
+          No matter what which site you are on, the views will be consistent.
         </p>
 
         <label

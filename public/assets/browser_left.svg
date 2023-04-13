@@ -7,7 +7,7 @@
         #dsvguibranding { fill: #bbbbbb; }
         .dsvgui-container{ fill: #fafafa; }
         .box1{ fill: #e2e2e2 }
-        .box2{ fill: #f6f6f6 }
+        .box2{ fill: #f9f9f9 }
         text{ fill: #2e2e2e }
         @media (prefers-color-scheme: dark) {
             .dsvgui-container { fill: #32373e }
