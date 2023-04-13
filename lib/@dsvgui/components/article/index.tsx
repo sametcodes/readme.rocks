@@ -64,6 +64,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                   y1={yOffset}
                   x2={container_width}
                   y2={yOffset}
+                  className="divider"
                   stroke="#dddddd"
                 />
               )}
