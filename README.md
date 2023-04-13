@@ -23,7 +23,7 @@ _All your statistics at once._
 
 ## Contributors
 
-<img width="700" src="https://readme.rocks/api/view?queryConfig%5Bowner_name%5D=facebook&queryConfig%5Brepository_name%5D=react&viewConfig%5Btitle%5D=Our%20contributors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20all%20your%20contributions.%20We%20appreciate%20that.&viewConfig%5Bitems_per_row%5D=15&id=642f70a3104ae4fd80d6efac" />
+<img src="https://readme.rocks/api/view?queryConfig%5Bowner_name%5D=facebook&queryConfig%5Brepository_name%5D=react&viewConfig%5Btitle%5D=Our%20contributors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20all%20your%20contributions.%20We%20appreciate%20that.&viewConfig%5Bitems_per_row%5D=15&id=642f70a3104ae4fd80d6efac" />
 
 ## Milestones
 
@@ -34,7 +34,7 @@ _All your statistics at once._
 <img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=d-fischer&id=64248c899d4315a82e3cb3f7" />
 </a>
 
-<img width="700" src="https://readme.rocks/api/view?queryConfig%5Busername%5D=ljharb&viewConfig%5Btitle%5D=My%20sponsors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20sponsoring%20me.&viewConfig%5Bitems_per_row%5D=15&id=64300f9e4160c69275201776" />
+<img src="https://readme.rocks/api/view?queryConfig%5Busername%5D=ljharb&viewConfig%5Btitle%5D=My%20sponsors&viewConfig%5Bsubtitle%5D=Thank%20you%20for%20sponsoring%20me.&viewConfig%5Bitems_per_row%5D=15&id=64300f9e4160c69275201776" />
 
 ### Running locally
 
