@@ -19,7 +19,7 @@ const handlePlatformAPI: PlatformAPIHandler = (
   config,
   connection
 ) => {
-  return async function (req: NextApiRequest, res: NextApiResponse) {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
     const { name: queryName, query_type } = query;
 
     if (Object.keys(services).includes(queryName) === false)

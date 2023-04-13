@@ -1,11 +1,10 @@
-import { AnyObject } from "yup";
+import { AnyObject, object } from "yup";
 
 export * from "@/services/data/platform/validations";
 export * from "@/services/data/platformQuery/validations";
 export * from "@/services/data/platformQueryConfig/validations";
 export * from "@/services/data/user/validations";
 
-import { object } from "yup";
 import { validations } from "@/platforms";
 import { PlatformCode } from "@prisma/client";
 

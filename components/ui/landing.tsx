@@ -37,9 +37,7 @@ export const LandingBrowserRight = () => {
 };
 
 export const LandingBrowserLeft = () => {
-  const [darkMode, setDarkMode] = useState(
-    window.matchMedia("(prefers-color-scheme: dark)").matches
-  );
+  const [darkMode, setDarkMode] = useState(false);
 
   const onClick = (event: React.MouseEvent<HTMLLabelElement, MouseEvent>) => {
     event.preventDefault();
@@ -47,6 +45,8 @@ export const LandingBrowserLeft = () => {
   };
 
   useEffect(() => {
+    setDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+
     window
       .matchMedia("(prefers-color-scheme: dark)")
       .addEventListener("change", (event) => setDarkMode(event.matches));

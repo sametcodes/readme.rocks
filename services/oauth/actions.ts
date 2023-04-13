@@ -39,7 +39,7 @@ const actions = {
 
     if (!platform) return console.error("Platform not found");
 
-    const current_connection = await prisma.connection.findFirst({
+    const currentConnection = await prisma.connection.findFirst({
       where: {
         userId: session.user.id as string,
         type: "oauth",
@@ -47,9 +47,9 @@ const actions = {
       },
     });
 
-    if (current_connection) {
+    if (currentConnection) {
       return prisma.connection.update({
-        where: { id: current_connection.id },
+        where: { id: currentConnection.id },
         data: {
           access_token: token.access_token as string,
           refresh_token: token.refresh_token as string,
@@ -194,8 +194,8 @@ const actions = {
         connection.refresh_token as string,
         async (
           err: { statusCode: number; data?: any },
-          access_token: string,
-          refresh_token: string,
+          accessToken: string,
+          refreshToken: string,
           result: any
         ) => {
           if (err) return reject(err);
@@ -205,8 +205,8 @@ const actions = {
             .updateConnection({
               connection,
               data: {
-                access_token,
-                refresh_token,
+                access_token: accessToken as string,
+                refresh_token: refreshToken as string,
                 refresh_token_expires_at:
                   Date.now() + Number(result.refresh_token_expires_in) * 1000,
                 expires_at: Date.now() + Number(result.expires_in) * 1000,

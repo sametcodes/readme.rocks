@@ -8,7 +8,7 @@ import OAuthProviders from "@/services/oauth/providers";
 import actions from "@/services/oauth/actions";
 import { PlatformCode } from "@prisma/client";
 
-let redirects: { [key: string]: string } = {};
+const redirects: { [key: string]: string } = {};
 
 async function handler(req: NextApiRequest, res: NextApiResponse, next: any) {
   const session = await getServerSession(req, res, authOptions);

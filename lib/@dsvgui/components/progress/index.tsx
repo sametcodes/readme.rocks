@@ -3,15 +3,15 @@ import { Document } from "@/lib/@dsvgui";
 export type IProgress = {
   title: string;
   percent: number;
-  metrics: {
+  metrics: Array<{
     text: string;
     icon: JSX.Element;
-  }[];
+  }>;
 };
 
 export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
-  const metrics_x_offset = 230;
-  const metrics_y_offset = 30;
+  const metricsOffsetX = 230;
+  const metricsOffsetY = 30;
 
   const height = 70 + Math.ceil(metrics.length / 2) * 30;
 
@@ -38,8 +38,8 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
         <g
           key={index}
           className="status_bar"
-          transform={`translate(${index % 2 ? metrics_x_offset : 0} ${
-            94 + Math.floor(index / 2) * metrics_y_offset
+          transform={`translate(${index % 2 ? metricsOffsetX : 0} ${
+            94 + Math.floor(index / 2) * metricsOffsetY
           })`}
         >
           {metric.icon}

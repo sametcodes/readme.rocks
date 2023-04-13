@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react";
 import Layout from "@/components/layout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { Toaster } from "@/components/ui/toast/provider";
 
 export default async function RootLayout({
   children,
@@ -47,6 +48,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="bg-light-lp-gradient bg-no-repeat dark:bg-dark-lp-gradient min-h-screen overflow-x-hidden">
+        <Toaster />
         <Layout session={session}>{children}</Layout>
         <Analytics />
       </body>

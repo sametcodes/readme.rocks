@@ -20,8 +20,8 @@ export default function request(query: string, connection: Connection) {
           String(res.status).startsWith("4") ||
           String(res.status).startsWith("5")
         ) {
-          return res.json().then((res) => {
-            throw new Error(res.message);
+          return res.json().then((result) => {
+            throw new Error(result.message);
           });
         }
 
