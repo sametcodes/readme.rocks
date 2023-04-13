@@ -1,5 +1,6 @@
 import { Document } from "@/lib/@dsvgui";
 import { stringToColorCode } from "@/lib/@dsvgui/utils";
+import { getTextWidth } from "../../utils/index";
 
 export type IBarStats = {
   title: string;
@@ -18,15 +19,15 @@ export const BarStats: React.FC<IBarStats> = ({
   value,
   items_per_row = 2,
 }) => {
-  const width = 330;
-  const total_bar_width = 330 - 50;
+  const width = Math.max(getTextWidth(title, { fontSize: 24 }), 330);
+  const total_bar_width = width;
   const legend_my = 20;
 
-  const height = 105 + Math.ceil(value.length / items_per_row) * legend_my;
+  const height = 70 + Math.ceil(value.length / items_per_row) * legend_my;
 
   let temp_bar_width = 0;
   return (
-    <Document w={width} h={height} padding={10}>
+    <Document w={width} h={height}>
       <g xmlns="http://www.w3.org/2000/svg" id="Widget">
         <g id="content">
           <g id="Frame 134">
@@ -36,11 +37,10 @@ export const BarStats: React.FC<IBarStats> = ({
                 className="title"
                 xmlSpace="preserve"
                 fontFamily="Manrope"
-                fontSize="16"
                 fontWeight="600"
                 letterSpacing="0px"
               >
-                <tspan x="24" y="41.511">
+                <tspan x="0" y="21.511">
                   {title}
                 </tspan>
               </text>
@@ -51,11 +51,10 @@ export const BarStats: React.FC<IBarStats> = ({
                 className="subtitle"
                 xmlSpace="preserve"
                 fontFamily="Manrope"
-                fontSize="12"
                 fontWeight="600"
                 letterSpacing="0px"
               >
-                <tspan x="24" y="58.83">
+                <tspan x="0" y="40">
                   {subtitle}
                 </tspan>
               </text>
@@ -73,7 +72,7 @@ export const BarStats: React.FC<IBarStats> = ({
                       style={{ transition: "all 0.5s ease" }}
                       width={bar_width}
                       height="10"
-                      transform={`translate(${temp_bar_width + 25}, 70)`}
+                      transform={`translate(${temp_bar_width + 0}, 55)`}
                       fill={stringToColorCode(item.key)}
                     />
                   </g>
@@ -83,28 +82,30 @@ export const BarStats: React.FC<IBarStats> = ({
             <g id="legends">
               <g id="row">
                 {value.map((item, index) => {
-                  const x = 32 + (index % items_per_row ? 150 : 0);
+                  const circle_size = 6;
+                  const x =
+                    circle_size +
+                    (index % items_per_row ? width / items_per_row : 0);
                   const y =
-                    95 + Math.floor(index / items_per_row) * legend_my + 5;
+                    80 + Math.floor(index / items_per_row) * legend_my + 5;
                   return (
                     <g id={`legend${index}`} key={index}>
                       <circle
                         cx={x}
                         cy={y}
-                        r="6"
+                        r={circle_size}
                         fill={stringToColorCode(item.key)}
                       />
                       <text
                         xmlSpace="preserve"
-                        fontFamily="Manrope"
-                        fontSize="10"
-                        letterSpacing="0px"
+                        fontSize="14"
+                        fill="#7e7e7e"
+                        x={x + 15}
+                        y={y + 5}
                       >
-                        <tspan x={x + 15} y={y + 4}>
-                          {item.name}{" "}
-                          <tspan fontWeight="bolder">
-                            %{item.percent.toFixed(2)}
-                          </tspan>
+                        <tspan>{item.name} </tspan>
+                        <tspan fontWeight="bolder">
+                          %{item.percent.toFixed(0)}{" "}
                         </tspan>
                       </text>
                     </g>

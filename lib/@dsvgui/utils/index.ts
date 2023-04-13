@@ -23,6 +23,7 @@ type IWrapText = (
   options: {
     maxLineWidth: number;
     fontSize: number;
+    maxLines?: number;
   },
   cb: (value: string, index: number, array: string[]) => JSX.Element
 ) => JSX.Element[];
@@ -46,9 +47,9 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
       currentLine = testLine;
     }
   }
-  lines.push(currentLine);
 
-  return lines.map(cb);
+  lines.push(currentLine);
+  return lines.slice(0, options.maxLines).map(cb);
 };
 
 type IConvertDateToReadbleFormat = (isoTimestamp: string) => string;
