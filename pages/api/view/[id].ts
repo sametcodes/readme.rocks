@@ -9,9 +9,6 @@ import { resolveHandler } from "@/middlewares/api";
 import { setCacheControl } from "@/middlewares/api/cache";
 import { NextApiRequest, NextApiResponse } from "next";
 
-/**
- * This is the handler for the private API endpoint.
- **/
 export default nextConnect()
   .use(validatePrivateRequest)
   .use(passport.initialize())

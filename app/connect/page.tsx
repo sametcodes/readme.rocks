@@ -18,7 +18,7 @@ export type IConnectionWithPlatforms = {
 
 export default async function Connect() {
   const session = await getServerSession(authOptions);
-  let connectionWithPlatforms: IConnectionWithPlatforms[] = [];
+  let connectionWithPlatforms: Array<IConnectionWithPlatforms> = [];
 
   if (!session) redirect("/");
 

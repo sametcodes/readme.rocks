@@ -15,7 +15,7 @@ export default async function handler(
   if (!session) return res.status(401).json({ message: "Unauthorized" });
 
   const method = req.method as keyof typeof methods;
-  const method_services = methods[method];
+  const methodServices = methods[method];
 
   const [service, ...params] = req.query.service as ServiceParams;
 
@@ -30,7 +30,7 @@ export default async function handler(
       .status(400)
       .json({ message: "Bad request: unknown data API service" });
 
-  if (!method_services.includes(service))
+  if (!methodServices.includes(service))
     return res
       .status(400)
       .json({ message: "Bad request: method not allowed for this service" });

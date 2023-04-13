@@ -18,11 +18,11 @@ type QueryType = "Public" | "Private";
 
 export interface JSDocMinified {
   name: string;
-  tags: { title: string; text: string }[];
+  tags: Array<{ title: string; text: string }>;
   description: string;
 }
 
-const platforms_require_oauth: { [key: string]: boolean } = {
+const platformsRequireOAuth: { [key: string]: boolean } = {
   github: true,
   stackoverflow: true,
   wakatime: true,
@@ -40,7 +40,10 @@ const getFiles = (path: string): Array<File> => {
     }));
 };
 
-const compileTs = (files: Array<File>, cb: (files: Array<File>) => void) => {
+const compileTs = (
+  compileFiles: Array<File>,
+  cb: (files: Array<File>) => void
+) => {
   const options: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2017,
     module: ts.ModuleKind.CommonJS,
@@ -52,13 +55,13 @@ const compileTs = (files: Array<File>, cb: (files: Array<File>) => void) => {
   console.log(`― Compiling TS files to JS`);
 
   const program = ts.createProgram(
-    files.map((file) => file.ts),
+    compileFiles.map((file) => file.ts),
     options
   );
   program.emit();
 
   const tm = setInterval(() => {
-    if (files.map((file) => fs.existsSync(file.js)).every(Boolean)) {
+    if (compileFiles.map((file) => fs.existsSync(file.js)).every(Boolean)) {
       cb(files);
       clearInterval(tm);
     }
@@ -85,31 +88,31 @@ const migrate = async ({
       name,
       config: {},
       queries: {},
-      require_auth: platforms_require_oauth[code] || false,
+      require_auth: platformsRequireOAuth[code] || false,
     },
     update: {
       name,
       queries: {},
-      require_auth: platforms_require_oauth[code] || false,
+      require_auth: platformsRequireOAuth[code] || false,
     },
   });
 
   const queries = docs
     .map((doc) => {
       const title = doc.tags.find((tag) => tag.title === "title");
-      const query_type = doc.tags.find((tag) => tag.title === "query_type");
-      const cache_time = doc.tags.find((tag) => tag.title === "cache_time");
-      const for_secured = doc.tags.find((tag) => tag.title === "for_secured");
-      const for_public = doc.tags.find((tag) => tag.title === "for_public");
+      const queryType = doc.tags.find((tag) => tag.title === "query_type");
+      const cacheTime = doc.tags.find((tag) => tag.title === "cache_time");
+      const forSecured = doc.tags.find((tag) => tag.title === "for_secured");
+      const forPublic = doc.tags.find((tag) => tag.title === "for_public");
 
       return {
         name: doc.name,
         description: doc.description,
         title: title?.text as string,
-        query_type: query_type?.text as QueryType,
-        for_secured: for_secured?.text,
-        for_public: for_public?.text,
-        cache_time: Number((cache_time?.text as string) || 86400),
+        query_type: queryType?.text as QueryType,
+        for_secured: forSecured?.text,
+        for_public: forPublic?.text,
+        cache_time: Number((cacheTime?.text as string) || 86400),
       };
     })
     .filter((doc) => Boolean(doc.title));
@@ -124,13 +127,13 @@ const migrate = async ({
     (query) => !queries.find((q) => q.name === query.name)
   );
 
-  for (let query of queriesToDelete) {
+  for (const query of queriesToDelete) {
     console.log(`― Removing ${code}:${query.name}`);
     await prisma.platformQuery.delete({ where: { id: query.id } });
   }
 
   // update or create queries
-  for (let query of queries) {
+  for (const query of queries) {
     console.log(`― Migrating ${code}:${query.name}`);
     const existingQuery = await prisma.platformQuery.findFirst({
       where: {
@@ -139,7 +142,7 @@ const migrate = async ({
       },
     });
 
-    let data: any = {
+    const data: any = {
       name: query.name,
       title: query.title,
       query_type: query.query_type,
@@ -149,25 +152,25 @@ const migrate = async ({
     };
 
     if (query.for_secured) {
-      const secured_query = await prisma.platformQuery.findFirst({
+      const securedQuery = await prisma.platformQuery.findFirst({
         where: { name: query.for_secured, platformId: platform.id },
       });
-      if (!secured_query)
+      if (!securedQuery)
         throw new Error(
           `Secured query ${query.for_secured} not found for ${code}:${query.name}`
         );
-      data.securedPlatformQuery = { connect: { id: secured_query.id } };
+      data.securedPlatformQuery = { connect: { id: securedQuery.id } };
     }
 
     if (query.for_public) {
-      const public_query = await prisma.platformQuery.findFirst({
+      const publicQuery = await prisma.platformQuery.findFirst({
         where: { name: query.for_public, platformId: platform.id },
       });
-      if (!public_query)
+      if (!publicQuery)
         throw new Error(
           `Public query ${query.for_public} not found for ${code}:${query.name}`
         );
-      data.publicPlatformQuery = { connect: { id: public_query.id } };
+      data.publicPlatformQuery = { connect: { id: publicQuery.id } };
     }
 
     if (existingQuery) {
@@ -181,12 +184,14 @@ const migrate = async ({
   }
 };
 
-const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
+const explainAndMigrateJSDoc = async (
+  explainFiles: Array<File>
+): Promise<void> => {
   console.log(`― Extracting JSDocs as JSON`);
-  const docs_promise = files.map((file) => {
-    const docs = jsdoc.explainSync({ files: file.js });
+  const docsPromise = explainFiles.map((file) => {
+    const explainedDocs = jsdoc.explainSync({ files: file.js });
     return {
-      docs: docs.filter(
+      docs: explainedDocs.filter(
         (doc: any) =>
           !doc?.undocumented && doc.kind === "member" && doc.scope === "global"
       ),
@@ -194,8 +199,8 @@ const explainAndMigrateJSDoc = async (files: Array<File>): Promise<void> => {
     };
   });
 
-  const docs = await Promise.all(docs_promise);
-  files.forEach((file) => fs.unlinkSync(file.js));
+  const docs = await Promise.all(docsPromise);
+  explainFiles.forEach((file) => fs.unlinkSync(file.js));
   Promise.all(docs.map(throat(1, migrate))).then(() =>
     console.log("All the methods are migrated.")
   );

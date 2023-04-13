@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo, useRef } from "react";
 import { buildFormWithYupSchema } from "./builder";
-import { mergeSchemas } from "@/utils";
+import { mergeSchemas, cn } from "@/utils";
 import { useToast } from "@/components/hooks/toast";
 
 import {
@@ -24,7 +24,6 @@ import {
   PlatformQuery,
   PlatformQueryConfig,
 } from "@prisma/client";
-import { cn } from "@/utils";
 import { Image, CopyButton } from "@/components/ui";
 import { validations } from "@/platforms";
 import Link from "next/link";
@@ -33,11 +32,12 @@ import { useRouter } from "next/navigation";
 
 type IConfigFormProps = {
   platformQuery: PlatformQuery & { platform: Platform };
-  queryConfigs:
-    | (PlatformQueryConfig & {
-        platform: Platform;
-        platformQuery: PlatformQuery;
-      })[];
+  queryConfigs: Array<
+    PlatformQueryConfig & {
+      platform: Platform;
+      platformQuery: PlatformQuery;
+    }
+  >;
   connectionProfile: ConnectionProfile | null;
   activeQueryConfigId: string | null;
   children?: React.ReactNode;
@@ -82,29 +82,29 @@ export default function PrivateConfigForm({
   );
 
   const readValidationFormValues = (
-    validation: AnyObject,
+    validationForm: AnyObject,
     prefix: string,
     data: FormData
   ) => {
-    const fields = validation.fields;
-    const field_keys = Object.keys(fields);
+    const fields = validationForm.fields;
+    const fieldKeys = Object.keys(fields);
 
-    return field_keys.reduce((acc: any, field_key: string) => {
-      const field = fields[field_key];
+    return fieldKeys.reduce((acc: any, fieldKey: string) => {
+      const field = fields[fieldKey];
 
       if (field.type === "string") {
-        acc[field_key] = data.get(prefix + "__" + field_key);
+        acc[fieldKey] = data.get(prefix + "__" + fieldKey);
       }
 
       if (field.type === "number") {
-        const num_value = data.get(prefix + "__" + field_key);
-        if (Number.isFinite(Number(num_value))) {
-          acc[field_key] = Number(num_value);
+        const numValue = data.get(prefix + "__" + fieldKey);
+        if (Number.isFinite(Number(numValue))) {
+          acc[fieldKey] = Number(numValue);
         }
       }
 
       if (field.type === "boolean") {
-        acc[field_key] = data.get(prefix + "__" + field_key) === "on";
+        acc[fieldKey] = data.get(prefix + "__" + fieldKey) === "on";
       }
 
       return acc;
@@ -226,13 +226,13 @@ export default function PrivateConfigForm({
       };
     } catch (error) {
       if (error instanceof ValidationError) {
-        const errors = error.inner
+        const validationErrors = error.inner
           .map((err) => ({ name: err.path, message: err.message }))
           .reduce(
             (acc: any, err: any) => ({ ...acc, [err.name]: err.message }),
             {}
           );
-        setErrors(errors);
+        setErrors(validationErrors);
       }
     }
 

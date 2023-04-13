@@ -2,15 +2,16 @@ import prisma from "@/services/prisma";
 import { DataAPIMethod } from "@/services/data/types";
 import { isObjectID } from "@/utils";
 
-import { shapeDataAPISchema } from "@/services/data/validations";
 import * as validations from "@/services/data/validations";
 import { PlatformQueryConfig, PlatformQuery, Platform } from "@prisma/client";
 
 export const getPlatformQueryConfigs: DataAPIMethod<
-  (PlatformQueryConfig & {
-    platform: Platform;
-    platformQuery: PlatformQuery;
-  })[]
+  Array<
+    PlatformQueryConfig & {
+      platform: Platform;
+      platformQuery: PlatformQuery;
+    }
+  >
 > = async ({ session, params }) => {
   return prisma.platformQueryConfig.findMany({
     where: { userId: session.user.id },
@@ -53,11 +54,13 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
 
   if (!platformQuery) throw new Error("Unknown platform query");
 
-  await shapeDataAPISchema(
-    platformQuery.platform.code,
-    platformQuery.name,
-    validations.createPlatformQueryConfig
-  ).validate(payload, { strict: true });
+  await validations
+    .shapeDataAPISchema(
+      platformQuery.platform.code,
+      platformQuery.name,
+      validations.createPlatformQueryConfig
+    )
+    .validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.create({
     data: {
@@ -109,11 +112,13 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
   });
   if (!platformQueryConfig) throw new Error("Unknown config.");
 
-  await shapeDataAPISchema(
-    platformQueryConfig.platform.code,
-    platformQueryConfig.platformQuery.name,
-    validations.editPlatformQueryConfig
-  ).validate(payload, { strict: true });
+  await validations
+    .shapeDataAPISchema(
+      platformQueryConfig.platform.code,
+      platformQueryConfig.platformQuery.name,
+      validations.editPlatformQueryConfig
+    )
+    .validate(payload, { strict: true });
 
   return prisma.platformQueryConfig.update({
     data: {

@@ -3,7 +3,7 @@ import { templates, samples } from "@/platforms";
 import Link from "next/link";
 
 type IPlatformQueries = {
-  platform: Platform & { queries: PlatformQuery[] };
+  platform: Platform & { queries: Array<PlatformQuery> };
 };
 
 const PlatformQueryList = async (
@@ -50,10 +50,10 @@ const PlatformQueryView = async (
   key: string
 ) => {
   const getView = template[query.name as keyof typeof template];
-  const sample_data = sample[query.name as keyof typeof samples];
-  if (!sample_data) return <></>;
+  const sampleData = sample[query.name as keyof typeof samples];
+  if (!sampleData) return <></>;
 
-  const view = await getView(sample_data.result, sample_data.config);
+  const view = await getView(sampleData.result, sampleData.config);
   return (
     <li key={key} className="flex justify-between my-3 items-center">
       <Link href={`/build/${query.id}`}>

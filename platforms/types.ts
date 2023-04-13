@@ -1,5 +1,4 @@
-import { PlatformQueryConfig } from "@prisma/client";
-import { Connection } from "@prisma/client";
+import { PlatformQueryConfig, Connection } from "@prisma/client";
 
 export type ViewComponent = (
   result: any,
