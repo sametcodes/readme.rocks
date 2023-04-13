@@ -1,5 +1,6 @@
 import { ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { AnyObject } from "yup";
 
 export const trimChars = (body: string) => {
   return body.replace(/[\t|\n]/g, "").replace(/  /g, "");
@@ -75,4 +76,15 @@ export function parseQueryString(queryString: string): Dictionary<unknown> {
   });
 
   return result;
+}
+
+export function mergeSchemas(...schemas: Array<any>) {
+  const [first = [], ...rest] = schemas;
+
+  const merged: AnyObject = rest.reduce(
+    (mergedSchemas, schema) => mergedSchemas.concat(schema),
+    first
+  );
+
+  return merged || {};
 }

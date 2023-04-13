@@ -1,9 +1,11 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import { redirect } from "next/navigation";
 
 import prisma from "@/services/prisma";
+import { Connects } from "@/components/connects";
 
-type IConnectionWithPlatforms = {
+export type IConnectionWithPlatforms = {
   id: string;
   profile: { name: string; email: string; image: string } | null;
   platform: {
@@ -17,6 +19,8 @@ type IConnectionWithPlatforms = {
 export default async function Connect() {
   const session = await getServerSession(authOptions);
   let connectionWithPlatforms: IConnectionWithPlatforms[] = [];
+
+  if (!session) redirect("/");
 
   if (session) {
     connectionWithPlatforms = await prisma.connection.findMany({
@@ -56,98 +60,11 @@ export default async function Connect() {
         });
 
   return (
-    <div className="flex container mx-auto flex-col">
-      <div className="mb-5">
-        <h1 className="text-3xl font-bold my-3 text-slate-700 dark:text-gray-300">
-          Connections
-        </h1>
-        <blockquote className="text-slate-700">
-          <p className="text-md dark:text-gray-400">
-            Connect your accounts to fetch data from platforms.
-          </p>
-        </blockquote>
-      </div>
-
-      {session && (
-        <div className="mt-[40px]">
-          <h2 className="text-2xl font-bold text-slate-700 dark:text-gray-300">
-            Connected Platforms (
-            {connectionWithPlatforms.length + noAuthRequiredPlatforms.length})
-          </h2>
-          {connectionWithPlatforms.map((connection) => {
-            return (
-              <div key={connection.id} className="mt-6">
-                <div className="flex justify-between">
-                  <div className="flex flex-col">
-                    <h2 className="text-xl inline-block dark:text-gray-300">
-                      {connection.platform.name}
-                    </h2>
-                    <span className="text-sm text-slate-400">
-                      {connection.platform._count.queries} available{" "}
-                      {connection.platform._count.queries === 1
-                        ? "query"
-                        : "queries"}
-                    </span>
-                  </div>
-                  <a href={`/api/oauth/disconnect/${connection.platform.code}`}>
-                    <p className="text-lg">Disconnect</p>
-                  </a>
-                </div>
-              </div>
-            );
-          })}
-          {noAuthRequiredPlatforms.map((platform) => {
-            return (
-              <div key={platform.id} className="mt-6">
-                <div className="flex justify-between">
-                  <div className="flex flex-col">
-                    <h2 className="text-xl inline-block dark:text-gray-300">
-                      {platform.name}
-                    </h2>
-                    <span className="text-sm text-slate-400">
-                      {platform._count.queries} available{" "}
-                      {platform._count.queries === 1 ? "query" : "queries"}
-                    </span>
-                  </div>
-                  <p className="text-lg text-slate-400 dark:text-gray-500">
-                    No auth required
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <div className="mt-[40px]">
-        <h2 className="text-2xl font-bold text-slate-700 dark:text-gray-300">
-          All platforms ({allPlatforms.length})
-        </h2>
-        {allPlatforms.map((platform) => {
-          return (
-            <div key={platform.id} className="mt-6">
-              <div className="flex justify-between">
-                <div className="flex flex-col">
-                  <h2 className="text-xl inline-block">{platform.name}</h2>
-                  <span className="text-sm text-slate-400">
-                    {platform._count.queries} available queries
-                  </span>
-                </div>
-                {session ? (
-                  <a href={`/api/oauth/connect/${platform.code}`}>
-                    <p className="text-lg">Connect</p>
-                  </a>
-                ) : (
-                  <p className="text-lg text-slate-400">Login required</p>
-                )}
-              </div>
-            </div>
-          );
-        })}
-        {allPlatforms.length === 0 && (
-          <p className="text-md text-slate-500 mt-2">No platforms to connect</p>
-        )}
-      </div>
-    </div>
+    <Connects
+      session={session}
+      connectionWithPlatforms={connectionWithPlatforms}
+      noAuthRequiredPlatforms={noAuthRequiredPlatforms}
+      allPlatforms={allPlatforms}
+    />
   );
 }

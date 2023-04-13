@@ -1,8 +1,14 @@
-import { Progress, IProgress } from "@/lib/@dsvgui/components";
-
+import {
+  Progress,
+  IProgress,
+  Metrics,
+  Flock,
+  IFlock,
+} from "@/lib/@dsvgui/components";
 import { GithubIcon } from "@/lib/@dsvgui/icons";
-import { Metrics } from "@/lib/@dsvgui/components";
 import { ViewComponent } from "@/platforms/types";
+import getImageSize from "image-size";
+import qs from "qs";
 
 export const getContributionsSummary: ViewComponent = (result, config) => {
   const {
@@ -114,10 +120,11 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
 };
 
 export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
-  const { milestone } =
-    (config.queryConfig as any).is_organization === "true"
-      ? result.data.organization.repository
-      : result.data.user.repository;
+  const { queryConfig } = config as any;
+
+  const login_field =
+    queryConfig.is_organization === "true" ? "organization" : "user";
+  const { milestone } = result.data[login_field].repository;
 
   const completed_jobs_count =
     milestone.closedPullRequests.totalCount + milestone.closedIssues.totalCount;
@@ -258,6 +265,133 @@ export const getUserActiveSponsorGoal: ViewComponent = (result, config) => {
       title={user.sponsorsListing.activeGoal.title}
       percent={user.sponsorsListing.activeGoal.percentComplete}
       metrics={metrics}
+    />
+  );
+};
+
+export const getUserCommitStreak: ViewComponent = (result, config) => {
+  const dates = new Set<string>();
+
+  result.data.viewer.contributionsCollection.commitContributionsByRepository.forEach(
+    (repo: any) => {
+      repo.contributions.nodes.forEach((commit: any) => {
+        const date = new Date(commit.occurredAt).toISOString().split("T")[0];
+        dates.add(date);
+      });
+    }
+  );
+
+  const sortedDates = Array.from(dates).sort();
+  let streak = 0;
+  let currentStreak = 0;
+
+  for (let i = 1; i < sortedDates.length; i++) {
+    const previousDate = new Date(sortedDates[i - 1]);
+    const currentDate = new Date(sortedDates[i]);
+    const dayDifference =
+      (currentDate.getTime() - previousDate.getTime()) / (1000 * 60 * 60 * 24);
+
+    if (dayDifference === 1) {
+      currentStreak++;
+    } else {
+      currentStreak = 0;
+    }
+
+    streak = Math.max(streak, currentStreak);
+  }
+
+  return (
+    <Metrics
+      icon={GithubIcon}
+      data={[{ title: "Commit Streak", value: streak }]}
+    />
+  );
+};
+
+export const getContributors: ViewComponent = async (result, config) => {
+  const { title, subtitle, items_per_row } = config.viewConfig as any;
+
+  const contributors = result.data.repository.mentionableUsers.nodes;
+
+  const promise_thumbnails: IFlock["members"] = contributors.map(
+    async (contributor: any, key: number) => {
+      const url = new URL(contributor.avatarUrl);
+      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      url.search = qs.stringify({ ...params, s: "64" });
+
+      const response = await fetch(url.toString());
+      const arrayBuffer = await response.arrayBuffer();
+
+      const buffer = Buffer.from(arrayBuffer);
+      const imageData = getImageSize(buffer);
+
+      return {
+        value: buffer.toString("base64"),
+        width: imageData.width,
+        height: imageData.height,
+      };
+    }
+  );
+
+  const thumbnails = await Promise.all(promise_thumbnails);
+
+  const members: IFlock["members"] = contributors.map(
+    (contributor: any, key: number) => ({
+      image: thumbnails[key],
+      caption: contributor.login,
+    })
+  );
+
+  return (
+    <Flock
+      title={title}
+      subtitle={subtitle}
+      items_per_row={items_per_row}
+      members={members}
+    />
+  );
+};
+
+export const getUserSponsorList: ViewComponent = async (result, config) => {
+  const { title, subtitle, items_per_row } = config.viewConfig as any;
+
+  const { nodes: sponsors } = result.data.user.sponsorshipsAsMaintainer;
+
+  const promise_thumbnails: IFlock["members"] = sponsors.map(
+    async (sponsor: any, key: number) => {
+      const url = new URL(sponsor.sponsorEntity.avatarUrl);
+      let params = qs.parse(url.search, { ignoreQueryPrefix: true });
+      url.search = qs.stringify({ ...params, s: "64" });
+
+      const response = await fetch(url.toString());
+      const arrayBuffer = await response.arrayBuffer();
+
+      const buffer = Buffer.from(arrayBuffer);
+      const imageData = getImageSize(buffer);
+
+      return {
+        value: buffer.toString("base64"),
+        width: imageData.width,
+        height: imageData.height,
+      };
+    }
+  );
+
+  const thumbnails = await Promise.all(promise_thumbnails);
+
+  const members: IFlock["members"] = sponsors.map(
+    (sponsor: any, key: number) => ({
+      image: thumbnails[key],
+      caption: sponsor.sponsorEntity.login,
+    })
+  );
+
+  return (
+    <Flock
+      title={title}
+      subtitle={subtitle}
+      items_per_row={items_per_row}
+      members={members}
     />
   );
 };

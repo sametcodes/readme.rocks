@@ -23,6 +23,7 @@ type IWrapText = (
   options: {
     maxLineWidth: number;
     fontSize: number;
+    maxLines?: number;
   },
   cb: (value: string, index: number, array: string[]) => JSX.Element
 ) => JSX.Element[];
@@ -46,9 +47,9 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
       currentLine = testLine;
     }
   }
-  lines.push(currentLine);
 
-  return lines.map(cb);
+  lines.push(currentLine);
+  return lines.slice(0, options.maxLines).map(cb);
 };
 
 type IConvertDateToReadbleFormat = (isoTimestamp: string) => string;
@@ -79,3 +80,13 @@ export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
 
   return `${month} ${day} '${year}`;
 };
+
+export function stringToColorCode(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash += str.charCodeAt(i);
+  }
+
+  const color = ((hash * 123456789) % 0xffffff).toString(16);
+  return "#" + "0".repeat(6 - color.length) + color;
+}

@@ -23,17 +23,6 @@ export default function request(endpoint: string, connection: Connection) {
         throw new Error(res.error_message);
       }
 
-      return { success: true, data: res };
-    })
-    .catch((err) => {
-      return {
-        success: false,
-        data: null,
-        error: {
-          error: true,
-          message: err.message,
-          code: 500,
-        },
-      };
+      return res;
     });
 }

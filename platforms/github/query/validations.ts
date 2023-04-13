@@ -6,7 +6,7 @@ export const getRepositoryMilestone = object({
     placeholder: "Repository Name",
     description: "The name of the repository.",
   }),
-  milestone_id: number().required().meta({
+  milestone_id: number().required().min(1).meta({
     label: "Milestone ID",
     placeholder: "Milestone ID",
     description:
@@ -30,7 +30,7 @@ export const getPublicRepositoryMilestone = object({
     placeholder: "repository",
     description: "The name of the repository.",
   }),
-  milestone_id: number().required().meta({
+  milestone_id: number().required().min(1).meta({
     label: "Milestone ID",
     placeholder: "40",
     description:
@@ -41,6 +41,33 @@ export const getPublicRepositoryMilestone = object({
   .noUnknown(true);
 
 export const getUserActiveSponsorGoal = object({
+  username: string().required().meta({
+    label: "Username",
+    placeholder: "Username",
+    description: "The username of the profile, do not include the @ symbol.",
+  }),
+})
+  .required()
+  .noUnknown(true);
+
+export const getUserCommitStreak = object().required().noUnknown(true);
+
+export const getContributors = object({
+  owner_name: string().required().meta({
+    label: "Owner username",
+    placeholder: "Owner",
+    description: "The name of the owner of the repository.",
+  }),
+  repository_name: string().required().meta({
+    label: "Repository Name",
+    placeholder: "Repository Name",
+    description: "The name of the repository.",
+  }),
+})
+  .required()
+  .noUnknown(true);
+
+export const getUserSponsorList = object({
   username: string().required().meta({
     label: "Username",
     placeholder: "Username",

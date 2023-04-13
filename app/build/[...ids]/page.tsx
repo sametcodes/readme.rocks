@@ -1,28 +1,46 @@
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
-import * as ConfigForm from "@/components/form";
+import { validations } from "@/platforms";
 import prisma from "@/services/prisma";
+import * as ConfigForm from "@/components/form";
+import { redirect } from "next/navigation";
 
-import { PlatformQuery, ConnectionProfile, Platform } from "@prisma/client";
+import {
+  PlatformQuery,
+  ConnectionProfile,
+  Platform,
+  PlatformQueryConfig,
+} from "@prisma/client";
+import { cn, mergeSchemas } from "@/utils";
 import NextImage from "next/image";
 import Link from "next/link";
+import { AnyObject } from "yup";
 
-export default async function Build({ params }: { params: { id: string } }) {
-  const query_id = params.id;
+export default async function Build({ params }: { params: { ids: string[] } }) {
+  if (!params.ids || Array.isArray(params.ids) === false)
+    return <p>Invalid params</p>;
+  const [query_id, query_config_id] = params.ids;
   const session = await getServerSession(authOptions);
 
   const query = await prisma.platformQuery.findUnique({
     where: { id: query_id },
-    include: { platform: true },
+    include: {
+      platform: true,
+      securedPlatformQuery: true,
+      publicPlatformQuery: true,
+    },
   });
 
   if (!query) return <p>Query not found</p>;
 
-  let queryConfig,
-    connectionProfile: ConnectionProfile | null = null;
+  let queryConfigs: (PlatformQueryConfig & {
+    platform: Platform;
+    platformQuery: PlatformQuery;
+  })[] = [];
+  let connectionProfile: ConnectionProfile | null = null;
 
   if (session) {
-    queryConfig = await prisma.platformQueryConfig.findFirst({
+    queryConfigs = await prisma.platformQueryConfig.findMany({
       where: {
         platformQueryId: query_id,
         userId: session.user.id,
@@ -33,6 +51,27 @@ export default async function Build({ params }: { params: { id: string } }) {
     connectionProfile = await prisma.connectionProfile.findFirst({
       where: { platformId: query.platformId, userId: session.user.id },
     });
+  }
+
+  const platformValidations = validations[query.platform.code];
+  const validation: { query: AnyObject; view: AnyObject } = {
+    query:
+      platformValidations.query[
+        query.name as keyof typeof platformValidations.query
+      ],
+    view: platformValidations.view[
+      query.name as keyof typeof platformValidations.view
+    ],
+  };
+  const schema = mergeSchemas(validation.query, validation.view);
+  const allowMultipleCreate = Object.keys(schema?.fields || {}).length > 0;
+
+  if (
+    allowMultipleCreate === false &&
+    !query_config_id &&
+    queryConfigs.length
+  ) {
+    return redirect(`/build/${query_id}/${queryConfigs[0].id}`);
   }
 
   const query_view = query.query_type.toLowerCase();
@@ -58,16 +97,37 @@ export default async function Build({ params }: { params: { id: string } }) {
         <blockquote className="text-slate-700 dark:text-gray-500">
           <p className="text-md">{query.description}</p>
         </blockquote>
+
+        <div>
+          <p className={cn("text-gray-500")}>
+            {query.publicPlatformQuery?.id && (
+              <Link
+                href={`/build/${query.publicPlatformQuery.id}`}
+                className="font-bold"
+              >
+                Switch to public query
+              </Link>
+            )}
+            {query.securedPlatformQuery?.id && (
+              <Link
+                href={`/build/${query.securedPlatformQuery.id}`}
+                className="font-bold"
+              >
+                Switch to secured query
+              </Link>
+            )}
+          </p>
+        </div>
       </div>
 
       {query_view === "public" && <ConfigForm.Public platformQuery={query} />}
-
       {query_view === "private" && (
         <>
           <ConfigForm.Private
             platformQuery={query}
             connectionProfile={connectionProfile}
-            queryConfig={queryConfig || undefined}
+            queryConfigs={queryConfigs || []}
+            activeQueryConfigId={query_config_id}
           >
             <ConnectAccount
               platformQuery={query}
@@ -127,7 +187,7 @@ const ConnectAccount = ({
                 connection to your {platformQuery.platform.name} account.
               </p>
               <a
-                href={`/api/oauth/connect/${platformQuery.platform.code}?redirect=${process.env.NEXT_PUBLIC_SITE_URL}/query/${platformQuery.id}`}
+                href={`/api/oauth/connect/${platformQuery.platform.code}?redirect=${process.env.NEXT_PUBLIC_SITE_URL}/build/${platformQuery.id}`}
                 className="bg-slate-100 text-slate-600 border-slate-300 hover:bg-slate-200 border rounded-lg py-2 px-4"
               >
                 Connect your {platformQuery.platform.name} account

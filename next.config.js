@@ -1,3 +1,5 @@
+const webpack = require("webpack");
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: { appDir: true },
@@ -17,6 +19,15 @@ const nextConfig = {
       };
     }
     return config;
+  },
+  async redirects() {
+    return [
+      {
+        source: "/build",
+        destination: "/build/list",
+        permanent: true,
+      },
+    ];
   },
 };
 

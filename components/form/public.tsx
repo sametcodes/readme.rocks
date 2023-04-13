@@ -40,7 +40,7 @@ export default function PublicConfigForm({
 
       if (field.type === "number") {
         const num_value = data.get(prefix + "__" + field_key);
-        if (Number(num_value) !== NaN) {
+        if (Number.isFinite(Number(num_value))) {
           acc[field_key] = Number(num_value);
         }
       }
@@ -83,6 +83,8 @@ export default function PublicConfigForm({
       ];
 
       const formDataValues = { ...(query || {}), ...(view || {}) };
+      if (Object.keys(formDataValues).length === 0)
+        return { queryConfig: query || {}, viewConfig: view || {} };
       const validations = [queryValidation, viewValidation].filter(Boolean);
       const schema = mergeSchemas(...validations);
       schema.validateSync(formDataValues, { abortEarly: false });
@@ -120,7 +122,10 @@ export default function PublicConfigForm({
   const onSubmit = async (event: any) => {
     event.preventDefault();
     if (!$form.current) return;
+
     const formData = readFormData(new FormData($form.current));
+    if (!formData) return;
+
     const query_string = objectToQueryString(
       Object.assign({}, formData, { id: platformQuery.id })
     );

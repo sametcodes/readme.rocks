@@ -53,18 +53,6 @@ export const createPlatformQueryConfig: DataAPIMethod = async ({
 
   if (!platformQuery) throw new Error("Unknown platform query");
 
-  const isExistPlatformQueryConfig = await prisma.platformQueryConfig.findFirst(
-    {
-      where: {
-        platformQueryId,
-        userId: session.user.id,
-      },
-    }
-  );
-
-  if (isExistPlatformQueryConfig)
-    throw new Error("You already have a config for this query.");
-
   await shapeDataAPISchema(
     platformQuery.platform.code,
     platformQuery.name,

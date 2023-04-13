@@ -1,5 +1,5 @@
 import { QueryService } from "@/platforms/types";
-import request from "./request";
+import request from "@/platforms/dailydev/query/request";
 
 /**
  * @name listArticles
@@ -45,7 +45,5 @@ export const listArticles: QueryService = async (connection, config) => {
   }`;
 
   const response = await request(query, connection);
-  if ("error" in response) return response;
-
-  return { success: true, data: response.data };
+  return response;
 };

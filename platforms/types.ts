@@ -6,16 +6,10 @@ export type ViewComponent = (
   config: PlatformQueryConfig
 ) => JSX.Element | Promise<JSX.Element> | null;
 
-export type ServiceResponse = {
-  success: boolean;
-  data?: any;
-  error?: {
-    message: string;
-    code: number;
-  };
-};
+export type ServiceResponse = any | Error;
 
 export type QueryService = (
   connection: Connection,
-  config: PlatformQueryConfig
+  config: PlatformQueryConfig,
+  secured: boolean
 ) => Promise<ServiceResponse>;
