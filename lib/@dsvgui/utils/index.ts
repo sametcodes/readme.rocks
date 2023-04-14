@@ -90,3 +90,42 @@ export function stringToColorCode(str: string) {
   const color = ((hash * 123456789) % 0xffffff).toString(16);
   return "#" + "0".repeat(6 - color.length) + color;
 }
+
+export function generateColorVariations(inputColor: string) {
+  function hexToRgb(hex: string) {
+    const bigint = parseInt(hex.slice(1), 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+
+    return [r, g, b];
+  }
+
+  function rgbToHex(r: number, g: number, b: number) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+  }
+
+  function lerp(a: number, b: number, t: number) {
+    return a + (b - a) * t;
+  }
+
+  const middleColor = hexToRgb(inputColor);
+  const endColor = hexToRgb("#EBEDF0");
+  const variations = [];
+
+  for (let i = 0; i < 5; i++) {
+    const t = i / 4;
+    const r = Math.round(lerp(middleColor[0], endColor[0], t));
+    const g = Math.round(lerp(middleColor[1], endColor[1], t));
+    const b = Math.round(lerp(middleColor[2], endColor[2], t));
+    const hexColor = rgbToHex(r, g, b);
+
+    variations.push(hexColor);
+  }
+
+  const startColor = middleColor.map((c) => Math.max(c * 2 - 255, 0));
+  const darkColor = rgbToHex(startColor[0], startColor[1], startColor[2]);
+  variations[0] = darkColor;
+
+  return variations;
+}
