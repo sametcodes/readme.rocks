@@ -86,10 +86,10 @@ export const getPublicRepositoryMilestone: QueryService = async (
 ) => {
   const { queryConfig } = config as any;
 
-  const login_field =
+  const loginField =
     queryConfig.is_organization === "true" ? "organization" : "user";
   const query = `{
-    ${login_field}(login: "${queryConfig.owner_name}"){
+    ${loginField}(login: "${queryConfig.owner_name}"){
       repository(name: "${queryConfig.repository_name}"){
         milestone(number: ${queryConfig.milestone_id}) {
           id
@@ -115,7 +115,7 @@ export const getPublicRepositoryMilestone: QueryService = async (
 
   const response = await request(query, connection);
 
-  const { milestone } = response.data[login_field].repository;
+  const { milestone } = response.data[loginField].repository;
   if (!milestone)
     throw new Error(
       "The milestone you are looking for does not exist. Please check the provided parameters."

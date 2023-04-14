@@ -4,37 +4,37 @@ import { getTextWidth } from "@/lib/@dsvgui/utils";
 
 type IMetrics = {
   icon: React.FC<IconProps>;
-  data: {
+  data: Array<{
     title: string;
     value: number | string;
-  }[];
+  }>;
 };
 
 export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
-  const padding = 40;
-  let initial_padding = 30;
+  const padding = 35;
+  let initialPadding = 15;
 
   const width = data.reduce((acc, item) => {
-    const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
-    const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
-    const w_text = Math.max(w_value, w_title);
+    const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
+    const wTitle = getTextWidth(item.title.toString(), { fontSize: 11 });
+    const wText = Math.max(wValue, wTitle);
 
-    return acc + w_text + padding;
-  }, padding + initial_padding);
+    return acc + wText + padding;
+  }, padding + initialPadding);
 
   return (
-    <Document w={width} h={75} padding={10}>
-      <Icon x={25} y={22} />
+    <Document w={width} h={35}>
+      <Icon x={0} y={2} />
 
-      <g transform="translate(55, 0)">
+      <g transform="translate(45, 0)">
         {data.map((item, index) => {
-          const w_value = getTextWidth(item.value.toString(), { fontSize: 22 });
-          const w_title = getTextWidth(item.title.toString(), { fontSize: 11 });
-          const w_text = Math.max(w_value, w_title);
+          const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
+          const wTitle = getTextWidth(item.title.toString(), { fontSize: 16 });
+          const wText = Math.max(wValue, wTitle);
 
-          const x_text = initial_padding;
-          initial_padding += w_text + padding;
-          let x_line = x_text - 10;
+          const xText = initialPadding;
+          initialPadding += wText + padding;
+          const xLine = xText - 10;
 
           return (
             <Fragment key={index}>
@@ -42,10 +42,9 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
                 fill="#878787"
                 xmlSpace="preserve"
                 fontFamily="Manrope"
-                fontSize="11"
-                letterSpacing="0.3px"
+                className="subtitle"
               >
-                <tspan x={x_text} y={30}>
+                <tspan x={xText} y={10}>
                   {item.title}
                 </tspan>
               </text>
@@ -53,23 +52,16 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
                 fill="black"
                 xmlSpace="preserve"
                 fontFamily="Manrope"
-                fontSize="22"
+                className="title"
                 fontWeight="600"
-                letterSpacing="0.3px"
               >
-                <tspan x={x_text} y={53.5195}>
+                <tspan x={xText} y={33.5195}>
                   {item.value}
                 </tspan>
               </text>
 
               {index !== 0 && (
-                <line
-                  x1={x_line}
-                  y1={19}
-                  x2={x_line}
-                  y2={56}
-                  stroke="#E3E3E3"
-                />
+                <line x1={xLine} y1={2} x2={xLine} y2={35} stroke="#E3E3E3" />
               )}
             </Fragment>
           );

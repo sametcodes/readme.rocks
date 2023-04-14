@@ -3,7 +3,7 @@ import { Article, IArticle } from "@/lib/@dsvgui";
 import getImageSize from "image-size";
 
 export const listArticles: ViewComponent = async (result, config) => {
-  const promise_thumbnails = result.map(async (article: any, key: number) => {
+  const promisedThumbnails = result.map(async (article: any, key: number) => {
     const response = await fetch(article.cover_image || article.social_image);
     const arrayBuffer = await response.arrayBuffer();
 
@@ -16,7 +16,7 @@ export const listArticles: ViewComponent = async (result, config) => {
       height: imageData.height,
     };
   });
-  const thumbnails = await Promise.all(promise_thumbnails);
+  const thumbnails = await Promise.all(promisedThumbnails);
 
   const articles: IArticle["articles"] = result.map(
     (article: any, key: number) => {

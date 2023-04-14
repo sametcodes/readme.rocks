@@ -24,29 +24,29 @@ export default function PublicConfigForm({
   const $form = useRef<HTMLFormElement>(null);
 
   const readValidationFormValues = (
-    validation: AnyObject,
+    validationForm: AnyObject,
     prefix: string,
     data: FormData
   ) => {
-    const fields = validation.fields;
-    const field_keys = Object.keys(fields);
+    const fields = validationForm.fields;
+    const fieldKeys = Object.keys(fields);
 
-    return field_keys.reduce((acc: any, field_key: string) => {
-      const field = fields[field_key];
+    return fieldKeys.reduce((acc: any, fieldKey: string) => {
+      const field = fields[fieldKey];
 
       if (field.type === "string") {
-        acc[field_key] = data.get(prefix + "__" + field_key);
+        acc[fieldKey] = data.get(prefix + "__" + fieldKey);
       }
 
       if (field.type === "number") {
-        const num_value = data.get(prefix + "__" + field_key);
-        if (Number.isFinite(Number(num_value))) {
-          acc[field_key] = Number(num_value);
+        const numValue = data.get(prefix + "__" + fieldKey);
+        if (Number.isFinite(Number(numValue))) {
+          acc[fieldKey] = Number(numValue);
         }
       }
 
       if (field.type === "boolean") {
-        acc[field_key] = data.get(prefix + "__" + field_key) === "on";
+        acc[fieldKey] = data.get(prefix + "__" + fieldKey) === "on";
       }
 
       return acc;
@@ -85,8 +85,8 @@ export default function PublicConfigForm({
       const formDataValues = { ...(query || {}), ...(view || {}) };
       if (Object.keys(formDataValues).length === 0)
         return { queryConfig: query || {}, viewConfig: view || {} };
-      const validations = [queryValidation, viewValidation].filter(Boolean);
-      const schema = mergeSchemas(...validations);
+      const validationsForm = [queryValidation, viewValidation].filter(Boolean);
+      const schema = mergeSchemas(...validationsForm);
       schema.validateSync(formDataValues, { abortEarly: false });
 
       return {
@@ -95,13 +95,13 @@ export default function PublicConfigForm({
       };
     } catch (error) {
       if (error instanceof ValidationError) {
-        const errors = error.inner
+        const errorsValidation = error.inner
           .map((err) => ({ name: err.path, message: err.message }))
           .reduce(
             (acc: any, err: any) => ({ ...acc, [err.name]: err.message }),
             {}
           );
-        setErrors(errors);
+        setErrors(errorsValidation);
       }
     }
 
@@ -126,10 +126,11 @@ export default function PublicConfigForm({
     const formData = readFormData(new FormData($form.current));
     if (!formData) return;
 
-    const query_string = objectToQueryString(
-      Object.assign({}, formData, { id: platformQuery.id })
-    );
-    setQueryString(query_string);
+    const _queryString = objectToQueryString({
+      ...formData,
+      ...{ id: platformQuery.id },
+    });
+    setQueryString(_queryString);
   };
 
   return (

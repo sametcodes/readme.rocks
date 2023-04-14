@@ -8,8 +8,8 @@ export const setCacheControl = (
   const {
     query: { cache_time },
   } = res.locals;
-  const cache_value = `public, max-age=60, s-maxage=${cache_time}, stale-while-revalidate=86400`;
-  res.setHeader("Cache-Control", cache_value);
+  const cacheValue = `public, max-age=60, s-maxage=${cache_time}, stale-while-revalidate=86400`;
+  res.setHeader("Cache-Control", cacheValue);
 
   if (req.query._vercel_no_cache && req.query._vercel_no_cache === "1") {
     res.setHeader(

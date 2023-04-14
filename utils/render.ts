@@ -1,21 +1,21 @@
 import ReactDOMServer from "react-dom/server";
 
-const stripParentElements = (string: string) => {
-  if (string.indexOf("<svg") === 0) {
-    return string;
+const stripParentElements = (str: string) => {
+  if (str.indexOf("<svg") === 0) {
+    return str;
   }
 
-  return string.replace(/^.*(<svg)/g, "$1").replace(/(<\/svg>).*$/g, "$1");
+  return str.replace(/^.*(<svg)/g, "$1").replace(/(<\/svg>).*$/g, "$1");
 };
 
 const render = (JSXElement: JSX.Element) => {
-  const string = ReactDOMServer.renderToString(JSXElement)
+  const output = ReactDOMServer.renderToString(JSXElement)
     .replace(/&lt;/g, "<")
     .replace(/&gt;/g, ">")
     .replace(/&quot;/g, '"')
     .replace(/&#x27;/g, "'");
 
-  return stripParentElements(string);
+  return stripParentElements(output);
 };
 
 export default render;

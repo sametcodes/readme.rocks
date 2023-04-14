@@ -5,14 +5,14 @@ export type IFlock = {
   title?: string;
   subtitle?: string;
   items_per_row: number;
-  members: {
+  members: Array<{
     image: {
       value: string;
       width: number;
       height: number;
     };
     caption: string;
-  }[];
+  }>;
 };
 
 export const Flock: React.FC<IFlock> = ({
@@ -21,51 +21,51 @@ export const Flock: React.FC<IFlock> = ({
   items_per_row,
   members,
 }) => {
-  let gap = 35;
+  const circleSize = 50;
+  const circleGap = 5;
   const numRows = Math.ceil(members.length / items_per_row);
 
-  const titleFontSize = title ? 16 : 0;
-  const subtitleFontSize = subtitle ? 12 : 0;
-  const padding = 25;
+  const titleFontSize = title ? 22 : 0;
+  const subtitleFontSize = subtitle ? 16 : 0;
 
-  const head_start = { x: title ? 10 : 0, y: title ? 25 : 10 };
-  const box_start = {
-    x: 25,
-    y: head_start.y + titleFontSize + subtitleFontSize + padding / 2,
+  const headStart = { x: 0, y: 20 };
+  const boxStart = {
+    x: circleSize / 2,
+    y: headStart.y + titleFontSize + subtitleFontSize + circleSize / 2,
   };
 
   const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize, ratio: 0.53 })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
     : 0;
   const subtitleWidth = subtitle
     ? getTextWidth(subtitle.trim(), {
         fontSize: subtitleFontSize,
-        ratio: 0.465,
       })
     : 0;
 
-  const documentWidth =
-    15 +
-    Math.max(
-      titleWidth,
-      subtitleWidth,
-      (members.length > items_per_row ? items_per_row : members.length) * gap
-    );
+  const documentWidth = Math.max(
+    titleWidth,
+    subtitleWidth,
+    (members.length > items_per_row ? items_per_row : members.length) *
+      (circleSize + circleGap)
+  );
   const documentHeight =
-    head_start.y + titleFontSize + subtitleFontSize + numRows * gap;
+    headStart.y +
+    titleFontSize +
+    subtitleFontSize +
+    numRows * (circleSize + circleGap);
 
-  const document_id = Math.random().toString(36).substr(2, 9);
+  const documentId = Math.random().toString(36).substr(2, 9);
   return (
-    <Document w={documentWidth} h={documentHeight} padding={10}>
+    <Document w={documentWidth} h={documentHeight}>
       {title && (
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="title"
           fontFamily="Manrope"
-          fontSize={titleFontSize}
           fontWeight="500"
         >
-          <tspan x={head_start.x} y={head_start.y}>
+          <tspan x={headStart.x} y={headStart.y}>
             {title.trim()}
           </tspan>
         </text>
@@ -75,10 +75,9 @@ export const Flock: React.FC<IFlock> = ({
           xmlns="http://www.w3.org/2000/svg"
           className="subtitle"
           fontFamily="Manrope"
-          fontSize={subtitleFontSize}
           fontWeight="400"
         >
-          <tspan x={head_start.x} y={head_start.y + titleFontSize}>
+          <tspan x={headStart.x} y={headStart.y + titleFontSize}>
             {subtitle.trim()}
           </tspan>
         </text>
@@ -92,29 +91,29 @@ export const Flock: React.FC<IFlock> = ({
             <circle
               xmlns="http://www.w3.org/2000/svg"
               className="border"
-              cx={box_start.x + gap * col}
-              cy={box_start.y + row * gap}
-              r="15.5"
-              fill={`url(#member${document_id}${index})`}
+              cx={boxStart.x + col * (circleSize + circleGap)}
+              cy={boxStart.y + row * (circleSize + circleGap)}
+              r={circleSize / 2}
+              fill={`url(#member${documentId}${index})`}
               stroke="#ddd"
             />
             <defs>
               <pattern
                 xmlns="http://www.w3.org/2000/svg"
-                id={`member${document_id}${index}`}
+                id={`member${documentId}${index}`}
                 patternContentUnits="objectBoundingBox"
                 width="1"
                 height="1"
               >
                 <use
                   xmlnsXlink="http://www.w3.org/1999/xlink"
-                  xlinkHref={`#image${document_id}${index}`}
+                  xlinkHref={`#image${documentId}${index}`}
                   transform="scale(0.00217391)"
                 />
               </pattern>
               <image
                 xmlns="http://www.w3.org/2000/svg"
-                id={`image${document_id}${index}`}
+                id={`image${documentId}${index}`}
                 width="460"
                 height="460"
                 xmlnsXlink="http://www.w3.org/1999/xlink"

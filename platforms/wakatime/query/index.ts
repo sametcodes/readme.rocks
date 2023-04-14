@@ -29,9 +29,9 @@ export const getAllTimeSinceToday: QueryService = async (
  */
 export const getTimeWithRange: QueryService = async (connection, config) => {
   const { range } = config.queryConfig as any;
-  const query_string = objectToQueryString({ range });
+  const queryString = objectToQueryString({ range });
   const response = await request(
-    `/users/current/summaries?${query_string}`,
+    `/users/current/summaries?${queryString}`,
     connection
   );
   return response;

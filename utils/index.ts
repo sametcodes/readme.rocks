@@ -33,7 +33,7 @@ interface Dictionary<T> {
 }
 
 export function objectToQueryString(obj: Dictionary<unknown>, prefix?: string) {
-  const pairs: string[] = [];
+  const pairs: Array<string> = [];
 
   for (const key in obj) {
     if (!Object.prototype.hasOwnProperty.call(obj, key)) continue;
