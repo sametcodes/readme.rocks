@@ -119,6 +119,12 @@ export const GithubIcon: React.FC<IconProps> = (props) => (
   </svg>
 );
 
+export const HackerNewsIcon: React.FC<IconProps> = (props) => (
+  <svg viewBox="0 0 32 32" width="32" height="32" fill="#29333a" {...props}>
+    <path d="M0 0v32h32V0H0z m17 18.3V25h-2V18.3L9.5 8H11.8L16 15.9 20.2 8h2.3L17 18.3z" />
+  </svg>
+);
+
 export const WakatimeIcon: React.FC<IconProps> = (props) => (
   <svg
     viewBox="0 0 340 340"
