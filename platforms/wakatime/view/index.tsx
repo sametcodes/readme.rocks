@@ -1,11 +1,11 @@
 import { ViewComponent } from "@/platforms/types";
-import { WakatimeIcon } from "@/lib/@dsvgui/icons";
+import { SiWakatime } from "react-icons/si";
 import { Metrics, Line, BarStats, IBarStats } from "@/lib/@dsvgui";
 
 export const getAllTimeSinceToday: ViewComponent = (result, config) => {
   return (
     <Metrics
-      icon={WakatimeIcon}
+      icon={SiWakatime}
       data={[{ title: "All time since today", value: result.data.text }]}
     />
   );
