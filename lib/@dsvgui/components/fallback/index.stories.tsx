@@ -10,7 +10,8 @@ export default meta;
 type Story = StoryObj<typeof Fallback>;
 
 export const Warning: Story = {
-  render: () => (
-    <Fallback title="Fallback" message="This is a fallback component" />
-  ),
+  args: {
+    title: "Fallback",
+    message: "This is a fallback component",
+  },
 };
