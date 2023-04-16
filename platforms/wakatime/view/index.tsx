@@ -36,23 +36,19 @@ export const getMostUsedLanguages: ViewComponent = (result, config) => {
   const range: keyof typeof subtitles = (config.queryConfig as any).range;
   const { language_count } = config.viewConfig as any;
 
-  const totalSeconds = result.data.languages
-    .slice(0, language_count)
-    .reduce((acc: number, el: any) => acc + el.total_seconds, 0);
-
-  const value: IBarStats["value"] = result.data.languages
+  const value = result.data.languages
     .slice(0, language_count)
     .map((lang: any) => ({
       key: lang.name,
       name: lang.name,
-      percent: (lang.total_seconds / totalSeconds) * 100,
+      value: lang.total_seconds,
     }));
 
   return (
     <BarStats
       title="Most used languages by Wakatime"
       subtitle={subtitles[range]}
-      value={value}
+      items={value}
     />
   );
 };
@@ -79,21 +75,17 @@ export const getMostRecentProjects: ViewComponent = (result, config) => {
     );
   }
 
-  const totalSeconds = projects.reduce(
-    (acc: number, el: any) => acc + el.total_seconds,
-    0
-  );
-  const value: IBarStats["value"] = projects.map((project: any) => ({
+  const items: IBarStats["items"] = projects.map((project: any) => ({
     key: project.name,
     name: `${project.name} (${project.text})`,
-    percent: (project.total_seconds / totalSeconds) * 100,
+    value: project.total_seconds,
   }));
 
   return (
     <BarStats
       title="Most recent projects by Wakatime"
       subtitle={subtitles[range]}
-      value={value}
+      items={items}
       items_per_row={1}
     />
   );
