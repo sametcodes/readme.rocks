@@ -11,23 +11,18 @@ type Story = StoryObj<typeof BarStats>;
 
 export const Base: Story = {
   args: {
-    title: "BarStats",
+    title: "Latest efforts",
     subtitle: "Last 30 Days",
-    value: [
+    items: [
       {
-        key: "str",
+        key: "readme",
         name: "readme",
-        percent: 30,
+        value: 1,
       },
       {
-        key: "str",
-        name: "rocks",
-        percent: 25,
-      },
-      {
-        key: "str",
+        key: "bucketlist",
         name: "bucketlist",
-        percent: 3,
+        value: 90,
       },
     ],
     items_per_row: 2,
