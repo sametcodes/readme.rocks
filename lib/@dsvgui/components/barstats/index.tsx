@@ -5,10 +5,10 @@ import { getTextWidth } from "../../utils/index";
 export type IBarStats = {
   title: string;
   subtitle?: string;
-  value: Array<{
+  items: Array<{
     key: string;
     name: string;
-    percent: number;
+    value: number;
   }>;
   items_per_row?: number;
 };
@@ -16,14 +16,15 @@ export type IBarStats = {
 export const BarStats: React.FC<IBarStats> = ({
   title,
   subtitle,
-  value,
+  items,
   items_per_row = 2,
 }) => {
   const width = Math.max(getTextWidth(title, { fontSize: 24 }), 330);
   const totalBarWidth = width;
   const legendMy = 20;
 
-  const height = 70 + Math.ceil(value.length / items_per_row) * legendMy;
+  const height = 70 + Math.ceil(items.length / items_per_row) * legendMy;
+  const totalValue = items.reduce((acc, item) => acc + item.value, 0);
 
   let tempBarWidth = 0;
   return (
@@ -60,10 +61,10 @@ export const BarStats: React.FC<IBarStats> = ({
               </text>
             </g>
             <g id="bars" shapeRendering="crispEdges">
-              {value.map((item, index, array) => {
-                const barWidth = (item.percent / 100) * totalBarWidth;
+              {items.map((item, index, array) => {
+                const barWidth = (item.value / totalValue) * totalBarWidth;
                 const prevBarWidth = array[index - 1]
-                  ? (array[index - 1].percent / 100) * totalBarWidth
+                  ? (array[index - 1].value / totalValue) * totalBarWidth
                   : 0;
                 tempBarWidth += prevBarWidth;
                 return (
@@ -81,7 +82,7 @@ export const BarStats: React.FC<IBarStats> = ({
             </g>
             <g id="legends">
               <g id="row">
-                {value.map((item, index) => {
+                {items.map((item, index) => {
                   const circleSize = 6;
                   const x =
                     circleSize +
@@ -105,7 +106,7 @@ export const BarStats: React.FC<IBarStats> = ({
                       >
                         <tspan>{item.name} </tspan>
                         <tspan fontWeight="bolder">
-                          %{item.percent.toFixed(0)}{" "}
+                          %{((item.value / totalValue) * 100).toFixed(1)}{" "}
                         </tspan>
                       </text>
                     </g>
