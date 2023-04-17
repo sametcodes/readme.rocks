@@ -32,7 +32,7 @@ export const getContributionsSummary: QueryService = async (
  * @name getRepositoryMilestone
  * @title Get repository milestone
  * @query_type Private
- * @cache_time 60
+ * @cache_time 3600
  * @for_public getPublicRepositoryMilestone
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
@@ -76,7 +76,7 @@ export const getRepositoryMilestone: QueryService = async (
  * @name getPublicRepositoryMilestone
  * @title Get public repository milestone
  * @query_type Public
- * @cache_time 60
+ * @cache_time 3600
  * @for_secured getRepositoryMilestone
  * @description Get the view of a specific milestone with count of issue and PRs for a repository
  */
@@ -128,7 +128,7 @@ export const getPublicRepositoryMilestone: QueryService = async (
  * @name getUserActiveSponsorGoal
  * @title Get active sponsor goal
  * @query_type Public
- * @cache_time 3600
+ * @cache_time 60
  * @description Show your active sponsor goal
  */
 export const getUserActiveSponsorGoal: QueryService = async (
