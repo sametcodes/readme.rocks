@@ -16,6 +16,7 @@ const meta: Meta<typeof Calendar> = {
       max: 52,
       step: 1,
     },
+    showMonthLabels: { control: "boolean" },
   },
 };
 export default meta;

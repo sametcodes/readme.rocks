@@ -5,8 +5,9 @@ export type ICalendar = {
   title?: string;
   subtitle?: string;
   weekCount?: number;
-  boxColor: string;
+  boxColor?: string;
   dates: { [key: string]: number };
+  showMonthLabels?: boolean;
 };
 
 export const Calendar: React.FC<ICalendar> = ({
@@ -15,6 +16,7 @@ export const Calendar: React.FC<ICalendar> = ({
   weekCount = 52,
   boxColor = "#40c463",
   dates,
+  showMonthLabels = true,
 }) => {
   const dayCount = 7;
   const boxSize = 13;
@@ -26,17 +28,27 @@ export const Calendar: React.FC<ICalendar> = ({
     ${colors.map((color, i) => `.c${i} { fill: ${color}; }`).join("\n")}
   `;
 
-  const headerHeight = (title ? 22 : 0) + (title && subtitle ? 16 : 0) + 10;
+  const headerHeight =
+    (title ? 22 : 0) +
+    (title && subtitle ? 16 : 0) +
+    (title || subtitle ? 15 : 0);
   const calendarHeight = dayCount * (boxSize + boxMargin);
 
-  const width = weekCount * (boxSize + boxMargin);
-  const height = calendarHeight + headerHeight + 10;
+  const width = weekCount * (boxSize + boxMargin) - boxMargin;
+  const height = calendarHeight + headerHeight + ((showMonthLabels && 15) || 0);
 
   const today = Date.now();
 
-  const maxValue = Math.max(...Object.values(dates));
+  const totalValue = Object.values(dates).reduce((acc, value) => {
+    return acc + value;
+  }, 0);
+  const averageValue = totalValue / Object.keys(dates).length;
+
   const getLevelColor = (value: number): string => {
-    const level = Math.floor((value / maxValue) * variationsCount);
+    const level = Math.ceil((value / averageValue) * variationsCount);
+    if (level >= variationsCount) {
+      return `c${variationsCount}`;
+    }
     return `c${level}`;
   };
 
@@ -64,12 +76,13 @@ export const Calendar: React.FC<ICalendar> = ({
               <rect
                 key={`${nthDay}`}
                 id={`${dateString}`}
+                data-value={dates[dateString] || 0}
                 x={(weekIndex - 1) * (boxSize + boxMargin)}
                 y={(dayIndex - 1) * (boxSize + boxMargin)}
                 width={boxSize}
+                rx="3px"
                 height={boxSize}
-                rx="3"
-                className={color}
+                className={[color, "d"].filter(Boolean).join(" ")}
               />
             );
           })}
@@ -119,15 +132,22 @@ export const Calendar: React.FC<ICalendar> = ({
         <g id="Weeks" transform={`translate(0 ${headerHeight})`}>
           {weeks}
         </g>
-        <g id="Labels" transform={`translate(0 ${headerHeight - 30})`}>
-          {months}
-        </g>
+        {showMonthLabels && (
+          <g id="Labels" transform={`translate(0 ${headerHeight - 30})`}>
+            {months}
+          </g>
+        )}
       </g>
       <defs>
         <style>
           {`
             .clabel { font-size: 12px; fill: #AFB4BD; }
             ${colorStyles}
+            rect.d{ stroke: rgba(27, 31, 35, 0.1); }
+            @media (prefers-color-scheme: dark) {
+              rect.d{ stroke: rgba(178, 174, 170, 0.1); }
+              .clabel { fill: #878787; }
+            }
           `}
         </style>
       </defs>

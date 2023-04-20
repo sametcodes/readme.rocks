@@ -4,6 +4,7 @@ import * as stackoverflow from "./stackoverflow";
 import * as wakatime from "./wakatime";
 import * as devto from "./devto";
 import * as dailydev from "./dailydev";
+import * as leetcode from "./leetcode";
 
 export const services = {
   github: github.query,
@@ -12,6 +13,7 @@ export const services = {
   codewars: codewars.query,
   devto: devto.query,
   dailydev: dailydev.query,
+  leetcode: leetcode.query,
 };
 
 export const templates = {
@@ -21,6 +23,7 @@ export const templates = {
   codewars: codewars.view,
   devto: devto.view,
   dailydev: dailydev.view,
+  leetcode: leetcode.view,
 };
 
 export const validations = {
@@ -30,6 +33,7 @@ export const validations = {
   codewars: codewars.validations,
   devto: devto.validations,
   dailydev: dailydev.validations,
+  leetcode: leetcode.validations,
 };
 
 export const samples = {
@@ -39,4 +43,5 @@ export const samples = {
   codewars: codewars.sample,
   devto: devto.sample,
   dailydev: dailydev.sample,
+  leetcode: leetcode.sample,
 };
