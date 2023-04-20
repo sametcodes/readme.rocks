@@ -7,6 +7,7 @@ export type ICalendar = {
   weekCount?: number;
   boxColor?: string;
   dates: { [key: string]: number };
+  showMonthLabels?: boolean;
 };
 
 export const Calendar: React.FC<ICalendar> = ({
@@ -15,6 +16,7 @@ export const Calendar: React.FC<ICalendar> = ({
   weekCount = 52,
   boxColor = "#40c463",
   dates,
+  showMonthLabels = true,
 }) => {
   const dayCount = 7;
   const boxSize = 13;
@@ -26,11 +28,14 @@ export const Calendar: React.FC<ICalendar> = ({
     ${colors.map((color, i) => `.c${i} { fill: ${color}; }`).join("\n")}
   `;
 
-  const headerHeight = (title ? 22 : 0) + (title && subtitle ? 16 : 0) + 10;
+  const headerHeight =
+    (title ? 22 : 0) +
+    (title && subtitle ? 16 : 0) +
+    (title || subtitle ? 15 : 0);
   const calendarHeight = dayCount * (boxSize + boxMargin);
 
-  const width = weekCount * (boxSize + boxMargin);
-  const height = calendarHeight + headerHeight + 10;
+  const width = weekCount * (boxSize + boxMargin) - boxMargin;
+  const height = calendarHeight + headerHeight + ((showMonthLabels && 15) || 0);
 
   const today = Date.now();
 
@@ -127,9 +132,11 @@ export const Calendar: React.FC<ICalendar> = ({
         <g id="Weeks" transform={`translate(0 ${headerHeight})`}>
           {weeks}
         </g>
-        <g id="Labels" transform={`translate(0 ${headerHeight - 30})`}>
-          {months}
-        </g>
+        {showMonthLabels && (
+          <g id="Labels" transform={`translate(0 ${headerHeight - 30})`}>
+            {months}
+          </g>
+        )}
       </g>
       <defs>
         <style>
