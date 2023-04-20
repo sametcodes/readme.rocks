@@ -16,6 +16,7 @@ const meta: Meta<typeof Calendar> = {
       max: 52,
       step: 1,
     },
+    showMonthLabels: { control: "boolean" },
   },
 };
 export default meta;
@@ -47,5 +48,15 @@ export const WithText: Story = {
     subtitle: "This is a Calendar component",
     dates,
     weekCount: 52,
+  },
+};
+
+export const WithStreak: Story = {
+  args: {
+    title: "Calendar",
+    subtitle: "This is a Calendar component",
+    dates,
+    weekCount: 26,
+    showStreak: true,
   },
 };
