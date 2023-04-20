@@ -1,3 +1,5 @@
+import getImageSize from "image-size";
+
 type IGetTextWidth = (
   inputText: string | number | null,
   options: {
@@ -128,4 +130,21 @@ export function generateColorVariations(inputColor: string) {
   variations[0] = darkColor;
 
   return variations;
+}
+
+export async function readImageURL(url: string) {
+  const response = await fetch(url, {
+    referrerPolicy: "no-referrer",
+    redirect: "follow",
+  });
+  const arrayBuffer = await response.arrayBuffer();
+
+  const buffer = Buffer.from(arrayBuffer);
+  const imageData = getImageSize(buffer);
+
+  return {
+    value: buffer.toString("base64"),
+    width: imageData.width,
+    height: imageData.height,
+  };
 }
