@@ -16,7 +16,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
   const documentId = Math.random().toString(36).substr(2, 9);
 
   const padding = rest.padding ?? 40;
-  const margin = rest.margin ?? 10;
+  const margin = rest.margin ?? 4;
   const brand = "readme.rocks";
 
   return (
