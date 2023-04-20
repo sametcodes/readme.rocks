@@ -1,11 +1,12 @@
 import { Document } from "@/lib/@dsvgui";
+import { IconType } from "react-icons/lib";
 
 export type IProgress = {
   title: string;
   percent: number;
   metrics: Array<{
     text: string;
-    icon: JSX.Element;
+    icon: IconType;
   }>;
 };
 
@@ -42,7 +43,7 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
             94 + Math.floor(index / 2) * metricsOffsetY
           })`}
         >
-          {metric.icon}
+          <metric.icon className="icon" x={0} y={-13} size="18px" />
           <text fill="#636363">
             <tspan x="30" y="0" className="subtitle" fontWeight="300">
               {metric.text}
