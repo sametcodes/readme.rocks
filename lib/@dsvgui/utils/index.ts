@@ -107,7 +107,7 @@ export function generateColorVariations(inputColor: string, step: number = 5) {
   for (let i = 0; i <= step; i++) {
     const rgb = hexToRgb(inputColor);
     const alpha = i * (1 / step);
-    variations.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha || 0.1})`);
+    variations.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha || 0.05})`);
   }
 
   return variations;
