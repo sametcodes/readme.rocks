@@ -93,7 +93,10 @@ export function stringToColorCode(str: string) {
   return "#" + "0".repeat(6 - color.length) + color;
 }
 
-export function generateColorVariations(inputColor: string) {
+export function generateColorVariations(
+  inputColor: string,
+  endColorValue: string
+) {
   function hexToRgb(hex: string) {
     const bigint = parseInt(hex.slice(1), 16);
     const r = (bigint >> 16) & 255;
@@ -112,7 +115,7 @@ export function generateColorVariations(inputColor: string) {
   }
 
   const middleColor = hexToRgb(inputColor);
-  const endColor = hexToRgb("#EBEDF0");
+  const endColor = hexToRgb(endColorValue);
   const variations = [];
 
   for (let i = 0; i < 5; i++) {

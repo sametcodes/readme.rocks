@@ -20,7 +20,11 @@ export const Calendar: React.FC<ICalendar> = ({
   const boxSize = 13;
   const boxMargin = 5;
 
-  const colors = generateColorVariations(boxColor);
+  const endColors = { light: "#ebedf0", dark: "#394C56" };
+  const colors = {
+    light: generateColorVariations(boxColor, endColors.light).reverse(),
+    dark: generateColorVariations(boxColor, endColors.dark).reverse(),
+  };
 
   const headerHeight = (title ? 22 : 0) + (title && subtitle ? 16 : 0) + 10;
   const calendarHeight = dayCount * (boxSize + boxMargin);
@@ -32,12 +36,11 @@ export const Calendar: React.FC<ICalendar> = ({
 
   const maxValue = Math.max(...Object.values(dates));
   const getLevelColor = (value: number): string => {
-    if (value >= maxValue * 0.8) return colors[4];
-    if (value >= maxValue * 0.6) return colors[3];
-    if (value >= maxValue * 0.4) return colors[2];
-    if (value >= maxValue * 0.2) return colors[1];
-    if (value > 0) return colors[1];
-    return colors[0];
+    if (value >= maxValue * 0.8) return "c4";
+    if (value >= maxValue * 0.6) return "c3";
+    if (value >= maxValue * 0.4) return "c2";
+    if (value > 0) return "c1";
+    return "c0";
   };
 
   const fillDates = (): React.ReactNode => {
@@ -54,7 +57,8 @@ export const Calendar: React.FC<ICalendar> = ({
 
             const date = new Date(today - nthDay * 24 * 60 * 60 * 1000);
             const dateString = date.toISOString().split("T")[0];
-            let color = colors[0];
+
+            let color = "c0";
             if (dateString in dates && dates[dateString] > 0) {
               color = getLevelColor(dates[dateString]);
             }
@@ -68,7 +72,7 @@ export const Calendar: React.FC<ICalendar> = ({
                 width={boxSize}
                 height={boxSize}
                 rx="3"
-                fill={color}
+                className={color}
               />
             );
           })}
@@ -125,8 +129,20 @@ export const Calendar: React.FC<ICalendar> = ({
       <defs>
         <style>
           {`
-                .clabel { font-size: 12px; fill: #AFB4BD; }
-                `}
+            .clabel { font-size: 12px; fill: #AFB4BD; }
+            .c0 { fill: ${endColors.light}; }
+            .c1 { fill: ${colors.light[1]}; }
+            .c2 { fill: ${colors.light[2]}; }
+            .c3 { fill: ${colors.light[3]}; }
+            .c4 { fill: ${colors.light[4]}; }
+            @media (prefers-color-scheme: dark) {
+              .c0 { fill: ${endColors.dark} }
+              .c1 { fill: ${colors.dark[1]}; }
+              .c2 { fill: ${colors.dark[2]}; }
+              .c3 { fill: ${colors.dark[3]}; }
+              .c4 { fill: ${colors.dark[4]}; }
+            }
+          `}
         </style>
       </defs>
     </Document>
