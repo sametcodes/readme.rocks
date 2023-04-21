@@ -20,7 +20,7 @@ _All your statistics at once._
 
 ## Calendar and streaks
 
-![](https://readme.rocks/api/view?queryConfig%5Busername%5D=_aka5h&viewConfig%5Btitle%5D=Recent%20submissions&viewConfig%5Bsubtitle%5D=Last%209%20months&viewConfig%5BweekCount%5D=20&viewConfig%5BboxColor%5D=%2340c463&viewConfig%5BshowMonthLabels%5D=true&viewConfig%5BshowStreak%5D=true&id=64415382192eb283354af5a1)
+![](https://readme.rocks/api/view?queryConfig%5Busername%5D=_aka5h&viewConfig%5Btitle%5D=LeetCode%20submissions&viewConfig%5Bsubtitle%5D=Last%205%20months&viewConfig%5BweekCount%5D=20&viewConfig%5BboxColor%5D=%2340c463&viewConfig%5BshowMonthLabels%5D=true&viewConfig%5BshowStreak%5D=true&id=64415382192eb283354af5a1)
 ![](https://readme.rocks/api/view?queryConfig%5Busername%5D=arthurcolle&viewConfig%5Btitle%5D=HackerNews%20Activity&viewConfig%5Bsubtitle%5D=Comments,%20jobs%20and%20polls&viewConfig%5BweekCount%5D=20&viewConfig%5BboxColor%5D=%23ff7a00&viewConfig%5BshowMonthLabels%5D=true&viewConfig%5BshowStreak%5D=false&id=6442166417556cdd9b746ff5)
 
 ## Your latest `daily.dev` and `dev.to` articles
