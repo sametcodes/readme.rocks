@@ -35,9 +35,10 @@ export const getUserSubmissions = {
       username: "_aka5h",
     },
     viewConfig: {
-      title: "Contributions",
+      title: "Latest submissions",
       subtitle: "Last 6 months",
       weekCount: 26,
+      boxColor: "#40c463",
     },
   },
 };

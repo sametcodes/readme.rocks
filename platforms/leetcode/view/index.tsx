@@ -34,6 +34,9 @@ export const getUserSubmissions: ViewComponent = (result, config) => {
       subtitle={viewConfig?.subtitle}
       weekCount={viewConfig?.weekCount}
       dates={dates}
+      boxColor={viewConfig?.boxColor}
+      showMonthLabels={viewConfig?.showMonthLabels === "true"}
+      showStreak={viewConfig?.showStreak === "true"}
     />
   );
 };

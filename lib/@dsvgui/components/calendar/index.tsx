@@ -1,5 +1,6 @@
 import { Document } from "@/lib/@dsvgui";
 import { generateColorVariations } from "@/lib/@dsvgui/utils";
+import { getTextWidth } from "../../utils/index";
 
 export type ICalendar = {
   title?: string;
@@ -8,6 +9,7 @@ export type ICalendar = {
   boxColor?: string;
   dates: { [key: string]: number };
   showMonthLabels?: boolean;
+  showStreak?: boolean;
 };
 
 export const Calendar: React.FC<ICalendar> = ({
@@ -17,6 +19,7 @@ export const Calendar: React.FC<ICalendar> = ({
   boxColor = "#40c463",
   dates,
   showMonthLabels = true,
+  showStreak = false,
 }) => {
   const dayCount = 7;
   const boxSize = 13;
@@ -29,19 +32,18 @@ export const Calendar: React.FC<ICalendar> = ({
   `;
 
   const headerHeight =
-    (title ? 22 : 0) +
-    (title && subtitle ? 16 : 0) +
-    (title || subtitle ? 15 : 0);
+    (title || showStreak ? 22 : 0) +
+    ((title && subtitle) || showStreak ? 16 : 0) +
+    (title || subtitle || showStreak ? 15 : 0);
   const calendarHeight = dayCount * (boxSize + boxMargin);
 
   const width = weekCount * (boxSize + boxMargin) - boxMargin;
   const height = calendarHeight + headerHeight + ((showMonthLabels && 15) || 0);
 
-  const today = Date.now();
-
-  const totalValue = Object.values(dates).reduce((acc, value) => {
-    return acc + value;
-  }, 0);
+  const totalValue = Object.values(dates).reduce(
+    (acc, value) => acc + value,
+    0
+  );
   const averageValue = totalValue / Object.keys(dates).length;
 
   const getLevelColor = (value: number): string => {
@@ -51,6 +53,40 @@ export const Calendar: React.FC<ICalendar> = ({
     }
     return `c${level}`;
   };
+
+  function calculateStreak() {
+    let tempStreak = 0;
+
+    const sortedDates = Object.entries(dates).sort((a, b) => {
+      return new Date(b[0]).getTime() - new Date(a[0]).getTime();
+    });
+
+    const days = sortedDates.map((sortedDate) => sortedDate[0]);
+    const values = sortedDates.map((sortedDate) => sortedDate[1]);
+
+    for (let i = 1; i < days.length; i++) {
+      const compareDate = [new Date(days[i - 1]), new Date(days[i])];
+
+      const todayDate = new Date().toISOString().split("T")[0];
+      if (todayDate === days[i - 1]) {
+        continue;
+      }
+
+      const dayDifference =
+        (compareDate[0].getTime() - compareDate[1].getTime()) /
+        (1000 * 60 * 60 * 24);
+      if (values[i - 1] > 0 && dayDifference === 1) {
+        tempStreak++;
+      } else {
+        break;
+      }
+    }
+
+    return tempStreak;
+  }
+
+  const today = Date.now();
+  const streak = calculateStreak();
 
   const fillDates = (): React.ReactNode => {
     const weeksArray = Array.from({ length: weekCount }, (_, i) => i + 1);
@@ -111,7 +147,7 @@ export const Calendar: React.FC<ICalendar> = ({
   return (
     <Document w={width} h={height}>
       <g id="Content">
-        {(title || subtitle) && (
+        {(title || subtitle || showStreak) && (
           <g id="Title">
             {title && (
               <text xmlSpace="preserve" className="title">
@@ -126,6 +162,26 @@ export const Calendar: React.FC<ICalendar> = ({
                   {subtitle}
                 </tspan>
               </text>
+            )}
+            {showStreak && (
+              <>
+                <text xmlSpace="preserve" className="title">
+                  <tspan
+                    x={width - getTextWidth(streak, { fontSize: 22 })}
+                    y="18"
+                  >
+                    {streak}
+                  </tspan>
+                </text>
+                <text xmlSpace="preserve" className="subtitle">
+                  <tspan
+                    x={width - getTextWidth("Streak", { fontSize: 16 })}
+                    y="38"
+                  >
+                    Streak
+                  </tspan>
+                </text>
+              </>
             )}
           </g>
         )}
