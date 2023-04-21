@@ -3,6 +3,9 @@ import { isObjectID } from "@/utils/index";
 import prisma from "@/services/prisma";
 import { sendFallbackResponse } from "@/services/api/response";
 
+import { ValidationError } from "yup";
+import { shapeDataAPISchema } from "@/services/data/validations";
+
 export const validatePrivateRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -40,5 +43,32 @@ export const validatePrivateRequest = async (
   res.locals.config = config;
   res.locals.platform = config.platform;
   res.locals.query = config.platformQuery;
+  return next();
+};
+
+export const validatePrivateBody = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: () => void
+) => {
+  const { query, platform, config } = res.locals;
+  console.log(config);
+
+  const schema = shapeDataAPISchema(platform.code, query.name);
+
+  try {
+    await schema.validate({
+      queryConfig: config.queryConfig,
+      viewConfig: config.viewConfig,
+    });
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      sendFallbackResponse(res, {
+        title: "Validation error",
+        message: error.message,
+      });
+    }
+  }
+
   return next();
 };

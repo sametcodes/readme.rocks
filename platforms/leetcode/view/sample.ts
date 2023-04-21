@@ -36,9 +36,11 @@ export const getUserSubmissions = {
     },
     viewConfig: {
       title: "Latest submissions",
-      subtitle: "Last 6 months",
-      weekCount: 26,
+      subtitle: "Last 9 months",
+      weekCount: 36,
       boxColor: "#40c463",
+      showStreak: "true",
+      showMonthLabels: "true",
     },
   },
 };
