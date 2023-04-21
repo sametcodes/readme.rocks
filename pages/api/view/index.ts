@@ -2,12 +2,16 @@ import { NextApiRequest, NextApiResponse } from "next";
 import nextConnect from "next-connect";
 
 import { resolveHandler } from "@/middlewares/api";
-import { validatePublicRequest } from "@/middlewares/api/public";
+import {
+  validatePublicRequest,
+  validatePublicBody,
+} from "@/middlewares/api/public";
 import { setCacheControl } from "@/middlewares/api/cache";
 import handlePlatformAPI from "@/services/api/handler";
 
 export default nextConnect()
   .use(validatePublicRequest)
+  .use(validatePublicBody)
   .use(resolveHandler)
   .use(setCacheControl)
   .get((req: NextApiRequest, res: NextApiResponse) => {
