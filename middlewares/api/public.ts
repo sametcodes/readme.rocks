@@ -4,6 +4,9 @@ import { parseQueryString } from "@/utils";
 import prisma from "@/services/prisma";
 import { sendFallbackResponse } from "@/services/api/response";
 
+import { ValidationError } from "yup";
+import { shapeDataAPISchema } from "@/services/data/validations";
+
 export const validatePublicRequest = async (
   req: NextApiRequest,
   res: NextApiResponse,
@@ -33,7 +36,6 @@ export const validatePublicRequest = async (
       message: "The configuration does not exist, please check the URL.",
     });
 
-  // get GET query as string
   const querystring = Object.keys(req.query)
     .filter((key) => key !== "id")
     .map((key) => `${key}=${req.query[key]}`)
@@ -46,5 +48,36 @@ export const validatePublicRequest = async (
   res.locals.config = config;
   res.locals.query = query;
   res.locals.platform = query.platform;
+  return next();
+};
+
+export const validatePublicBody = async (
+  req: NextApiRequest,
+  res: NextApiResponse,
+  next: () => void
+) => {
+  const { query, platform } = res.locals;
+
+  const querystring = Object.keys(req.query)
+    .filter((key) => key !== "id")
+    .map((key) => `${key}=${req.query[key]}`)
+    .join("&");
+  const config = parseQueryString(querystring);
+
+  const schema = shapeDataAPISchema(platform.code, query.name);
+  try {
+    await schema.validate({
+      queryConfig: config?.queryConfig || {},
+      viewConfig: config?.viewConfig || {},
+    });
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return sendFallbackResponse(res, {
+        title: "Validation error",
+        message: error.message,
+      });
+    }
+  }
+
   return next();
 };

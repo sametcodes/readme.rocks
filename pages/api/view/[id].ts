@@ -3,7 +3,10 @@ import passport from "passport";
 
 import handlePlatformAPI from "@/services/api/handler";
 
-import { validatePrivateRequest } from "@/middlewares/api/private";
+import {
+  validatePrivateBody,
+  validatePrivateRequest,
+} from "@/middlewares/api/private";
 import { validateAccessToken, loadPassport } from "@/middlewares/api/auth";
 import { resolveHandler } from "@/middlewares/api";
 import { setCacheControl } from "@/middlewares/api/cache";
@@ -11,6 +14,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default nextConnect()
   .use(validatePrivateRequest)
+  .use(validatePrivateBody)
   .use(passport.initialize())
   .use(resolveHandler)
   .use(loadPassport)

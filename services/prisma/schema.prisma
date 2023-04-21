@@ -18,6 +18,7 @@ enum PlatformCode {
     stackoverflow
     wakatime
     hackernews
+    leetcode
 }
 
 model User {

@@ -1,9 +1,10 @@
-import { Document, IconProps } from "@/lib/@dsvgui";
+import { Document } from "@/lib/@dsvgui";
 import { Fragment } from "react";
 import { getTextWidth } from "@/lib/@dsvgui/utils";
+import { IconType } from "react-icons/lib";
 
 type IMetrics = {
-  icon: React.FC<IconProps>;
+  icon: IconType;
   data: Array<{
     title: string;
     value: number | string;
@@ -16,7 +17,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
   const width = data.reduce((acc, item) => {
     const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
-    const wTitle = getTextWidth(item.title.toString(), { fontSize: 11 });
+    const wTitle = getTextWidth(item.title.toString(), { fontSize: 15 });
     const wText = Math.max(wValue, wTitle);
 
     return acc + wText + padding;
@@ -24,7 +25,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
   return (
     <Document w={width} h={35}>
-      <Icon x={0} y={2} />
+      <Icon x={0} y={0} size="33px" className="icon" />
 
       <g transform="translate(45, 0)">
         {data.map((item, index) => {

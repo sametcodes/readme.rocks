@@ -34,6 +34,9 @@ export const getTimeWithRange: QueryService = async (connection, config) => {
     `/users/current/summaries?${queryString}`,
     connection
   );
+  if (response.error) {
+    throw new Error(response.error);
+  }
   return response;
 };
 

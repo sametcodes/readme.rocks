@@ -18,8 +18,7 @@
     "migrate:queries": "ts-node -r tsconfig-paths/register migrations/jsdocquery.ts",
     "migrate:down": "npm run migrate:queries && env-cmd -f .vercel/.env.development.local bash migrations/down.sh",
     "migrate:up": "env-cmd -f .vercel/.env.production.local bash migrations/up.sh",
-    "test:platform-api": "jest --config jest.config.js",
-    "lint:ts": "tslint --fix -c tslint.json --project ./"
+    "test:platform-api": "jest --config jest.config.js"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",
@@ -44,6 +43,7 @@
     "qs": "^6.11.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.8.0",
     "tailwind-merge": "^1.10.0",
     "yup": "^1.0.2"
   },

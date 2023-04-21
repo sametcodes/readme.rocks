@@ -5,6 +5,7 @@ import * as wakatime from "./wakatime";
 import * as devto from "./devto";
 import * as dailydev from "./dailydev";
 import * as hackernews from "./hackernews";
+import * as leetcode from "./leetcode";
 
 export const services = {
   github: github.query,
@@ -14,6 +15,7 @@ export const services = {
   devto: devto.query,
   dailydev: dailydev.query,
   hackernews: hackernews.query,
+  leetcode: leetcode.query,
 };
 
 export const templates = {
@@ -24,6 +26,7 @@ export const templates = {
   devto: devto.view,
   dailydev: dailydev.view,
   hackernews: hackernews.view,
+  leetcode: leetcode.view,
 };
 
 export const validations = {
@@ -34,6 +37,7 @@ export const validations = {
   devto: devto.validations,
   dailydev: dailydev.validations,
   hackernews: hackernews.validations,
+  leetcode: leetcode.validations,
 };
 
 export const samples = {
@@ -44,4 +48,5 @@ export const samples = {
   devto: devto.sample,
   dailydev: dailydev.sample,
   hackernews: hackernews.sample,
+  leetcode: leetcode.sample,
 };

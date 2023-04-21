@@ -1,13 +1,13 @@
 import { ViewComponent } from "@/platforms/types";
 import { Metrics } from "@/lib/@dsvgui";
-import { StackOverflowIcon } from "@/lib/@dsvgui/icons";
+import { BsStackOverflow } from "react-icons/bs";
 
 export const getReputation: ViewComponent = (result, platform) => {
   const [{ reputation }] = result.items;
 
   return (
     <Metrics
-      icon={StackOverflowIcon}
+      icon={BsStackOverflow}
       data={[{ title: "Reputation", value: reputation }]}
     />
   );

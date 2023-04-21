@@ -46,7 +46,7 @@ export const Style: React.FC = () => {
               stop[offset='0']{ stop-color: #32373e; }
               stop[offset='1']{ stop-color: #32373e; }
               text { fill: #eeeeee }
-              .icon{ fill: #eeeeee }
+              .icon{ fill: #dddddd; stroke: #dddddd; }
               text.title{ fill: #fff; }
               text.subtitle{ fill: #9c9c9c; }
               .border{ stroke: #555; }
