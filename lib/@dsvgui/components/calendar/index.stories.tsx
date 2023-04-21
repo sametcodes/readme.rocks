@@ -50,3 +50,13 @@ export const WithText: Story = {
     weekCount: 52,
   },
 };
+
+export const WithStreak: Story = {
+  args: {
+    title: "Calendar",
+    subtitle: "This is a Calendar component",
+    dates,
+    weekCount: 26,
+    showStreak: true,
+  },
+};
