@@ -197,6 +197,11 @@ export default function PrivateConfigForm({
       .then((result) => {
         if (result.success) {
           setConfig(result.data);
+          toast({
+            title: "Query updated",
+            description:
+              "The query has been updated successfully. The changes will be reflected everywhere.",
+          });
         } else {
           alert("ERROR");
         }
