@@ -17,7 +17,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
   const width = data.reduce((acc, item) => {
     const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
-    const wTitle = getTextWidth(item.title.toString(), { fontSize: 11 });
+    const wTitle = getTextWidth(item.title.toString(), { fontSize: 15 });
     const wText = Math.max(wValue, wTitle);
 
     return acc + wText + padding;
