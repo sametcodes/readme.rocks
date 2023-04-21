@@ -7,6 +7,7 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/641b5e30a6550999ac4331d2)
 ![](https://readme.rocks/api/view/642dfbff39f5d6e5e5f45c3b)
 ![](https://readme.rocks/api/view?queryConfig%5Busername%5D=sametcodes&id=641b2efa3e90e7e555cdacd7)
+![](https://readme.rocks/api/view?queryConfig%5Busername%5D=_aka5h&id=64414ea69c1f3df3b3e01264)
 
 ## Recent projects and used languages
 
@@ -14,7 +15,10 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/6431b559ddde9c1558a16fe6)
 
 ## Line stats
-![](https://readme.rocks/api/view/642220d0c3f0ffcbcafd573f)
+![](https://readme.rocks/api/view/6440669e4c5d605274994a4b)
+
+## Calendar and streaks
+![](https://readme.rocks/api/view?queryConfig%5Busername%5D=_aka5h&viewConfig%5Btitle%5D=My%20recent%20submissions&viewConfig%5Bsubtitle%5D=Last%209%20months&viewConfig%5BweekCount%5D=36&viewConfig%5BboxColor%5D=%2340c463&viewConfig%5BshowMonthLabels%5D=true&viewConfig%5BshowStreak%5D=true&id=64415382192eb283354af5a1)
 
 ## Your latest `daily.dev` and `dev.to` articles
 
