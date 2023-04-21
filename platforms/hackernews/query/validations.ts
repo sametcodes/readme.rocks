@@ -9,3 +9,11 @@ export const getUser = object({
 })
   .required()
   .noUnknown(true);
+
+export const getUserSubmissions = object({
+  username: string().required().meta({
+    label: "Username",
+    placeholder: "Username",
+    description: "Please do not include the @ symbol.",
+  }),
+}).noUnknown(true);

@@ -52,7 +52,6 @@ export const validatePrivateBody = async (
   next: () => void
 ) => {
   const { query, platform, config } = res.locals;
-  console.log(config);
 
   const schema = shapeDataAPISchema(platform.code, query.name);
 

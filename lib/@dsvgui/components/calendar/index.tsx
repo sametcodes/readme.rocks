@@ -24,11 +24,25 @@ export const Calendar: React.FC<ICalendar> = ({
   const dayCount = 7;
   const boxSize = 13;
   const boxMargin = 5;
+  const documentColorId = "_" + Math.random().toString(36).substr(2, 5);
+
+  const today = Date.now();
+  dates = Object.entries(dates).reduce(
+    (acc: { [key: string]: number }, [key, value]) => {
+      if (today - new Date(key).getTime() > weekCount * 7 * 24 * 60 * 60 * 1000)
+        return acc;
+      acc[key] = value;
+      return acc;
+    },
+    {}
+  );
 
   const variationsCount = 5;
   const colors = generateColorVariations(boxColor, variationsCount);
   const colorStyles = `
-    ${colors.map((color, i) => `.c${i} { fill: ${color}; }`).join("\n")}
+    ${colors
+      .map((color, i) => `.${documentColorId}_c${i} { fill: ${color}; }`)
+      .join("\n")}
   `;
 
   const headerHeight =
@@ -49,9 +63,9 @@ export const Calendar: React.FC<ICalendar> = ({
   const getLevelColor = (value: number): string => {
     const level = Math.ceil((value / averageValue) * variationsCount);
     if (level >= variationsCount) {
-      return `c${variationsCount}`;
+      return `${documentColorId}_c${variationsCount}`;
     }
-    return `c${level}`;
+    return `${documentColorId}_c${level}`;
   };
 
   function calculateStreak() {
@@ -85,7 +99,6 @@ export const Calendar: React.FC<ICalendar> = ({
     return tempStreak;
   }
 
-  const today = Date.now();
   const streak = calculateStreak();
 
   const fillDates = (): React.ReactNode => {
@@ -103,7 +116,7 @@ export const Calendar: React.FC<ICalendar> = ({
             const date = new Date(today - nthDay * 24 * 60 * 60 * 1000);
             const dateString = date.toISOString().split("T")[0];
 
-            let color = "c0";
+            let color = `${documentColorId}_c0`;
             if (dateString in dates && dates[dateString] > 0) {
               color = getLevelColor(dates[dateString]);
             }
