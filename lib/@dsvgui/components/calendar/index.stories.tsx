@@ -23,7 +23,7 @@ export default meta;
 
 type Story = StoryObj<typeof Calendar>;
 
-const produceFakeDates = () => {
+export const produceFakeDates = () => {
   const today = Date.now();
   const fakeDates: { [key: string]: number } = {};
   for (let i = 0; i < 365; i++) {
