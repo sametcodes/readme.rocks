@@ -21,6 +21,7 @@ module.exports = {
       "always",
       [
         "build",
+        "deps",
         "config",
         "docs",
         "feat",
