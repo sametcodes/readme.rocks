@@ -53,6 +53,19 @@ export const buildFormWithYupSchema = (
               ))}
             </select>
           );
+        } else if (
+          /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(field.spec.default)
+        ) {
+          inputElement = (
+            <input
+              type="color"
+              {...fieldProps}
+              className={cn(
+                fieldProps.className,
+                "w-[40px] h-[40px] px-[0px] py-[0px]"
+              )}
+            />
+          );
         } else {
           inputElement = <input type="text" {...fieldProps} />;
         }
@@ -100,7 +113,7 @@ export const buildFormWithYupSchema = (
     return (
       <div
         key={fieldName}
-        className="mb-2 flex-wrap flex basis-[min-content] min-w-full items-center"
+        className="mb-2 flex-wrap basis-[min-content] min-w-full items-center"
       >
         <label
           htmlFor={fieldName}
