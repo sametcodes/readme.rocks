@@ -2,20 +2,20 @@ import { Document } from "@/lib/@dsvgui";
 import { getTextWidth, hexToRgb } from "@/lib/@dsvgui/utils/index";
 
 type ILine = {
-  leftTitle: string;
-  leftSubtitle: string;
-  rightTitle: string;
-  rightSubtitle: string;
+  leftTitle?: string;
+  leftSubtitle?: string;
+  rightTitle?: string;
+  rightSubtitle?: string;
   points: Array<number>;
   period?: "month" | "weekday" | "day" | null;
-  lineColor: string;
+  lineColor?: string;
 };
 
 export const Line: React.FC<ILine> = ({
-  leftTitle,
-  leftSubtitle,
-  rightTitle,
-  rightSubtitle,
+  leftTitle = "",
+  leftSubtitle = "",
+  rightTitle = "",
+  rightSubtitle = "",
   points,
   period,
   lineColor = "#000000",

@@ -16,10 +16,10 @@ export const getTimeWithRange: ViewComponent = (result, config) => {
   const points = result.data.map((day: any) => day.grand_total.total_seconds);
   return (
     <Line
-      title="Wakatime"
-      subtitle={subtitle}
+      leftTitle="Wakatime"
+      leftSubtitle={subtitle}
       points={points}
-      total={result.cumulative_total.text}
+      rightTitle={result.cumulative_total.text}
     />
   );
 };
