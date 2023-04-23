@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["storybook-static"],
   "extends": [
     "next/core-web-vitals"
   ],
