@@ -14,14 +14,16 @@ export const getAllTimeSinceToday: ViewComponent = (result, config) => {
 export const getTimeWithRange: ViewComponent = (result, config) => {
   const subtitle = (config.queryConfig as any).range;
   const points = result.data.map((day: any) => day.grand_total.total_seconds);
-  return (
-    <Line
-      leftTitle="Wakatime"
-      leftSubtitle={subtitle}
-      points={points}
-      rightTitle={result.cumulative_total.text}
-    />
-  );
+
+  const lines = [
+    {
+      leftTitle: "Line",
+      leftSubtitle: subtitle,
+      points,
+      rightTitle: result.cumulative_total.text,
+    },
+  ];
+  return <Line items={lines} />;
 };
 
 export const getMostUsedLanguages: ViewComponent = (result, config) => {
