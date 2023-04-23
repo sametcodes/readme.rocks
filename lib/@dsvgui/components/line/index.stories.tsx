@@ -5,13 +5,11 @@ const meta: Meta<typeof Line> = {
   title: "Line",
   component: Line,
   argTypes: {
-    leftTitle: { control: "text" },
-    leftSubtitle: { control: "text" },
-    rightTitle: { control: "text" },
-    rightSubtitle: { control: "text" },
-    period: { control: "radio", options: ["month", "weekday", "day", null] },
-    points: { control: "array" },
-    lineColor: { control: "color" },
+    items: {
+      control: {
+        type: "object",
+      },
+    },
   },
 };
 export default meta;
@@ -28,12 +26,88 @@ const randomPoints = (length: number) => {
 
 export const Base: Story = {
   args: {
-    leftTitle: "Line",
-    leftSubtitle: "Last 30 Days",
-    rightTitle: "124 hrs 48 mins",
-    rightSubtitle: "since last week",
-    period: "month",
-    points: randomPoints(3),
-    lineColor: "#000000",
+    items: [
+      {
+        leftTitle: "Line",
+        leftSubtitle: "Last 30 Days",
+        points: randomPoints(10),
+      },
+    ],
+  },
+};
+
+export const ColoredLines: Story = {
+  args: {
+    items: [
+      {
+        leftTitle: "Line",
+        leftSubtitle: "Last 30 Days",
+        points: randomPoints(10),
+        lineColor: "#f0000f",
+      },
+    ],
+  },
+};
+
+export const SecondaryTitle: Story = {
+  args: {
+    items: [
+      {
+        leftTitle: "Line",
+        leftSubtitle: "Last 30 Days",
+        rightTitle: "124 hrs 48 mins",
+        rightSubtitle: "since last week",
+        points: randomPoints(10),
+        lineColor: "#000000",
+      },
+    ],
+  },
+};
+
+export const PeriodLabels: Story = {
+  args: {
+    items: [
+      {
+        leftTitle: "Line",
+        leftSubtitle: "Last 30 Days",
+        points: randomPoints(10),
+        lineColor: "#000000",
+        period: "month",
+      },
+    ],
+  },
+};
+
+export const MultipleLines: Story = {
+  args: {
+    items: [
+      {
+        leftTitle: "Line",
+        leftSubtitle: "Last 30 Days",
+        rightTitle: "124 hrs",
+        rightSubtitle: "since last week",
+        points: randomPoints(10),
+        lineColor: "#0000ff",
+        period: "day",
+      },
+      {
+        leftTitle: "Line 2",
+        leftSubtitle: "Last 90 Days",
+        rightTitle: "+$1.2k",
+        rightSubtitle: "since last week",
+        points: randomPoints(5),
+        lineColor: "#55f155",
+        period: "weekday",
+      },
+      {
+        leftTitle: "Line 3",
+        leftSubtitle: "Last 30 Days",
+        rightTitle: "-$123",
+        rightSubtitle: "since last week",
+        points: randomPoints(15),
+        lineColor: "#ff3333",
+        period: "month",
+      },
+    ],
   },
 };
