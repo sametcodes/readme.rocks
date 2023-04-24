@@ -1,31 +1,34 @@
 import getImageSize from "image-size";
+import opentype from "opentype.js";
+import { loadFontBuffer } from "./fonts";
 
 type IGetTextWidth = (
   inputText: string | number | null,
   options: {
     fontSize: number;
-    ratio?: number;
+    fontFamily?: string;
+    fontWeight?: number;
   }
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const { fontSize = 16, ratio = 0.5 } = options;
+  const { fontSize, fontWeight = 500, fontFamily = "Manrope" } = options;
 
-  let width = 0;
   let text = inputText ?? "";
   text = text.toString();
 
-  // Estimate the width using a monospace font (each character has the same width)
-  width = text.length * fontSize * ratio;
-  return width;
+  const fontBuffer = loadFontBuffer(fontFamily, fontWeight);
+  const font = opentype.parse(fontBuffer);
+  return font.getAdvanceWidth(text, fontSize);
 };
 
 type IWrapText = (
   inputText: string,
   options: {
     maxLineWidth: number;
-    fontSize: number;
     maxLines?: number;
+    fontSize: number;
+    fontWeight?: number;
   },
   cb: (value: string, index: number, array: Array<string>) => JSX.Element
 ) => Array<JSX.Element>;
@@ -40,7 +43,10 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
   for (let i = 1; i < words.length; i++) {
     const word = words[i];
     const testLine = currentLine + " " + word;
-    const testWidth = getTextWidth(testLine, { fontSize: options.fontSize });
+    const testWidth = getTextWidth(testLine, {
+      fontSize: options.fontSize,
+      fontWeight: options.fontWeight,
+    });
 
     if (testWidth > maxLineWidth) {
       lines.push(currentLine);
@@ -83,6 +89,19 @@ export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
   return `${month} ${day} '${year}`;
 };
 
+export function rgbToHex([r, g, b]: Array<number>) {
+  return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
+
+export function hexToRgb(hex: string, alpha = 1) {
+  const bigint = parseInt(hex.slice(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return [r, g, b, alpha];
+}
+
 export function stringToColorCode(str: string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -94,18 +113,9 @@ export function stringToColorCode(str: string) {
 }
 
 export function generateColorVariations(inputColor: string, step: number = 5) {
-  function hexToRgb(hex: string) {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-
-    return [r, g, b];
-  }
-
   const variations: Array<string> = [];
   for (let i = 0; i <= step; i++) {
-    const rgb = hexToRgb(inputColor);
+    const rgb = hexToRgb(inputColor, 1);
     const alpha = i * (1 / step);
     variations.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha || 0.05})`);
   }
