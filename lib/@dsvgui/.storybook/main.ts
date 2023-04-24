@@ -18,7 +18,9 @@ const defaultConfig = {
     autodocs: "tag",
   },
   webpackFinal: (config, { isServer }) => {
-    config.resolve.fallback.fs = false;
+    if (!isServer) {
+      config.resolve.fallback = { ...config.resolve.fallback, fs: false };
+    }
     config.plugins.push(
       new webpack.ProvidePlugin({ Buffer: ["buffer", "Buffer"] })
     );

@@ -17,7 +17,6 @@ const nextConfig = {
         fs: false,
       };
     }
-    config.module.rules.push({ test: /\.node$/i, loader: "node-loader" });
     return config;
   },
   async redirects() {

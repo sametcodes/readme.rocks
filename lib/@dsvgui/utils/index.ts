@@ -1,13 +1,14 @@
 import getImageSize from "image-size";
+import opentype from "opentype.js";
+import Manrope from "../document/fonts/manrope/index.export";
 
-let canvas: HTMLCanvasElement;
-if (typeof window === "undefined") {
-  console.log("Server side rendering detected, using canvas");
-  canvas = require("canvas").createCanvas(0, 0);
-} else {
-  console.log("Client side rendering detected, using canvas");
-  canvas = document.createElement("canvas");
+function bufferToArrayBuffer(buffer: Buffer) {
+  return buffer.buffer.slice(
+    buffer.byteOffset,
+    buffer.byteOffset + buffer.byteLength
+  );
 }
+export const fontBuffer = bufferToArrayBuffer(Buffer.from(Manrope, "base64"));
 
 type IGetTextWidth = (
   inputText: string | number | null,
@@ -19,22 +20,13 @@ type IGetTextWidth = (
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const {
-    fontSize = 16,
-    fontFamily = "sans-serif",
-    fontWeight = "normal",
-  } = options;
+  const { fontSize = 16 } = options;
 
   let text = inputText ?? "";
   text = text.toString();
 
-  const context = canvas.getContext("2d");
-  if (!context) throw new Error("Canvas context is not defined!");
-
-  context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
-
-  const metrics = context.measureText(text);
-  return metrics.width;
+  const font = opentype.parse(fontBuffer);
+  return font.getAdvanceWidth(text, fontSize);
 };
 
 type IWrapText = (
