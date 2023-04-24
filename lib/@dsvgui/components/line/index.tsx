@@ -64,21 +64,21 @@ export const Line: React.FC<ILine> = ({ items }) => {
   const widths = items.map((item) => {
     const leftTitleWidth = getTextWidth(item.leftTitle || "", {
       fontSize: 22,
-      ratio: 0.58,
+      fontWeight: 700,
     });
     const leftSubtitleWidth = getTextWidth(item.leftSubtitle || "", {
       fontSize: 16,
-      ratio: 0.57,
+      fontWeight: 500,
     });
     const leftTitlesWidth = Math.max(leftTitleWidth, leftSubtitleWidth);
 
     const rightTitleWidth = getTextWidth(item.rightTitle || "", {
       fontSize: 22,
-      ratio: 0.58,
+      fontWeight: 700,
     });
     const rightSubtitleWidth = getTextWidth(item.rightSubtitle || "", {
       fontSize: 16,
-      ratio: 0.527,
+      fontWeight: 500,
     });
     const rightTitlesWidth = Math.max(rightTitleWidth, rightSubtitleWidth);
 
@@ -118,9 +118,11 @@ export const Line: React.FC<ILine> = ({ items }) => {
 
         const periodLabel = date.toLocaleDateString("en-US", dateOptions);
         const xGap = width / (item.points.length - 1);
-        const x = i * xGap - getTextWidth(periodLabel, { fontSize: 8 }) / 2;
+        const x =
+          i * xGap -
+          getTextWidth(periodLabel, { fontSize: 8, fontWeight: 300 }) / 2;
         return (
-          <text key={i} className="clabel">
+          <text key={i} className="clabel" fontWeight={300}>
             <tspan x={x}>{periodLabel}</tspan>
           </text>
         );
@@ -136,24 +138,12 @@ export const Line: React.FC<ILine> = ({ items }) => {
           strokeLinejoin="round"
         />
         <g id="left">
-          <text
-            xmlSpace="preserve"
-            fontFamily="Roboto"
-            className="title"
-            fontWeight="bolder"
-            letterSpacing="0.5px"
-          >
+          <text fontWeight="700" className="title">
             <tspan x="0" y="15">
               {item.leftTitle}
             </tspan>
           </text>
-          <text
-            fill="#555555"
-            xmlSpace="preserve"
-            fontFamily="Roboto"
-            className="subtitle"
-            fontWeight={500}
-          >
+          <text fill="#555555" className="subtitle" fontWeight={500}>
             <tspan x="0" y="33">
               {item.leftSubtitle}
             </tspan>
@@ -167,11 +157,10 @@ export const Line: React.FC<ILine> = ({ items }) => {
             <tspan
               x={
                 width -
-                getTextWidth(item.rightTitle?.replace(/ /g, "") || "", {
+                getTextWidth(item.rightTitle || "", {
                   fontSize: 22,
-                  ratio: 0.5,
-                }) -
-                documentPadding / 2
+                  fontWeight: 700,
+                })
               }
               y="15"
             >
@@ -180,14 +169,14 @@ export const Line: React.FC<ILine> = ({ items }) => {
           </text>
           <text
             className={["subtitle", `lineText_${index}`].join(" ")}
-            fontWeight={300}
+            fontWeight={500}
           >
             <tspan
               x={
                 width -
                 getTextWidth(item.rightSubtitle || "", {
                   fontSize: 16,
-                  ratio: 0.5,
+                  fontWeight: 500,
                 })
               }
               y="33"
@@ -217,6 +206,10 @@ export const Line: React.FC<ILine> = ({ items }) => {
           <style>{`
           .clabel{ fill: #999; font-size: 8px; }
           .lineText_${index}{ fill: ${item.lineColor} !important; }
+          .subtitle.lineText_${index}{ fill: rgba(${hexToRgb(
+            item.lineColor || "#000000",
+            0.6
+          ).join(", ")}) !important; }
         `}</style>
           <linearGradient
             x1="0"

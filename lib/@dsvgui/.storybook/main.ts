@@ -1,7 +1,8 @@
+/** @type { import('@storybook/nextjs').StorybookConfig } */
+
 import webpack from "webpack";
 
-/** @type { import('@storybook/nextjs').StorybookConfig } */
-const config = {
+const defaultConfig = {
   stories: ["../components/**/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
     "@storybook/addon-links",
@@ -16,14 +17,14 @@ const config = {
   docs: {
     autodocs: "tag",
   },
-  webpackFinal: (config) => {
-    config.resolve.fallback.fs = false;
+  webpackFinal: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = { ...config.resolve.fallback, fs: false };
+    }
     config.plugins.push(
-      new webpack.ProvidePlugin({
-        Buffer: ["buffer", "Buffer"],
-      })
+      new webpack.ProvidePlugin({ Buffer: ["buffer", "Buffer"] })
     );
     return config;
   },
 };
-export default config;
+export default defaultConfig;
