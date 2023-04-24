@@ -24,7 +24,7 @@ const randomPoints = (length: number) => {
   return points;
 };
 
-export const Base: Story = {
+export const Minimal: Story = {
   args: {
     items: [
       {
@@ -36,7 +36,7 @@ export const Base: Story = {
   },
 };
 
-export const ColoredLines: Story = {
+export const Colored: Story = {
   args: {
     items: [
       {
@@ -49,7 +49,7 @@ export const ColoredLines: Story = {
   },
 };
 
-export const SecondaryTitle: Story = {
+export const WithSecondaryTitle: Story = {
   args: {
     items: [
       {
@@ -64,7 +64,7 @@ export const SecondaryTitle: Story = {
   },
 };
 
-export const PeriodLabels: Story = {
+export const WithPeriodLabels: Story = {
   args: {
     items: [
       {
