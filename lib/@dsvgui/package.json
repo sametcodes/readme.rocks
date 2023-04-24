@@ -19,6 +19,7 @@
     "@storybook/react": "^7.0.6",
     "@storybook/testing-library": "^0.1.0",
     "buffer": "^6.0.3",
+    "canvas": "^2.11.2",
     "image-size": "^1.0.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

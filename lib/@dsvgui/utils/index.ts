@@ -1,31 +1,49 @@
 import getImageSize from "image-size";
 
+let canvas: HTMLCanvasElement;
+if (typeof window === "undefined") {
+  console.log("Server side rendering detected, using canvas");
+  canvas = require("canvas").createCanvas(0, 0);
+} else {
+  console.log("Client side rendering detected, using canvas");
+  canvas = document.createElement("canvas");
+}
+
 type IGetTextWidth = (
   inputText: string | number | null,
   options: {
     fontSize: number;
-    ratio?: number;
+    fontFamily?: string;
+    fontWeight?: string | number;
   }
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const { fontSize = 16, ratio = 0.5 } = options;
+  const {
+    fontSize = 16,
+    fontFamily = "sans-serif",
+    fontWeight = "normal",
+  } = options;
 
-  let width = 0;
   let text = inputText ?? "";
   text = text.toString();
 
-  // Estimate the width using a monospace font (each character has the same width)
-  width = text.length * fontSize * ratio;
-  return width;
+  const context = canvas.getContext("2d");
+  if (!context) throw new Error("Canvas context is not defined!");
+
+  context.font = `${fontWeight} ${fontSize}px ${fontFamily}`;
+
+  const metrics = context.measureText(text);
+  return metrics.width;
 };
 
 type IWrapText = (
   inputText: string,
   options: {
     maxLineWidth: number;
-    fontSize: number;
     maxLines?: number;
+    fontSize: number;
+    fontWeight?: string;
   },
   cb: (value: string, index: number, array: Array<string>) => JSX.Element
 ) => Array<JSX.Element>;
@@ -40,7 +58,10 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
   for (let i = 1; i < words.length; i++) {
     const word = words[i];
     const testLine = currentLine + " " + word;
-    const testWidth = getTextWidth(testLine, { fontSize: options.fontSize });
+    const testWidth = getTextWidth(testLine, {
+      fontSize: options.fontSize,
+      fontWeight: options.fontWeight,
+    });
 
     if (testWidth > maxLineWidth) {
       lines.push(currentLine);
@@ -82,6 +103,10 @@ export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
 
   return `${month} ${day} '${year}`;
 };
+
+export function rgbToHex([r, g, b]: Array<number>) {
+  return "#" + [r, g, b].map((x) => x.toString(16).padStart(2, "0")).join("");
+}
 
 export function hexToRgb(hex: string, alpha = 1) {
   const bigint = parseInt(hex.slice(1), 16);

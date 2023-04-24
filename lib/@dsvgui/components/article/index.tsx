@@ -32,7 +32,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
   const titleWidth =
     Math.max(
       ...articles.map((article) =>
-        getTextWidth(article.meta.title, { fontSize: 16 })
+        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: "bold" })
       ),
       400
     ) + 20;
@@ -52,7 +52,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
 
           const title = wrapText(
             article.meta.title,
-            { maxLineWidth: titleWidth, fontSize: 16 },
+            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: "bold" },
             (line: string, index: number) => (
               <tspan key={index} x="0" dy={index === 0 ? 0 : 25}>
                 {line}
@@ -92,7 +92,11 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                   >
                     {wrapText(
                       article.meta.description.replace(/\n/gm, " "),
-                      { maxLineWidth: titleWidth, fontSize: 12, maxLines: 3 },
+                      {
+                        maxLineWidth: titleWidth - 20,
+                        fontSize: 12,
+                        maxLines: 3,
+                      },
                       (line: string, index) => (
                         <tspan key={index} x="0" dy={index === 0 ? 0 : 13}>
                           {line}

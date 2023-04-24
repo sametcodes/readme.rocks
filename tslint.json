@@ -9,6 +9,7 @@
   "rules": {
     "no-console": false,
     "no-bitwise": false,
+    "no-var-requires": false,
     "no-any": false,
     "array-type": [true, "generic"],
     "arrow-return-shorthand": true,
