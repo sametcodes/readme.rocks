@@ -1,6 +1,6 @@
 import { ViewComponent } from "@/platforms/types";
 import { SiWakatime } from "react-icons/si";
-import { Metrics, Line, BarStats, IBarStats } from "@/lib/@dsvgui";
+import { Metrics, Line, BarStats, IBarStats, ILineItem } from "@/lib/@dsvgui";
 
 export const getAllTimeSinceToday: ViewComponent = (result, config) => {
   return (
@@ -12,15 +12,21 @@ export const getAllTimeSinceToday: ViewComponent = (result, config) => {
 };
 
 export const getTimeWithRange: ViewComponent = (result, config) => {
-  const subtitle = (config.queryConfig as any).range;
+  const { viewConfig, queryConfig } = config as any;
   const points = result.data.map((day: any) => day.grand_total.total_seconds);
 
   const lines = [
     {
-      leftTitle: "Line",
-      leftSubtitle: subtitle,
-      points,
+      leftTitle: "WakaTime",
+      leftSubtitle: "from pulses",
       rightTitle: result.cumulative_total.text,
+      rightSubtitle: queryConfig.range,
+      points,
+      period:
+        viewConfig.showPeriod === false
+          ? undefined
+          : ("day" as ILineItem["period"]),
+      lineColor: viewConfig.lineColor,
     },
   ];
   return <Line items={lines} />;
