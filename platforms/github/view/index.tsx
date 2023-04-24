@@ -10,7 +10,7 @@ import getImageSize from "image-size";
 import qs from "qs";
 
 import { AiFillGithub, AiOutlineCalendar } from "react-icons/ai";
-import { RxPieChart } from "react-icons/rx";
+import { HiChartBar } from "react-icons/hi";
 import { VscIssues, VscGitPullRequest } from "react-icons/vsc";
 import { SiGithubsponsors } from "react-icons/si";
 
@@ -53,7 +53,7 @@ export const getRepositoryMilestone: ViewComponent = (result, config) => {
     "No due date";
 
   const metrics: IProgress["metrics"] = [
-    { icon: RxPieChart, text: `%${percentInText} completed` },
+    { icon: HiChartBar, text: `%${percentInText} completed` },
     { icon: AiOutlineCalendar, text: dueDate },
     {
       icon: VscIssues,
@@ -98,7 +98,7 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
     "No due date";
 
   const metrics: IProgress["metrics"] = [
-    { icon: RxPieChart, text: `%${percentInText} completed` },
+    { icon: HiChartBar, text: `%${percentInText} completed` },
     { icon: AiOutlineCalendar, text: dueDate },
     {
       icon: VscIssues,
@@ -124,7 +124,7 @@ export const getUserActiveSponsorGoal: ViewComponent = (result, config) => {
 
   const metrics: IProgress["metrics"] = [
     {
-      icon: RxPieChart,
+      icon: HiChartBar,
       text: `%${user.sponsorsListing.activeGoal.percentComplete} reached`,
     },
     {

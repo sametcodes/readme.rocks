@@ -83,6 +83,15 @@ export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
   return `${month} ${day} '${year}`;
 };
 
+export function hexToRgb(hex: string, alpha = 1) {
+  const bigint = parseInt(hex.slice(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+
+  return [r, g, b, alpha];
+}
+
 export function stringToColorCode(str: string) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -94,18 +103,9 @@ export function stringToColorCode(str: string) {
 }
 
 export function generateColorVariations(inputColor: string, step: number = 5) {
-  function hexToRgb(hex: string) {
-    const bigint = parseInt(hex.slice(1), 16);
-    const r = (bigint >> 16) & 255;
-    const g = (bigint >> 8) & 255;
-    const b = bigint & 255;
-
-    return [r, g, b];
-  }
-
   const variations: Array<string> = [];
   for (let i = 0; i <= step; i++) {
-    const rgb = hexToRgb(inputColor);
+    const rgb = hexToRgb(inputColor, 1);
     const alpha = i * (1 / step);
     variations.push(`rgba(${rgb[0]}, ${rgb[1]}, ${rgb[2]}, ${alpha || 0.05})`);
   }

@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "npm run prisma:generate && next build",
     "start": "next start",
-    "lint:tsc": "tslint -c tslint.json --project ./",
+    "lint:tsc": "tslint -c tslint.json --project ./ && tsc --noEmit",
     "lint:next": "next lint --max-warnings=0",
     "lint": "npm run lint:tsc && npm run lint:next",
     "lint:fix:next": "next lint --fix",
