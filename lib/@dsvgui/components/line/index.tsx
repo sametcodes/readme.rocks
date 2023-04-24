@@ -138,24 +138,12 @@ export const Line: React.FC<ILine> = ({ items }) => {
           strokeLinejoin="round"
         />
         <g id="left">
-          <text
-            xmlSpace="preserve"
-            fontFamily="Roboto"
-            className="title"
-            fontWeight="bolder"
-            letterSpacing="0.5px"
-          >
+          <text fontWeight="700" className="title">
             <tspan x="0" y="15">
               {item.leftTitle}
             </tspan>
           </text>
-          <text
-            fill="#555555"
-            xmlSpace="preserve"
-            fontFamily="Roboto"
-            className="subtitle"
-            fontWeight={500}
-          >
+          <text fill="#555555" className="subtitle" fontWeight={500}>
             <tspan x="0" y="33">
               {item.leftSubtitle}
             </tspan>
@@ -188,7 +176,7 @@ export const Line: React.FC<ILine> = ({ items }) => {
                 width -
                 getTextWidth(item.rightSubtitle || "", {
                   fontSize: 16,
-                  fontWeight: 300,
+                  fontWeight: 500,
                 })
               }
               y="33"

@@ -1,30 +1,23 @@
 import getImageSize from "image-size";
 import opentype from "opentype.js";
-import Manrope from "../document/fonts/manrope/index.export";
-
-function bufferToArrayBuffer(buffer: Buffer) {
-  return buffer.buffer.slice(
-    buffer.byteOffset,
-    buffer.byteOffset + buffer.byteLength
-  );
-}
-export const fontBuffer = bufferToArrayBuffer(Buffer.from(Manrope, "base64"));
+import { loadFontBuffer } from "./fonts";
 
 type IGetTextWidth = (
   inputText: string | number | null,
   options: {
     fontSize: number;
     fontFamily?: string;
-    fontWeight?: string | number;
+    fontWeight?: number;
   }
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const { fontSize = 16 } = options;
+  const { fontSize, fontWeight = 500, fontFamily = "Manrope" } = options;
 
   let text = inputText ?? "";
   text = text.toString();
 
+  const fontBuffer = loadFontBuffer(fontFamily, fontWeight);
   const font = opentype.parse(fontBuffer);
   return font.getAdvanceWidth(text, fontSize);
 };
@@ -35,7 +28,7 @@ type IWrapText = (
     maxLineWidth: number;
     maxLines?: number;
     fontSize: number;
-    fontWeight?: string;
+    fontWeight?: number;
   },
   cb: (value: string, index: number, array: Array<string>) => JSX.Element
 ) => Array<JSX.Element>;
