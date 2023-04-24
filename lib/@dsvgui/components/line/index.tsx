@@ -1,7 +1,7 @@
 import { Document } from "@/lib/@dsvgui";
 import { getTextWidth, hexToRgb } from "@/lib/@dsvgui/utils/index";
 
-type ILineItem = {
+export type ILineItem = {
   leftTitle?: string;
   leftSubtitle?: string;
   rightTitle?: string;

@@ -1,8 +1,21 @@
-import { object, number, string } from "yup";
+import { object, number, string, boolean } from "yup";
 
 export const getAllTimeSinceToday = object().required().noUnknown(true);
 
-export const getTimeWithRange = object().required().noUnknown(true);
+export const getTimeWithRange = object({
+  lineColor: string().required().default("#000000").meta({
+    label: "Line Color",
+    placeholder: "Line Color",
+    description: "The color of the line.",
+  }),
+  showPeriod: boolean().required().meta({
+    label: "Show Period",
+    placeholder: "Show Period",
+    description: "Whether to show the period or not.",
+  }),
+})
+  .required()
+  .noUnknown(true);
 
 export const getMostUsedLanguages = object({
   language_count: number().min(1).max(10).default(6).required().meta({

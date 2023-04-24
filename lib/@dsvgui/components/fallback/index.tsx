@@ -13,7 +13,7 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
 
   const subtitle = wrapText(
     message,
-    { maxLineWidth: width - 50, fontSize: 14 },
+    { maxLineWidth: width - 60, fontSize: 14, fontWeight: 400 },
     (line, index) => (
       <tspan key={index} x="67" y={index * 16 + 40}>
         {line}
