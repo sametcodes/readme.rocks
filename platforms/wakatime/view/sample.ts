@@ -32,6 +32,10 @@ export const getTimeWithRange = {
     queryConfig: {
       range: "Last 7 days",
     },
+    viewConfig: {
+      showPeriod: true,
+      lineColor: "#216e39",
+    },
   },
 };
 
