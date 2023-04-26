@@ -8,7 +8,7 @@ export const getTimeWithRange = object({
     placeholder: "Line Color",
     description: "The color of the line.",
   }),
-  showPeriod: boolean().required().meta({
+  showPeriod: boolean().required().default(false).meta({
     label: "Show Period",
     placeholder: "Show Period",
     description: "Whether to show the period or not.",
