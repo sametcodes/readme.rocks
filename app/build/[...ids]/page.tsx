@@ -1,3 +1,10 @@
+export const dynamic = "force-static";
+
+export async function generateStaticParams() {
+  const queries = await prisma.platformQuery.findMany({ select: { id: true } });
+  return queries.map((query) => ({ ids: [query.id] }));
+}
+
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { validations } from "@/platforms";
