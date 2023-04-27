@@ -1,5 +1,3 @@
-export const dynamic = "force-static";
-
 import prisma from "@/services/prisma";
 import { Platform, PlatformCode, PlatformQuery } from "@prisma/client";
 import { templates, samples } from "@/platforms";
