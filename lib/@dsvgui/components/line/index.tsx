@@ -41,11 +41,13 @@ export const Line: React.FC<ILine> = ({ items }) => {
     let x = -xGap;
     let path =
       "M " +
-      (x + xGap) +
+      (x + xGap).toFixed(3) +
       " " +
-      (lineHeight -
+      (
+        lineHeight -
         (item.period ? 7 : -5) -
-        (item.points[0] / maxValue) * lineHeight * ratio);
+        (item.points[0] / maxValue) * lineHeight * ratio
+      ).toFixed(3);
 
     for (const point of item.points) {
       x += xGap;
@@ -53,9 +55,11 @@ export const Line: React.FC<ILine> = ({ items }) => {
         " L " +
         x +
         " " +
-        (lineHeight -
+        (
+          lineHeight -
           (item.period ? 7 : -5) -
-          (point / maxValue) * lineHeight * ratio);
+          (point / maxValue) * lineHeight * ratio
+        ).toFixed(3);
     }
 
     return path;
@@ -221,42 +225,42 @@ export const Line: React.FC<ILine> = ({ items }) => {
           >
             <stop offset="0" stopColor="#ffffff" />
             <stop
-              offset="0.141455"
+              offset="0.15"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7
               ).join(", ")})`}
             />
             <stop
-              offset="0.201455"
+              offset="0.20"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.3
               ).join(", ")})`}
             />
             <stop
-              offset="0.363128"
+              offset="0.4"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.5
               ).join(", ")})`}
             />
             <stop
-              offset="0.581288"
+              offset="0.6"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7
               ).join(", ")})`}
             />
             <stop
-              offset="0.729526"
+              offset="0.8"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.8
               ).join(", ")})`}
             />
             <stop
-              offset="0.923128"
+              offset="0.9"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7

@@ -9,7 +9,6 @@ export const Branding: React.FC<IBranding> = ({ x, y }) => {
       id="dsvguibranding"
       xmlSpace="preserve"
       fontSize={8}
-      fontFamily="Manrope"
       fill="#cccccc"
       x={x}
       y={y}

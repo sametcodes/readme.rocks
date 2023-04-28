@@ -34,7 +34,6 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
       <text
         fill="#3e3e3e"
         xmlSpace="preserve"
-        fontFamily="Manrope"
         fontSize="22"
         fontWeight="bold"
         letterSpacing="0.1px"
@@ -43,13 +42,7 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
           {title}
         </tspan>
       </text>
-      <text
-        fill="#6e6e6e"
-        xmlSpace="preserve"
-        fontFamily="Manrope"
-        fontSize="14"
-        fontWeight="400"
-      >
+      <text fill="#6e6e6e" xmlSpace="preserve" fontSize="14" fontWeight="400">
         {subtitle}
       </text>
     </Document>

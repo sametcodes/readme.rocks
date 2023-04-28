@@ -163,7 +163,7 @@ export const Calendar: React.FC<ICalendar> = ({
         {(title || subtitle || showStreak) && (
           <g id="Title">
             {title && (
-              <text xmlSpace="preserve" className="title">
+              <text xmlSpace="preserve" className="title" fontWeight="700">
                 <tspan x="0" y="18">
                   {title}
                 </tspan>

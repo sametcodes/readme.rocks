@@ -18,7 +18,7 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
 
   return (
     <Document w={462} h={height}>
-      <text fill="#5E5E5E" className="title">
+      <text fill="#5E5E5E" className="title" fontWeight="700">
         <tspan x="0" y="20.7539">
           {title}
         </tspan>

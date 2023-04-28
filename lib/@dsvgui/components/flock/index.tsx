@@ -62,8 +62,7 @@ export const Flock: React.FC<IFlock> = ({
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="title"
-          fontFamily="Manrope"
-          fontWeight="500"
+          fontWeight="700"
         >
           <tspan x={headStart.x} y={headStart.y}>
             {title.trim()}
@@ -74,7 +73,6 @@ export const Flock: React.FC<IFlock> = ({
         <text
           xmlns="http://www.w3.org/2000/svg"
           className="subtitle"
-          fontFamily="Manrope"
           fontWeight="400"
         >
           <tspan x={headStart.x} y={headStart.y + titleFontSize}>

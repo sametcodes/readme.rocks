@@ -33,28 +33,14 @@ export const BarStats: React.FC<IBarStats> = ({
         <g id="content">
           <g id="Frame 134">
             <g id="title">
-              <text
-                id="Most used languages"
-                className="title"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                fontWeight="600"
-                letterSpacing="0px"
-              >
+              <text className="title" fontWeight="700">
                 <tspan x="0" y="21.511">
                   {title}
                 </tspan>
               </text>
             </g>
             <g id="subtitle">
-              <text
-                id="in the last 7 days"
-                className="subtitle"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                fontWeight="600"
-                letterSpacing="0px"
-              >
+              <text className="subtitle">
                 <tspan x="0" y="40">
                   {subtitle}
                 </tspan>

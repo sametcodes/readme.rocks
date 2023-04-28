@@ -76,20 +76,13 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                 <g transform={`translate(${xOffset} 24)`}>
                   <text
                     xmlSpace="preserve"
-                    fontFamily="Manrope"
                     fontWeight="700"
                     fill="#0c0c0c"
                     fontSize="16"
                   >
                     {title}
                   </text>
-                  <text
-                    fill="#999999"
-                    xmlSpace="preserve"
-                    fontSize={12}
-                    fontFamily="Manrope"
-                    y={5 + title.length * 15}
-                  >
+                  <text fill="#999999" fontSize={12} y={5 + title.length * 15}>
                     {wrapText(
                       article.meta.description.replace(/\n/gm, " "),
                       {

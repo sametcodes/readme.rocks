@@ -39,12 +39,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
           return (
             <Fragment key={index}>
-              <text
-                fill="#878787"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                className="subtitle"
-              >
+              <text fill="#878787" xmlSpace="preserve" className="subtitle">
                 <tspan x={xText} y={10}>
                   {item.title}
                 </tspan>
@@ -52,7 +47,6 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
               <text
                 fill="black"
                 xmlSpace="preserve"
-                fontFamily="Manrope"
                 className="title"
                 fontWeight="600"
               >

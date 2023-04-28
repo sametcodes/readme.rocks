@@ -12,7 +12,7 @@ type IGetTextWidth = (
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const { fontSize, fontWeight = 500, fontFamily = "Manrope" } = options;
+  const { fontSize, fontWeight = 500, fontFamily = "Open Sans" } = options;
 
   let text = inputText ?? "";
   text = text.toString();
