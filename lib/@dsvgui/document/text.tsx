@@ -21,7 +21,7 @@ type IText = {
 const onHandFonts = {
   title: {
     size: 22,
-    weight: 500,
+    weight: 700,
   },
   subtitle: {
     size: 16,
