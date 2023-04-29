@@ -1,4 +1,4 @@
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { wrapText } from "@/lib/@dsvgui/utils";
 import { getTextWidth } from "@/lib/@dsvgui/utils/index";
 
@@ -32,7 +32,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
   const titleWidth =
     Math.max(
       ...articles.map((article) =>
-        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 700 })
+        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 500 })
       ),
       400
     ) + 20;
@@ -52,11 +52,11 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
 
           const title = wrapText(
             article.meta.title,
-            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 700 },
+            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 500 },
             (line: string, index: number) => (
-              <tspan key={index} x="0" dy={index === 0 ? 0 : 25}>
+              <Text x={0} y={index * 25} option={{ size: 16, weight: 500 }}>
                 {line}
-              </tspan>
+              </Text>
             )
           );
 
@@ -74,36 +74,25 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
               )}
               <g transform={`translate(0 ${yOffset})`}>
                 <g transform={`translate(${xOffset} 24)`}>
-                  <text
-                    xmlSpace="preserve"
-                    fontFamily="Manrope"
-                    fontWeight="700"
-                    fill="#0c0c0c"
-                    fontSize="16"
-                  >
-                    {title}
-                  </text>
-                  <text
-                    fill="#999999"
-                    xmlSpace="preserve"
-                    fontSize={12}
-                    fontFamily="Manrope"
-                    y={5 + title.length * 15}
-                  >
-                    {wrapText(
-                      article.meta.description.replace(/\n/gm, " "),
-                      {
-                        maxLineWidth: titleWidth - 20,
-                        fontSize: 12,
-                        maxLines: 3,
-                      },
-                      (line: string, index) => (
-                        <tspan key={index} x="0" dy={index === 0 ? 0 : 13}>
-                          {line}
-                        </tspan>
-                      )
-                    )}
-                  </text>
+                  {title}
+                  {wrapText(
+                    article.meta.description.replace(/\n/gm, " "),
+                    {
+                      maxLineWidth: titleWidth - 20,
+                      fontSize: 12,
+                      maxLines: 3,
+                    },
+                    (line: string, index) => (
+                      <Text
+                        x={0}
+                        y={17 + title.length + index * 13}
+                        option={{ size: 12, weight: 500 }}
+                        className="subtitle"
+                      >
+                        {line}
+                      </Text>
+                    )
+                  )}
                 </g>
 
                 <g transform={`translate(${xOffset} 90)`}>
@@ -114,9 +103,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       y={-11}
                       fontSize="15px"
                     />
-                    <text fill="#555" fontSize="12" x="3" y="1">
+                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
                       {article.publish_date}
-                    </text>
+                    </Text>
                   </g>
                   <g transform={`translate(${15 + titleWidth / 4} 0)`}>
                     <AiOutlineLike
@@ -125,9 +114,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       y={-11}
                       fontSize="15px"
                     />
-                    <text fill="#555" fontSize="12" x="3" y="1">
-                      {article.like_count} likes
-                    </text>
+                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
+                      {article.like_count}
+                    </Text>
                   </g>
                   <g transform={`translate(${15 + titleWidth / 2} 0)`}>
                     <BiTimeFive
@@ -136,9 +125,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       y={-11}
                       fontSize="15px"
                     />
-                    <text fill="#555" fontSize="12" x="3" y="1">
-                      {article.reading_time_minutes} mins
-                    </text>
+                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
+                      {article.reading_time_minutes}
+                    </Text>
                   </g>
                   <g transform={`translate(${15 + (titleWidth / 4) * 3} 0)`}>
                     <IoPersonCircleOutline
@@ -147,9 +136,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       y={-11}
                       fontSize="15px"
                     />
-                    <text fill="#555" fontSize="12" x="3" y="1">
+                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
                       {article.meta.author}
-                    </text>
+                    </Text>
                   </g>
                 </g>
 

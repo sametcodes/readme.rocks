@@ -1,5 +1,6 @@
 import { Document } from "@/lib/@dsvgui";
 import { getTextWidth, hexToRgb } from "@/lib/@dsvgui/utils/index";
+import { Text } from "../../document/text";
 
 export type ILineItem = {
   leftTitle?: string;
@@ -41,11 +42,13 @@ export const Line: React.FC<ILine> = ({ items }) => {
     let x = -xGap;
     let path =
       "M " +
-      (x + xGap) +
+      (x + xGap).toFixed(3) +
       " " +
-      (lineHeight -
+      (
+        lineHeight -
         (item.period ? 7 : -5) -
-        (item.points[0] / maxValue) * lineHeight * ratio);
+        (item.points[0] / maxValue) * lineHeight * ratio
+      ).toFixed(3);
 
     for (const point of item.points) {
       x += xGap;
@@ -53,9 +56,11 @@ export const Line: React.FC<ILine> = ({ items }) => {
         " L " +
         x +
         " " +
-        (lineHeight -
+        (
+          lineHeight -
           (item.period ? 7 : -5) -
-          (point / maxValue) * lineHeight * ratio);
+          (point / maxValue) * lineHeight * ratio
+        ).toFixed(3);
     }
 
     return path;
@@ -118,13 +123,15 @@ export const Line: React.FC<ILine> = ({ items }) => {
 
         const periodLabel = date.toLocaleDateString("en-US", dateOptions);
         const xGap = width / (item.points.length - 1);
-        const x =
-          i * xGap -
-          getTextWidth(periodLabel, { fontSize: 8, fontWeight: 300 }) / 2;
         return (
-          <text key={i} className="clabel" fontWeight={300}>
-            <tspan x={x}>{periodLabel}</tspan>
-          </text>
+          <Text
+            key={index}
+            x={(textWidth) => i * xGap - textWidth / 2}
+            y={0}
+            option={{ size: 8, weight: 500 }}
+          >
+            {periodLabel}
+          </Text>
         );
       });
     }
@@ -138,52 +145,20 @@ export const Line: React.FC<ILine> = ({ items }) => {
           strokeLinejoin="round"
         />
         <g id="left">
-          <text fontWeight="700" className="title">
-            <tspan x="0" y="15">
-              {item.leftTitle}
-            </tspan>
-          </text>
-          <text fill="#555555" className="subtitle" fontWeight={500}>
-            <tspan x="0" y="33">
-              {item.leftSubtitle}
-            </tspan>
-          </text>
+          <Text x={0} y={15} option="title">
+            {item.leftTitle}
+          </Text>
+          <Text x={0} y={34} option="subtitle">
+            {item.leftSubtitle}
+          </Text>
         </g>
         <g id="right">
-          <text
-            className={["title", `lineText_${index}`].join(" ")}
-            fontWeight="700"
-          >
-            <tspan
-              x={
-                width -
-                getTextWidth(item.rightTitle || "", {
-                  fontSize: 22,
-                  fontWeight: 700,
-                })
-              }
-              y="15"
-            >
-              {item.rightTitle}
-            </tspan>
-          </text>
-          <text
-            className={["subtitle", `lineText_${index}`].join(" ")}
-            fontWeight={500}
-          >
-            <tspan
-              x={
-                width -
-                getTextWidth(item.rightSubtitle || "", {
-                  fontSize: 16,
-                  fontWeight: 500,
-                })
-              }
-              y="33"
-            >
-              {item.rightSubtitle}
-            </tspan>
-          </text>
+          <Text option="title" x={(textWidth) => width - textWidth} y={15}>
+            {item.rightTitle}
+          </Text>
+          <Text option="subtitle" x={(textWidth) => width - textWidth} y={34}>
+            {item.rightSubtitle}
+          </Text>
         </g>
         {item.period && (
           <g id="Labels" transform={`translate(0 ${rowHeight + 7})`}>
@@ -204,7 +179,6 @@ export const Line: React.FC<ILine> = ({ items }) => {
 
         <defs>
           <style>{`
-          .clabel{ fill: #999; font-size: 8px; }
           .lineText_${index}{ fill: ${item.lineColor} !important; }
           .subtitle.lineText_${index}{ fill: rgba(${hexToRgb(
             item.lineColor || "#000000",
@@ -221,42 +195,42 @@ export const Line: React.FC<ILine> = ({ items }) => {
           >
             <stop offset="0" stopColor="#ffffff" />
             <stop
-              offset="0.141455"
+              offset="0.15"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7
               ).join(", ")})`}
             />
             <stop
-              offset="0.201455"
+              offset="0.20"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.3
               ).join(", ")})`}
             />
             <stop
-              offset="0.363128"
+              offset="0.4"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.5
               ).join(", ")})`}
             />
             <stop
-              offset="0.581288"
+              offset="0.6"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7
               ).join(", ")})`}
             />
             <stop
-              offset="0.729526"
+              offset="0.8"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.8
               ).join(", ")})`}
             />
             <stop
-              offset="0.923128"
+              offset="0.9"
               stopColor={`rgba(${hexToRgb(
                 item.lineColor || "#000000",
                 0.7

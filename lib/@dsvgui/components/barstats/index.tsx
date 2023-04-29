@@ -1,4 +1,4 @@
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { stringToColorCode } from "@/lib/@dsvgui/utils";
 import { getTextWidth } from "../../utils/index";
 
@@ -33,32 +33,14 @@ export const BarStats: React.FC<IBarStats> = ({
         <g id="content">
           <g id="Frame 134">
             <g id="title">
-              <text
-                id="Most used languages"
-                className="title"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                fontWeight="600"
-                letterSpacing="0px"
-              >
-                <tspan x="0" y="21.511">
-                  {title}
-                </tspan>
-              </text>
+              <Text x={0} y={21.5} option="title">
+                {title}
+              </Text>
             </g>
             <g id="subtitle">
-              <text
-                id="in the last 7 days"
-                className="subtitle"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                fontWeight="600"
-                letterSpacing="0px"
-              >
-                <tspan x="0" y="40">
-                  {subtitle}
-                </tspan>
-              </text>
+              <Text x={0} y={40} option="subtitle">
+                {subtitle}
+              </Text>
             </g>
             <g id="bars" shapeRendering="crispEdges">
               {items.map((item, index, array) => {
@@ -97,18 +79,20 @@ export const BarStats: React.FC<IBarStats> = ({
                         r={circleSize}
                         fill={stringToColorCode(item.key)}
                       />
-                      <text
-                        xmlSpace="preserve"
-                        fontSize="14"
-                        fill="#7e7e7e"
+                      <Text
                         x={x + 15}
                         y={y + 5}
+                        option={{
+                          size: 14,
+                          weight: 500,
+                        }}
+                        className="subtitle"
                       >
-                        <tspan>{item.name} </tspan>
-                        <tspan fontWeight="bolder">
-                          %{((item.value / totalValue) * 100).toFixed(1)}{" "}
-                        </tspan>
-                      </text>
+                        {`${item.name} %${(
+                          (item.value / totalValue) *
+                          100
+                        ).toFixed(1)}`}
+                      </Text>
                     </g>
                   );
                 })}
