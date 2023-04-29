@@ -55,7 +55,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
               <Text x={xText} y={10} option="subtitle">
                 {item.title}
               </Text>
-              <Text x={xText} y={33.51} option={{ size: 22, weight: 500 }}>
+              <Text x={xText} y={33.51} option={{ size: 22, weight: 700 }}>
                 {item.value.toString()}
               </Text>
               {index !== 0 && (

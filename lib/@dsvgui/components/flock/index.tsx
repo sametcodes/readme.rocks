@@ -35,7 +35,7 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize, fontWeight: 500 })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize, fontWeight: 700 })
     : 0;
   const subtitleWidth = subtitle
     ? getTextWidth(subtitle.trim(), {

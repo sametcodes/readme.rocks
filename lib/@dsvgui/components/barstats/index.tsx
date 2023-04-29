@@ -19,7 +19,10 @@ export const BarStats: React.FC<IBarStats> = ({
   items,
   items_per_row = 2,
 }) => {
-  const width = Math.max(getTextWidth(title, { fontSize: 24 }), 330);
+  const width = Math.max(
+    getTextWidth(title, { fontSize: 22, fontWeight: 700 }),
+    330
+  );
   const totalBarWidth = width;
   const legendMy = 20;
 

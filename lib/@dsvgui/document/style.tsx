@@ -4,7 +4,7 @@ export const Style: React.FC = () => {
       <style>{`
             .websafe{ font-family: Tahoma, Verdana, sans-serif }
             .text{ fill: #22272e;}
-            .text.subtitle{ fill: #6c6c6c; }
+            .text.subtitle{ fill: #7c7c7c; }
 
             .dsvgui-container{ fill: #fbfbfb; }
             stop[offset='0']{ stop-color: #fbfbfb; }
