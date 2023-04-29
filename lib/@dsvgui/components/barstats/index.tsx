@@ -86,6 +86,7 @@ export const BarStats: React.FC<IBarStats> = ({
                           size: 14,
                           weight: 500,
                         }}
+                        className="subtitle"
                       >
                         {`${item.name} %${(
                           (item.value / totalValue) *
