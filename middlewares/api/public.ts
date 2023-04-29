@@ -6,6 +6,13 @@ import { sendFallbackResponse } from "@/services/api/response";
 
 import { ValidationError } from "yup";
 import { shapeDataAPISchema } from "@/services/data/validations";
+import { Platform, PlatformQuery } from "@prisma/client";
+
+let cachedPlatformQueries: {
+  [key: string]: PlatformQuery & {
+    platform: Platform;
+  };
+} = {};
 
 export const validatePublicRequest = async (
   req: NextApiRequest,
@@ -19,22 +26,35 @@ export const validatePublicRequest = async (
       message: "The configuration ID doesn't seem valid.",
     });
 
-  const query = await prisma.platformQuery.findFirst({
-    where: { id },
-    select: {
-      id: true,
-      name: true,
-      cache_time: true,
-      platformId: true,
-      platform: { select: { name: true, code: true } },
-    },
-  });
-
-  if (!query)
-    return sendFallbackResponse(res, {
-      title: "Not found",
-      message: "The configuration does not exist, please check the URL.",
+  let query: PlatformQuery & {
+    platform: Platform;
+  };
+  if (cachedPlatformQueries[id]) {
+    query = cachedPlatformQueries[id];
+  } else {
+    const platformQuery = await prisma.platformQuery.findFirst({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        cache_time: true,
+        platformId: true,
+        platform: { select: { name: true, code: true } },
+      },
     });
+    if (!platformQuery)
+      return sendFallbackResponse(res, {
+        title: "Not found",
+        message: "The configuration does not exist, please check the URL.",
+      });
+
+    query = platformQuery as PlatformQuery & {
+      platform: Platform;
+    };
+    cachedPlatformQueries = {
+      [id]: query,
+    };
+  }
 
   const querystring = Object.keys(req.query)
     .filter((key) => key !== "id")
