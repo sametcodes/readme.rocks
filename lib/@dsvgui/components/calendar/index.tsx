@@ -1,6 +1,5 @@
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { generateColorVariations } from "@/lib/@dsvgui/utils";
-import { getTextWidth } from "../../utils/index";
 
 export type ICalendar = {
   title?: string;
@@ -146,11 +145,14 @@ export const Calendar: React.FC<ICalendar> = ({
       const monthString = month.toLocaleString("default", { month: "short" });
       const x = width - i * 4 * (boxSize + boxMargin + 1) - 25;
       return (
-        <text key={monthString} id={monthString} className="clabel">
-          <tspan x={x > 0 ? x : 0} y="165.864">
-            {monthString}
-          </tspan>
-        </text>
+        <Text
+          key={monthString}
+          x={x > 0 ? x : 0}
+          y={166}
+          option={{ size: 12, weight: 400 }}
+        >
+          {monthString}
+        </Text>
       );
     }
   );
@@ -163,37 +165,31 @@ export const Calendar: React.FC<ICalendar> = ({
         {(title || subtitle || showStreak) && (
           <g id="Title">
             {title && (
-              <text xmlSpace="preserve" className="title">
-                <tspan x="0" y="18">
-                  {title}
-                </tspan>
-              </text>
+              <Text x={0} y={18} option="title">
+                {title}
+              </Text>
             )}
             {title && subtitle && (
-              <text xmlSpace="preserve" className="subtitle">
-                <tspan x="0" y="38">
-                  {subtitle}
-                </tspan>
-              </text>
+              <Text x={0} y={38} option="subtitle">
+                {subtitle}
+              </Text>
             )}
             {showStreak && (
               <>
-                <text xmlSpace="preserve" className="title">
-                  <tspan
-                    x={width - getTextWidth(streak, { fontSize: 22 })}
-                    y="18"
-                  >
-                    {streak}
-                  </tspan>
-                </text>
-                <text xmlSpace="preserve" className="subtitle">
-                  <tspan
-                    x={width - getTextWidth("Streak", { fontSize: 16 })}
-                    y="38"
-                  >
-                    Streak
-                  </tspan>
-                </text>
+                <Text
+                  x={(textWidth) => width - textWidth}
+                  y={18}
+                  option="title"
+                >
+                  {streak}
+                </Text>
+                <Text
+                  x={(textWidth) => width - textWidth}
+                  y={36}
+                  option="subtitle"
+                >
+                  Streak
+                </Text>
               </>
             )}
           </g>

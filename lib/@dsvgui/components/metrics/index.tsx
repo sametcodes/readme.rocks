@@ -1,4 +1,5 @@
 import { Document } from "@/lib/@dsvgui";
+import { Text } from "@/lib/@dsvgui/document/text";
 import { Fragment } from "react";
 import { getTextWidth } from "@/lib/@dsvgui/utils";
 import { IconType } from "react-icons/lib";
@@ -16,8 +17,14 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
   let initialPadding = 15;
 
   const width = data.reduce((acc, item) => {
-    const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
-    const wTitle = getTextWidth(item.title.toString(), { fontSize: 15 });
+    const wValue = getTextWidth(item.value.toString(), {
+      fontSize: 22,
+      fontWeight: 700,
+    });
+    const wTitle = getTextWidth(item.title.toString(), {
+      fontSize: 16,
+      fontWeight: 500,
+    });
     const wText = Math.max(wValue, wTitle);
 
     return acc + wText + padding;
@@ -29,8 +36,14 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
       <g transform="translate(45, 0)">
         {data.map((item, index) => {
-          const wValue = getTextWidth(item.value.toString(), { fontSize: 22 });
-          const wTitle = getTextWidth(item.title.toString(), { fontSize: 16 });
+          const wTitle = getTextWidth(item.title.toString(), {
+            fontSize: 16,
+            fontWeight: 500,
+          });
+          const wValue = getTextWidth(item.value.toString(), {
+            fontSize: 22,
+            fontWeight: 800,
+          });
           const wText = Math.max(wValue, wTitle);
 
           const xText = initialPadding;
@@ -39,28 +52,12 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
 
           return (
             <Fragment key={index}>
-              <text
-                fill="#878787"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                className="subtitle"
-              >
-                <tspan x={xText} y={10}>
-                  {item.title}
-                </tspan>
-              </text>
-              <text
-                fill="black"
-                xmlSpace="preserve"
-                fontFamily="Manrope"
-                className="title"
-                fontWeight="600"
-              >
-                <tspan x={xText} y={33.5195}>
-                  {item.value}
-                </tspan>
-              </text>
-
+              <Text x={xText} y={10} option="subtitle">
+                {item.title}
+              </Text>
+              <Text x={xText} y={33.51} option={{ size: 22, weight: 800 }}>
+                {item.value.toString()}
+              </Text>
               {index !== 0 && (
                 <line x1={xLine} y1={2} x2={xLine} y2={35} stroke="#E3E3E3" />
               )}

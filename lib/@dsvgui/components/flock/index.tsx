@@ -1,4 +1,4 @@
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { getTextWidth } from "@/lib/@dsvgui/utils";
 
 export type IFlock = {
@@ -35,11 +35,12 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize })
+    ? getTextWidth(title.trim(), { fontSize: titleFontSize, fontWeight: 700 })
     : 0;
   const subtitleWidth = subtitle
     ? getTextWidth(subtitle.trim(), {
         fontSize: subtitleFontSize,
+        fontWeight: 400,
       })
     : 0;
 
@@ -59,28 +60,14 @@ export const Flock: React.FC<IFlock> = ({
   return (
     <Document w={documentWidth} h={documentHeight}>
       {title && (
-        <text
-          xmlns="http://www.w3.org/2000/svg"
-          className="title"
-          fontFamily="Manrope"
-          fontWeight="500"
-        >
-          <tspan x={headStart.x} y={headStart.y}>
-            {title.trim()}
-          </tspan>
-        </text>
+        <Text x={headStart.x} y={headStart.y} option="title">
+          {title.trim()}
+        </Text>
       )}
       {subtitle && (
-        <text
-          xmlns="http://www.w3.org/2000/svg"
-          className="subtitle"
-          fontFamily="Manrope"
-          fontWeight="400"
-        >
-          <tspan x={headStart.x} y={headStart.y + titleFontSize}>
-            {subtitle.trim()}
-          </tspan>
-        </text>
+        <Text x={headStart.x} y={headStart.y + 22} option="subtitle">
+          {subtitle.trim()}
+        </Text>
       )}
       {members.map((member, index) => {
         const row = Math.floor(index / items_per_row);
