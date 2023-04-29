@@ -1,18 +1,19 @@
 import getImageSize from "image-size";
 import opentype from "opentype.js";
 import { loadFontBuffer } from "./fonts";
+import { FontFamily, defaultFont } from "../document/fonts";
 
 type IGetTextWidth = (
   inputText: string | number | null,
   options: {
     fontSize: number;
-    fontFamily?: string;
     fontWeight?: number;
+    fontFamily?: FontFamily;
   }
 ) => number;
 
 export const getTextWidth: IGetTextWidth = (inputText, options) => {
-  const { fontSize, fontWeight = 500, fontFamily = "Open Sans" } = options;
+  const { fontSize, fontWeight = 500, fontFamily = defaultFont } = options;
 
   let text = inputText ?? "";
   text = text.toString();

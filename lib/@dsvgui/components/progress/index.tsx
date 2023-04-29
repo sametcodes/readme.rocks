@@ -1,4 +1,4 @@
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { IconType } from "react-icons/lib";
 
 export type IProgress = {
@@ -18,11 +18,9 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
 
   return (
     <Document w={462} h={height}>
-      <text fill="#5E5E5E" className="title" fontWeight="700">
-        <tspan x="0" y="20.7539">
-          {title}
-        </tspan>
-      </text>
+      <Text x={0} y={20} option="title">
+        {title}
+      </Text>
       <g className="status_bar">
         <rect x="0" y="44" width={462} height="18" rx="5" fill="#E0E0E0" />
         <rect
@@ -44,11 +42,9 @@ export const Progress: React.FC<IProgress> = ({ title, percent, metrics }) => {
           })`}
         >
           <metric.icon className="icon" x={0} y={-13} size="18px" />
-          <text fill="#636363">
-            <tspan x="30" y="0" className="subtitle" fontWeight="300">
-              {metric.text}
-            </tspan>
-          </text>
+          <Text x={30} y={0} option="subtitle">
+            {metric.text}
+          </Text>
         </g>
       ))}
     </Document>

@@ -1,3 +1,5 @@
+import { Text } from "@/lib/@dsvgui/";
+
 type IBranding = {
   x: number;
   y: number;
@@ -5,15 +7,8 @@ type IBranding = {
 
 export const Branding: React.FC<IBranding> = ({ x, y }) => {
   return (
-    <text
-      id="dsvguibranding"
-      xmlSpace="preserve"
-      fontSize={8}
-      fill="#cccccc"
-      x={x}
-      y={y}
-    >
-      <tspan>readme.rocks</tspan>
-    </text>
+    <Text x={x} y={y} option={{ size: 8, weight: 400 }}>
+      readme.rocks
+    </Text>
   );
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import { Document } from "@/lib/@dsvgui";
+import { Document, Text } from "@/lib/@dsvgui";
 import { wrapText } from "@/lib/@dsvgui/utils/index";
 import { IoWarningOutline } from "react-icons/io5";
 
@@ -15,9 +15,9 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
     message,
     { maxLineWidth: width - 60, fontSize: 14, fontWeight: 400 },
     (line, index) => (
-      <tspan key={index} x="67" y={index * 16 + 40}>
+      <Text x={67} y={index * 16 + 40} option={{ size: 14, weight: 400 }}>
         {line}
-      </tspan>
+      </Text>
     )
   );
 
@@ -31,20 +31,10 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
         className="icon"
         size="45px"
       />
-      <text
-        fill="#3e3e3e"
-        xmlSpace="preserve"
-        fontSize="22"
-        fontWeight="bold"
-        letterSpacing="0.1px"
-      >
-        <tspan x="67" y="20">
-          {title}
-        </tspan>
-      </text>
-      <text fill="#6e6e6e" xmlSpace="preserve" fontSize="14" fontWeight="400">
-        {subtitle}
-      </text>
+      <Text x={67} y={20} option="title">
+        {title}
+      </Text>
+      {subtitle}
     </Document>
   );
 };
