@@ -7,7 +7,7 @@ type IBranding = {
 
 export const Branding: React.FC<IBranding> = ({ x, y }) => {
   return (
-    <Text x={x} y={y} option={{ size: 8, weight: 400 }}>
+    <Text x={x} y={y} option={{ size: 8, weight: 500 }}>
       readme.rocks
     </Text>
   );

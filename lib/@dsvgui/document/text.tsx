@@ -13,6 +13,7 @@ type IText = {
   y: number;
   option: IFontType | IFontOptions;
   children: string | number | undefined;
+  as?: "path" | "text";
 };
 
 const onHandFonts = {
@@ -26,7 +27,13 @@ const onHandFonts = {
   },
 };
 
-export const Text: React.FC<IText> = ({ x, y, option, children }) => {
+export const Text: React.FC<IText> = ({
+  x,
+  y,
+  option,
+  children,
+  as = "text",
+}) => {
   if (!children) return <></>;
   const defaultFontFamily = defaultFont;
 
@@ -40,10 +47,26 @@ export const Text: React.FC<IText> = ({ x, y, option, children }) => {
   if (typeof x === "function")
     x = x(openTypeFont.getAdvanceWidth(children.toString(), font.size));
 
-  const path = openTypeFont.getPath(children.toString(), x, y, font.size);
-  const pathSVG = path.toPathData(1);
-
   const classNames = ["text"];
   if (typeof option === "string") classNames.push(option);
-  return <path className={classNames.join(" ")} d={pathSVG} />;
+
+  if (as === "path") {
+    const path = openTypeFont.getPath(children.toString(), x, y, font.size);
+    const pathSVG = path.toPathData(1);
+
+    return <path className={classNames.join(" ")} d={pathSVG} />;
+  } else {
+    classNames.push("websafe");
+    return (
+      <text
+        x={x}
+        y={y}
+        className={classNames.join(" ")}
+        fontSize={font.size}
+        fontWeight={font.weight}
+      >
+        <tspan>{children}</tspan>
+      </text>
+    );
+  }
 };

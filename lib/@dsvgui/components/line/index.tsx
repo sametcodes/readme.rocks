@@ -128,7 +128,7 @@ export const Line: React.FC<ILine> = ({ items }) => {
             key={index}
             x={(textWidth) => i * xGap - textWidth / 2}
             y={0}
-            option={{ size: 8, weight: 300 }}
+            option={{ size: 8, weight: 500 }}
           >
             {periodLabel}
           </Text>

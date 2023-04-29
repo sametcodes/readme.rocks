@@ -2,6 +2,7 @@ export const Style: React.FC = () => {
   return (
     <defs>
       <style>{`
+            .websafe{ font-family: Tahoma, Verdana, sans-serif }
             .text{ fill: #32373e;}
             .text.subtitle{ fill: #5c5c5c; }
 

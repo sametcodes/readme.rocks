@@ -86,7 +86,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       <Text
                         x={0}
                         y={20 + title.length + index * 13}
-                        option={{ size: 12, weight: 400 }}
+                        option={{ size: 12, weight: 500 }}
                       >
                         {line}
                       </Text>
