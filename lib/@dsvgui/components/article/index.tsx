@@ -32,7 +32,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
   const titleWidth =
     Math.max(
       ...articles.map((article) =>
-        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 700 })
+        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 500 })
       ),
       400
     ) + 20;
@@ -52,9 +52,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
 
           const title = wrapText(
             article.meta.title,
-            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 700 },
+            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 500 },
             (line: string, index: number) => (
-              <Text x={0} y={index * 25} option={{ size: 16, weight: 700 }}>
+              <Text x={0} y={index * 25} option={{ size: 16, weight: 500 }}>
                 {line}
               </Text>
             )
@@ -85,8 +85,9 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                     (line: string, index) => (
                       <Text
                         x={0}
-                        y={20 + title.length + index * 13}
-                        option={{ size: 12, weight: 400 }}
+                        y={17 + title.length + index * 13}
+                        option={{ size: 12, weight: 500 }}
+                        className="subtitle"
                       >
                         {line}
                       </Text>

@@ -2,8 +2,9 @@ export const Style: React.FC = () => {
   return (
     <defs>
       <style>{`
-            .text{ fill: #32373e;}
-            .text.subtitle{ fill: #5c5c5c; }
+            .websafe{ font-family: Tahoma, Verdana, sans-serif }
+            .text{ fill: #22272e;}
+            .text.subtitle{ fill: #6c6c6c; }
 
             .dsvgui-container{ fill: #fbfbfb; }
             stop[offset='0']{ stop-color: #fbfbfb; }

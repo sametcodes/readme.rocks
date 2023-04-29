@@ -149,7 +149,7 @@ export const Calendar: React.FC<ICalendar> = ({
           key={monthString}
           x={x > 0 ? x : 0}
           y={166}
-          option={{ size: 12, weight: 400 }}
+          option={{ size: 12, weight: 500 }}
         >
           {monthString}
         </Text>

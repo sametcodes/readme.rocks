@@ -2,10 +2,11 @@
 
 import * as Manrope from "./manrope";
 import * as OpenSans from "./opensans";
+import * as Tahoma from "./tahoma";
 
-const fonts = { Manrope, OpenSans };
+const fonts = { Manrope, OpenSans, Tahoma };
 
 export type FontFamily = keyof typeof fonts;
-export const defaultFont: FontFamily = "Manrope";
+export const defaultFont: FontFamily = "Tahoma";
 
 export default fonts;

@@ -42,7 +42,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
           });
           const wValue = getTextWidth(item.value.toString(), {
             fontSize: 22,
-            fontWeight: 800,
+            fontWeight: 700,
           });
           const wText = Math.max(wValue, wTitle);
 
@@ -55,7 +55,7 @@ export const Metrics: React.FC<IMetrics> = ({ data, icon: Icon }) => {
               <Text x={xText} y={10} option="subtitle">
                 {item.title}
               </Text>
-              <Text x={xText} y={33.51} option={{ size: 22, weight: 800 }}>
+              <Text x={xText} y={33.51} option={{ size: 22, weight: 500 }}>
                 {item.value.toString()}
               </Text>
               {index !== 0 && (

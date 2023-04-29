@@ -13,9 +13,9 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
 
   const subtitle = wrapText(
     message,
-    { maxLineWidth: width - 60, fontSize: 14, fontWeight: 400 },
+    { maxLineWidth: width - 60, fontSize: 14, fontWeight: 500 },
     (line, index) => (
-      <Text x={67} y={index * 16 + 40} option={{ size: 14, weight: 400 }}>
+      <Text x={67} y={index * 16 + 40} option={{ size: 14, weight: 500 }}>
         {line}
       </Text>
     )
