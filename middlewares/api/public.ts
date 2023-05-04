@@ -6,13 +6,15 @@ import { sendFallbackResponse } from "@/services/api/response";
 
 import { ValidationError } from "yup";
 import { shapeDataAPISchema } from "@/services/data/validations";
-import { Platform, PlatformQuery } from "@prisma/client";
+import kv from "@vercel/kv";
 
-let cachedPlatformQueries: {
-  [key: string]: PlatformQuery & {
-    platform: Platform;
-  };
-} = {};
+type CachedPublicQuery = {
+  id: string;
+  name: string;
+  cache_time: number;
+  platformId: string;
+  platform: { name: string; code: string };
+} | null;
 
 export const validatePublicRequest = async (
   req: NextApiRequest,
@@ -26,13 +28,12 @@ export const validatePublicRequest = async (
       message: "The configuration ID doesn't seem valid.",
     });
 
-  let query: PlatformQuery & {
-    platform: Platform;
-  };
-  if (cachedPlatformQueries[id]) {
-    query = cachedPlatformQueries[id];
+  let query: CachedPublicQuery;
+  const cachedQuery: CachedPublicQuery = await kv.get(id);
+  if (cachedQuery) {
+    query = cachedQuery;
   } else {
-    const platformQuery = await prisma.platformQuery.findFirst({
+    query = await prisma.platformQuery.findFirst({
       where: { id },
       select: {
         id: true,
@@ -42,18 +43,13 @@ export const validatePublicRequest = async (
         platform: { select: { name: true, code: true } },
       },
     });
-    if (!platformQuery)
+    if (!query)
       return sendFallbackResponse(res, {
         title: "Not found",
         message: "The configuration does not exist, please check the URL.",
       });
 
-    query = platformQuery as PlatformQuery & {
-      platform: Platform;
-    };
-    cachedPlatformQueries = {
-      [id]: query,
-    };
+    await kv.set(id, JSON.stringify(query));
   }
 
   const querystring = Object.keys(req.query)
@@ -61,11 +57,11 @@ export const validatePublicRequest = async (
     .map((key) => `${key}=${req.query[key]}`)
     .join("&");
 
-  const config = parseQueryString(querystring);
+  const paramsConfig = parseQueryString(querystring);
 
   // @ts-ignore
   res.locals = {};
-  res.locals.config = config;
+  res.locals.config = paramsConfig;
   res.locals.query = query;
   res.locals.platform = query.platform;
   return next();
