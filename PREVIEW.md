@@ -2,6 +2,8 @@
 
 _All your statistics at once._
 
+![](https://readmerocks-git-209-create-a-proxy-endpoint-f-c62dc8-sametcodes.vercel.app/api/view/6440669e4c5d605274994a4b)
+
 ## Your development metrics
 ![](https://preview.readme.rocks/api/view/641b5deaa6550999ac4331d0)
 ![](https://preview.readme.rocks/api/view/641b5e30a6550999ac4331d2)
