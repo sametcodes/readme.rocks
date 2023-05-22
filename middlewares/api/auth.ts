@@ -35,7 +35,6 @@ export const validateAccessToken = async (
     });
 
   res.locals.connection = connection;
-
   if (connection.expires_at && Date.now() > connection.expires_at) {
     try {
       await actions.refreshAccessToken(platform.code, connection);

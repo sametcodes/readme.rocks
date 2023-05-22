@@ -6,15 +6,6 @@ import { sendFallbackResponse } from "@/services/api/response";
 
 import { ValidationError } from "yup";
 import { shapeDataAPISchema } from "@/services/data/validations";
-import kv from "@vercel/kv";
-
-type CachedPublicQuery = {
-  id: string;
-  name: string;
-  cache_time: number;
-  platformId: string;
-  platform: { name: string; code: string };
-} | null;
 
 export const validatePublicRequest = async (
   req: NextApiRequest,
@@ -28,29 +19,21 @@ export const validatePublicRequest = async (
       message: "The configuration ID doesn't seem valid.",
     });
 
-  let query: CachedPublicQuery;
-  const cachedQuery: CachedPublicQuery = await kv.get(id);
-  if (cachedQuery) {
-    query = cachedQuery;
-  } else {
-    query = await prisma.platformQuery.findFirst({
-      where: { id },
-      select: {
-        id: true,
-        name: true,
-        cache_time: true,
-        platformId: true,
-        platform: { select: { name: true, code: true } },
-      },
+  const query = await prisma.platformQuery.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      cache_time: true,
+      platformId: true,
+      platform: { select: { name: true, code: true } },
+    },
+  });
+  if (!query)
+    return sendFallbackResponse(res, {
+      title: "Not found",
+      message: "The configuration does not exist, please check the URL.",
     });
-    if (!query)
-      return sendFallbackResponse(res, {
-        title: "Not found",
-        message: "The configuration does not exist, please check the URL.",
-      });
-
-    await kv.set(id, JSON.stringify(query));
-  }
 
   const querystring = Object.keys(req.query)
     .filter((key) => key !== "id")
