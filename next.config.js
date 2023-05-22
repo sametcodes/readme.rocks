@@ -28,6 +28,28 @@ const nextConfig = {
       },
     ];
   },
+  async headers() {
+    return [
+      {
+        source: "/api/view",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "s-maxage=60, stale-while-revalidate=604800",
+          },
+        ],
+      },
+      {
+        source: "/api/view/:id*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "s-maxage=60, stale-while-revalidate=604800",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;
