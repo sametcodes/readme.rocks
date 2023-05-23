@@ -5,15 +5,6 @@ import { sendFallbackResponse } from "@/services/api/response";
 
 import { ValidationError } from "yup";
 import { shapeDataAPISchema } from "@/services/data/validations";
-import kv from "@vercel/kv";
-import { PlatformQueryConfig } from "@prisma/client";
-
-type CachedPrivateQuery =
-  | (PlatformQueryConfig & {
-      platformQuery: { name: string; cache_time: number };
-      platform: { name: string; code: string };
-    })
-  | null;
 
 export const validatePrivateRequest = async (
   req: NextApiRequest,
@@ -27,26 +18,19 @@ export const validatePrivateRequest = async (
       message: "The configuration ID doesn't seem valid.",
     });
 
-  let queryConfig: CachedPrivateQuery;
-  const cachedConfig: CachedPrivateQuery = await kv.get(id);
-  if (cachedConfig) {
-    queryConfig = cachedConfig;
-  } else {
-    queryConfig = await prisma.platformQueryConfig.findFirst({
-      where: { id },
-      select: {
-        id: true,
-        userId: true,
-        queryConfig: true,
-        viewConfig: true,
-        platformQueryId: true,
-        platformId: true,
-        platformQuery: { select: { name: true, cache_time: true } },
-        platform: { select: { name: true, code: true } },
-      },
-    });
-    await kv.set(id, JSON.stringify(queryConfig));
-  }
+  const queryConfig = await prisma.platformQueryConfig.findFirst({
+    where: { id },
+    select: {
+      id: true,
+      userId: true,
+      queryConfig: true,
+      viewConfig: true,
+      platformQueryId: true,
+      platformId: true,
+      platformQuery: { select: { name: true, cache_time: true } },
+      platform: { select: { name: true, code: true } },
+    },
+  });
 
   if (!queryConfig)
     return sendFallbackResponse(res, {

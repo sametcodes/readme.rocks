@@ -1,4 +1,5 @@
 import { Session } from "next-auth";
+import { NextApiRequest, NextApiResponse } from "next";
 
 export type DataAPIPayload = {
   session: Session;
@@ -12,4 +13,12 @@ export type DataAPIResponse = {
   error: string;
 };
 
-export type DataAPIMethod<T = any> = (payload: DataAPIPayload) => Promise<T>;
+export type HandlerContext = {
+  req: NextApiRequest;
+  res: NextApiResponse;
+};
+
+export type DataAPIMethod<T = any> = (
+  payload: DataAPIPayload,
+  context: HandlerContext
+) => Promise<T>;

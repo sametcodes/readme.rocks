@@ -93,11 +93,10 @@ export const deletePlatformQueryConfig: DataAPIMethod = async ({
     .then((res) => ({}));
 };
 
-export const editPlatformQueryConfig: DataAPIMethod = async ({
-  payload,
-  params,
-  session,
-}) => {
+export const editPlatformQueryConfig: DataAPIMethod = async (
+  { payload, params, session },
+  { req, res }
+) => {
   const [configId] = params;
   if (isObjectID(configId) === false)
     throw new Error("id parameter is missing or invalid");
@@ -120,6 +119,7 @@ export const editPlatformQueryConfig: DataAPIMethod = async ({
     )
     .validate(payload, { strict: true });
 
+  res.revalidate(`/api/view/${configId}`);
   return prisma.platformQueryConfig.update({
     data: {
       queryConfig: payload.queryConfig,

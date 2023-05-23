@@ -36,7 +36,10 @@ export default async function handler(
       .json({ message: "Bad request: method not allowed for this service" });
 
   try {
-    const result = await dataService({ session, params, payload: req.body });
+    const result = await dataService(
+      { session, params, payload: req.body },
+      { req, res }
+    );
     return res.status(200).json({ success: true, data: result });
   } catch (err) {
     console.log(err);
