@@ -51,3 +51,6 @@ export default function Index() {
     </>
   );
 }
+
+export const dynamic = "force-static";
+export const revalidate = false;

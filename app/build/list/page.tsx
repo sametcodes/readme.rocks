@@ -88,3 +88,6 @@ const PlatformQueryView = async (
     </li>
   );
 };
+
+export const dynamic = "force-static";
+export const revalidate = false;
