@@ -52,5 +52,4 @@ export default function Index() {
   );
 }
 
-export const dynamic = "force-static";
-export const revalidate = false;
+export const revalidate = 3604800;

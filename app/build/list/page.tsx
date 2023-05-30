@@ -1,10 +1,11 @@
-import { cache } from "react";
 import prisma from "@/services/prisma";
 import { Platform, PlatformCode, PlatformQuery } from "@prisma/client";
 import { templates, samples } from "@/platforms";
 import Link from "next/link";
 
-const getPlatforms = cache(async () => {
+export const revalidate = 604800;
+
+export default async function QueryList() {
   const platforms = await prisma.platform.findMany({
     include: {
       queries: {
@@ -12,11 +13,6 @@ const getPlatforms = cache(async () => {
       },
     },
   });
-  return platforms;
-});
-
-export default async function QueryList() {
-  const platforms = await getPlatforms();
 
   const view = await Promise.all(
     platforms.map((platform) => PlatformQueries({ platform }, platform.id))
