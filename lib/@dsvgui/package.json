@@ -12,7 +12,7 @@
   "author": "sametcodes",
   "license": "ISC",
   "dependencies": {
-    "@storybook/addon-essentials": "^7.0.6",
+    "@storybook/addon-essentials": "^7.6.17",
     "@storybook/addon-interactions": "^7.0.6",
     "@storybook/addon-links": "^7.0.6",
     "@storybook/blocks": "^7.0.6",
@@ -25,7 +25,7 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
-    "storybook": "^7.0.6"
+    "storybook": "^7.6.17"
   },
   "devDependencies": {
     "@storybook/addon-mdx-gfm": "^7.0.6",
