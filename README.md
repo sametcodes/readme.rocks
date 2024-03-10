@@ -15,6 +15,15 @@ _All your statistics at once._
 ![](https://readme.rocks/api/view/6431b08616981eaebfd030f9)
 ![](https://readme.rocks/api/view/6431b559ddde9c1558a16fe6)
 
+## Project progress with milestones
+
+<a href="https://github.com/sametcodes/readme.rocks/milestone/4">
+   <img width="450px" src="https://readme.rocks/api/view/6434324683b8f4f727a83c32" />
+<a href="https://github.com/sponsorships/d-fischer">
+<a href="https://github.com/sametcodes/readme.rocks/milestone/2">
+   <img width="450px" src="https://readme.rocks/api/view/64a70675d1e3cba955dc7df9" />
+</a>
+
 ## Line stats
 ![](https://readme.rocks/api/view/6440669e4c5d605274994a4b)
 
