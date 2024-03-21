@@ -1,6 +1,10 @@
 import nextConnect from "next-connect";
 import passport from "passport";
 
+export const config = {
+  runtime: "edge",
+};
+
 import handlePlatformAPI from "@/services/api/handler";
 
 import {
@@ -9,7 +13,7 @@ import {
 } from "@/middlewares/api/private";
 import { validateAccessToken, loadPassport } from "@/middlewares/api/auth";
 import { resolveHandler } from "@/middlewares/api";
-// import { setCacheControl } from "@/middlewares/api/cache";
+import { setCacheControl } from "@/middlewares/api/cache";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default nextConnect()
@@ -19,14 +23,20 @@ export default nextConnect()
   .use(resolveHandler)
   .use(loadPassport)
   .use(validateAccessToken)
-  // .use(setCacheControl)
+  .use(setCacheControl)
   .get((req: NextApiRequest, res: NextApiResponse) => {
-    const { services, templates, connection, query, config } = res.locals;
+    const {
+      services,
+      templates,
+      connection,
+      query,
+      config: configLocal,
+    } = res.locals;
     return handlePlatformAPI(
       services,
       templates,
       query,
-      config,
+      configLocal,
       connection
     )(req, res);
   });
