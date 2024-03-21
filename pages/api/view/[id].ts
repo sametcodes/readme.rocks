@@ -1,10 +1,6 @@
 import nextConnect from "next-connect";
 import passport from "passport";
 
-export const config = {
-  runtime: "edge",
-};
-
 import handlePlatformAPI from "@/services/api/handler";
 
 import {
@@ -25,18 +21,12 @@ export default nextConnect()
   .use(validateAccessToken)
   .use(setCacheControl)
   .get((req: NextApiRequest, res: NextApiResponse) => {
-    const {
-      services,
-      templates,
-      connection,
-      query,
-      config: configLocal,
-    } = res.locals;
+    const { services, templates, connection, query, config } = res.locals;
     return handlePlatformAPI(
       services,
       templates,
       query,
-      configLocal,
+      config,
       connection
     )(req, res);
   });
