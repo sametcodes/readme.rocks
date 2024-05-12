@@ -37,5 +37,7 @@ export const listArticles: ViewComponent = async (result, config) => {
     }
   );
 
-  return <Article articles={articles} />;
+  return (
+    <Article document={{ w: 5, h: articles.length }} articles={articles} />
+  );
 };

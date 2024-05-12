@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Calendar } from "./index";
+import { Grid } from "../../utils/grid";
+import { Calendar, calendarDocumentPreferences, ICalendar } from "./index";
 
 const meta: Meta<typeof Calendar> = {
   title: "Calendar",
@@ -21,7 +22,7 @@ const meta: Meta<typeof Calendar> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Calendar>;
+type Story = StoryObj<ICalendar>;
 
 const produceFakeDates = () => {
   const today = Date.now();
@@ -35,27 +36,47 @@ const produceFakeDates = () => {
 };
 const dates = produceFakeDates();
 
-export const Regular: Story = {
+export const Base: Story = {
   args: {
-    dates,
-  },
-};
-
-export const WithText: Story = {
-  args: {
+    document: {
+      w: 4,
+      h: 2,
+      ...calendarDocumentPreferences,
+    },
     title: "Calendar",
     subtitle: "This is a Calendar component",
     dates,
-    weekCount: 52,
+    weekCount: 26,
+  },
+};
+
+export const Compact: Story = {
+  args: {
+    document: {
+      w: 4,
+      h: 1,
+      ...calendarDocumentPreferences,
+    },
+    dates,
+    weekCount: 26,
   },
 };
 
 export const WithStreak: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 2,
+      ...calendarDocumentPreferences,
+    },
     title: "Calendar",
     subtitle: "This is a Calendar component",
     dates,
     weekCount: 26,
     showStreak: true,
   },
+};
+
+export const WithGrid = () => {
+  return <Grid component={Calendar} stories={[Base, Compact, WithStreak]} />;
 };

@@ -1,15 +1,29 @@
 import React from "react";
-import { Document, Text } from "@/lib/@dsvgui";
-import { wrapText } from "@/lib/@dsvgui/utils/index";
-import { IoWarningOutline } from "react-icons/io5";
 
-type IFallback = {
+import { Document, Text, getDocumentSize } from "../../document";
+import { wrapText } from "../../utils";
+import { IoWarningOutline } from "react-icons/io5";
+import { DocumentMeta } from "../../document/type";
+
+export type IFallback = {
   title: string;
   message: string;
+} & DocumentMeta;
+
+export const documentPreferences = {
+  minW: 3,
+  minH: 1,
+  maxW: 4,
+  maxH: 1,
+  default: {
+    w: 3,
+    h: 1,
+  },
 };
 
-export const Fallback: React.FC<IFallback> = ({ title, message }) => {
-  const width = 450;
+export const Fallback: React.FC<IFallback> = ({ title, message, document }) => {
+  document = document || documentPreferences.default;
+  const { height, width } = getDocumentSize(document);
 
   const subtitle = wrapText(
     message,
@@ -20,8 +34,6 @@ export const Fallback: React.FC<IFallback> = ({ title, message }) => {
       </Text>
     )
   );
-
-  const height = 25 + subtitle.length * 16;
 
   return (
     <Document w={width} h={height}>

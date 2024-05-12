@@ -1,10 +1,13 @@
-import { Document, Text } from "@/lib/@dsvgui";
-import { wrapText } from "@/lib/@dsvgui/utils";
-import { getTextWidth } from "@/lib/@dsvgui/utils/index";
+import React from "react";
+
+import { Document, Text, getDocumentSize } from "../../document";
+import { wrapText, getTextWidth } from "../../utils";
 
 import { AiOutlineCalendar, AiOutlineLike } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
 import { IoPersonCircleOutline } from "react-icons/io5";
+
+import { DocumentMeta } from "../../document/type";
 
 export type IArticle = {
   articles: Array<{
@@ -22,39 +25,49 @@ export type IArticle = {
     like_count: number;
     reading_time_minutes: number;
   }>;
+} & DocumentMeta;
+
+export const articleDocumentPreferences = {
+  minW: 3,
+  minH: 1,
+  maxW: 5,
+  maxH: 4,
+  default: {
+    w: 5,
+    h: 3,
+  },
 };
 
-export const Article: React.FC<IArticle> = ({ articles }) => {
+export const Article: React.FC<IArticle> = ({ articles, document }) => {
+  document = document || articleDocumentPreferences.default;
+  const { width, height } = getDocumentSize(document);
+
+  const withImage = document.w > 4;
   const documentId = Math.random().toString(36).substr(2, 9);
 
+  const rowHeight = height / articles.length;
   const innerPadding = 30;
-  const thumbnailWidth = 100;
-  const titleWidth =
-    Math.max(
-      ...articles.map((article) =>
-        getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 700 })
-      ),
-      400
-    ) + 20;
+  const thumbnailWidth = withImage ? 100 : 0;
+  const titleWidth = Math.max(
+    ...articles.map((article) =>
+      getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 700 })
+    ),
+    width - thumbnailWidth - 45
+  );
   const containerWidth = titleWidth + thumbnailWidth + innerPadding;
 
   return (
-    <Document
-      w={containerWidth}
-      h={100 * articles.length}
-      padding={0}
-      useBranding={false}
-    >
+    <Document w={width} h={height} padding={0} useBranding={false}>
       <g clipPath="url(#clip_borders)">
         {articles.map((article, key: number) => {
-          const yOffset = 100 * key;
-          const xOffset = 120;
+          const yOffset = rowHeight * key;
+          const xOffset = thumbnailWidth + 20;
 
           const title = wrapText(
             article.meta.title,
             { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 700 },
             (line: string, index: number) => (
-              <Text x={0} y={index * 25} option={{ size: 16, weight: 700 }}>
+              <Text x={0} y={index * 15} option={{ size: 16, weight: 700 }}>
                 {line}
               </Text>
             )
@@ -64,7 +77,8 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
             <>
               {key !== 0 && (
                 <line
-                  x1={100}
+                  key={`line_${key}`}
+                  x1={thumbnailWidth}
                   y1={yOffset}
                   x2={containerWidth}
                   y2={yOffset}
@@ -72,15 +86,15 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                   stroke="#dddddd"
                 />
               )}
-              <g transform={`translate(0 ${yOffset})`}>
-                <g transform={`translate(${xOffset} 24)`}>
+              <g transform={`translate(0 ${yOffset})`} key={`group_${key}`}>
+                <g transform={`translate(${xOffset} 20)`}>
                   {title}
                   {wrapText(
                     article.meta.description.replace(/\n/gm, " "),
                     {
                       maxLineWidth: titleWidth - 20,
                       fontSize: 12,
-                      maxLines: 3,
+                      maxLines: 2,
                     },
                     (line: string, index) => (
                       <Text
@@ -95,7 +109,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                   )}
                 </g>
 
-                <g transform={`translate(${xOffset} 90)`}>
+                <g transform={`translate(${xOffset} 75)`}>
                   <g transform={`translate(${15} 0)`}>
                     <AiOutlineCalendar
                       className="icon"
@@ -107,29 +121,43 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                       {article.publish_date}
                     </Text>
                   </g>
-                  <g transform={`translate(${15 + titleWidth / 4} 0)`}>
-                    <AiOutlineLike
-                      className="icon"
-                      x={-18}
-                      y={-11}
-                      fontSize="15px"
-                    />
-                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
-                      {article.like_count}
-                    </Text>
-                  </g>
-                  <g transform={`translate(${15 + titleWidth / 2} 0)`}>
-                    <BiTimeFive
-                      className="icon"
-                      x={-18}
-                      y={-11}
-                      fontSize="15px"
-                    />
-                    <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
-                      {article.reading_time_minutes}
-                    </Text>
-                  </g>
-                  <g transform={`translate(${15 + (titleWidth / 4) * 3} 0)`}>
+                  {(document?.w || articleDocumentPreferences.default.w) >
+                    3 && (
+                    <>
+                      <g transform={`translate(${30 + titleWidth / 4} 0)`}>
+                        <AiOutlineLike
+                          className="icon"
+                          x={-18}
+                          y={-11}
+                          fontSize="15px"
+                        />
+                        <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
+                          {article.like_count}
+                        </Text>
+                      </g>
+                      <g transform={`translate(${15 + titleWidth / 2} 0)`}>
+                        <BiTimeFive
+                          className="icon"
+                          x={-18}
+                          y={-11}
+                          fontSize="15px"
+                        />
+                        <Text x={3} y={1} option={{ size: 12, weight: 500 }}>
+                          {article.reading_time_minutes}
+                        </Text>
+                      </g>
+                    </>
+                  )}
+                  <g
+                    transform={`translate(${
+                      0 +
+                      (titleWidth / 4) * 3 -
+                      ((document?.w || articleDocumentPreferences.default.w) <=
+                      3
+                        ? 30
+                        : 0)
+                    } 0)`}
+                  >
                     <IoPersonCircleOutline
                       className="icon"
                       x={-18}
@@ -151,31 +179,33 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
                 </g>
               </g>
 
-              <defs>
-                <clipPath id={`clip_image_${documentId}${key}`}>
-                  <rect width={100} height={100} fill="white" />
-                </clipPath>
-                <pattern
-                  id={`pattern_${documentId}${key}`}
-                  patternContentUnits="objectBoundingBox"
-                  width="1"
-                  height="1"
-                >
-                  <use
+              {withImage && (
+                <defs key={`def_${key}`}>
+                  <clipPath id={`clip_image_${documentId}${key}`}>
+                    <rect width={rowHeight} height={rowHeight} fill="white" />
+                  </clipPath>
+                  <pattern
+                    id={`pattern_${documentId}${key}`}
+                    patternContentUnits="objectBoundingBox"
+                    width="1"
+                    height="1"
+                  >
+                    <use
+                      xmlnsXlink="http://www.w3.org/1999/xlink"
+                      xlinkHref={`#image_${documentId}${key}`}
+                      transform={`matrix(0.000837427 0 0 0.000814996 -0.172454 0)`}
+                    />
+                  </pattern>
+                  <image
+                    id={`image_${documentId}${key}`}
+                    transform={`translate(50 -130)`}
+                    width={article.thumbnail.width}
+                    height={500}
                     xmlnsXlink="http://www.w3.org/1999/xlink"
-                    xlinkHref={`#image_${documentId}${key}`}
-                    transform={`matrix(0.000837427 0 0 0.000814996 -0.172454 0)`}
+                    xlinkHref={`data:image/png;base64,${article.thumbnail.value}`}
                   />
-                </pattern>
-                <image
-                  id={`image_${documentId}${key}`}
-                  transform={`translate(50 -130)`}
-                  width={article.thumbnail.width}
-                  height={500}
-                  xmlnsXlink="http://www.w3.org/1999/xlink"
-                  xlinkHref={`data:image/png;base64,${article.thumbnail.value}`}
-                />
-              </defs>
+                </defs>
+              )}
             </>
           );
         })}
@@ -183,12 +213,7 @@ export const Article: React.FC<IArticle> = ({ articles }) => {
 
       <defs>
         <clipPath id="clip_borders">
-          <rect
-            width={containerWidth}
-            height={100 * articles.length}
-            rx="20"
-            fill="white"
-          />
+          <rect width={containerWidth} height={height} rx="20" fill="white" />
         </clipPath>
       </defs>
     </Document>
