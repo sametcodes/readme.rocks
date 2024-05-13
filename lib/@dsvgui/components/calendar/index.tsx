@@ -1,5 +1,8 @@
-import { Document, Text } from "@/lib/@dsvgui";
-import { generateColorVariations } from "@/lib/@dsvgui/utils";
+import React from "react";
+
+import { Document, Text, getDocumentSize } from "../../document";
+import { generateColorVariations } from "../../utils";
+import { DocumentMeta } from "../../document/type";
 
 export type ICalendar = {
   title?: string;
@@ -9,6 +12,17 @@ export type ICalendar = {
   dates: { [key: string]: number };
   showMonthLabels?: boolean;
   showStreak?: boolean;
+} & DocumentMeta;
+
+export const calendarDocumentPreferences = {
+  minW: 3,
+  minH: 1,
+  maxW: 8,
+  maxH: 2,
+  default: {
+    w: 4,
+    h: 2,
+  },
 };
 
 export const Calendar: React.FC<ICalendar> = ({
@@ -19,10 +33,20 @@ export const Calendar: React.FC<ICalendar> = ({
   dates,
   showMonthLabels = true,
   showStreak = false,
+  document,
 }) => {
+  document = document || calendarDocumentPreferences.default;
+  const { width, height } = getDocumentSize(document);
+  const isCompact = document.h === 1;
+  weekCount = document.w * 6.2;
+
+  title = isCompact ? "" : title;
+  subtitle = isCompact ? "" : subtitle;
+  showStreak = isCompact ? false : showStreak;
+
   const dayCount = 7;
-  const boxSize = 13;
-  const boxMargin = 5;
+  const boxMargin = 3;
+  const boxSize = (width - 30) / weekCount - boxMargin - (isCompact ? 4 : 0);
   const documentColorId = "_" + Math.random().toString(36).substr(2, 5);
 
   const today = Date.now();
@@ -48,10 +72,6 @@ export const Calendar: React.FC<ICalendar> = ({
     (title || showStreak ? 22 : 0) +
     ((title && subtitle) || showStreak ? 16 : 0) +
     (title || subtitle || showStreak ? 15 : 0);
-  const calendarHeight = dayCount * (boxSize + boxMargin);
-
-  const width = weekCount * (boxSize + boxMargin) - boxMargin;
-  const height = calendarHeight + headerHeight + ((showMonthLabels && 15) || 0);
 
   const totalValue = Object.values(dates).reduce(
     (acc, value) => acc + value,
@@ -125,10 +145,14 @@ export const Calendar: React.FC<ICalendar> = ({
                 key={`${nthDay}`}
                 id={`${dateString}`}
                 data-value={dates[dateString] || 0}
-                x={(weekIndex - 1) * (boxSize + boxMargin)}
-                y={(dayIndex - 1) * (boxSize + boxMargin)}
+                x={
+                  (weekIndex - 1) * (boxSize + boxMargin) - (isCompact ? 5 : 0)
+                }
+                y={
+                  (dayIndex - 1) * (boxSize + boxMargin) - (isCompact ? 7.5 : 0)
+                }
                 width={boxSize}
-                rx="3px"
+                rx="2px"
                 height={boxSize}
                 className={[color, "d"].filter(Boolean).join(" ")}
               />
@@ -143,12 +167,12 @@ export const Calendar: React.FC<ICalendar> = ({
     (_, i) => {
       const month = new Date(today - i * 30 * 24 * 60 * 60 * 1000);
       const monthString = month.toLocaleString("default", { month: "short" });
-      const x = width - i * 4 * (boxSize + boxMargin + 1) - 25;
+      const x = (weekCount - i * 4) * (boxSize + boxMargin) - boxSize / 2 - 25;
       return (
         <Text
           key={monthString}
           x={x > 0 ? x : 0}
-          y={166}
+          y={170}
           option={{ size: 12, weight: 500 }}
         >
           {monthString}
@@ -177,14 +201,14 @@ export const Calendar: React.FC<ICalendar> = ({
             {showStreak && (
               <>
                 <Text
-                  x={(textWidth) => width - textWidth}
+                  x={(textWidth) => width - textWidth - 40}
                   y={18}
                   option="title"
                 >
                   {streak}
                 </Text>
                 <Text
-                  x={(textWidth) => width - textWidth}
+                  x={(textWidth) => width - textWidth - 40}
                   y={36}
                   option="subtitle"
                 >
@@ -194,7 +218,25 @@ export const Calendar: React.FC<ICalendar> = ({
             )}
           </g>
         )}
-        <g id="Weeks" transform={`translate(0 ${headerHeight})`}>
+        {isCompact && (
+          <>
+            <Text
+              x={(textWidth) => width - textWidth - 40}
+              y={18}
+              option="title"
+            >
+              {streak}
+            </Text>
+            <Text
+              x={(textWidth) => width - textWidth - 40}
+              y={36}
+              option="subtitle"
+            >
+              Streak
+            </Text>
+          </>
+        )}
+        <g id="Weeks" transform={`translate(0 ${headerHeight - 5})`}>
           {weeks}
         </g>
         {showMonthLabels && (

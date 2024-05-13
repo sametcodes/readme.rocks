@@ -1,3 +1,4 @@
+import React from "react";
 import { FontFamily, defaultFont } from "../document/fonts";
 import { loadOpenTypeFont } from "../utils/fonts";
 

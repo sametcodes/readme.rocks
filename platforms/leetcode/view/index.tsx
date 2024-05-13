@@ -10,7 +10,7 @@ export const getUser: ViewComponent = (result, config) => {
       data={[
         { title: "Reputation", value: user.profile.reputation },
         { title: "Ranking", value: user.profile.ranking },
-        { title: "Post view count", value: user.profile.postViewCount },
+        { title: "View count", value: user.profile.postViewCount },
       ]}
     />
   );

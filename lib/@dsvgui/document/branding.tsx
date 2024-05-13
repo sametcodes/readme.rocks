@@ -1,4 +1,6 @@
-import { Text } from "@/lib/@dsvgui/";
+import React from "react";
+
+import { Text } from "..";
 
 type IBranding = {
   x: number;
