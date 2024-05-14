@@ -12,11 +12,11 @@
   "author": "sametcodes",
   "license": "ISC",
   "dependencies": {
-    "@storybook/addon-essentials": "^7.0.6",
-    "@storybook/addon-interactions": "^7.0.6",
-    "@storybook/addon-links": "^7.0.6",
-    "@storybook/blocks": "^7.0.6",
-    "@storybook/nextjs": "^7.0.6",
+    "@storybook/addon-essentials": "^7.6.19",
+    "@storybook/addon-interactions": "^7.6.19",
+    "@storybook/addon-links": "^7.6.19",
+    "@storybook/blocks": "^7.6.19",
+    "@storybook/nextjs": "^7.6.19",
     "@storybook/react": "^7.0.6",
     "@storybook/testing-library": "^0.1.0",
     "buffer": "^6.0.3",
@@ -25,10 +25,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^4.8.0",
-    "storybook": "^7.0.6"
+    "storybook": "^7.6.19"
   },
   "devDependencies": {
-    "@storybook/addon-mdx-gfm": "^7.0.6",
     "@types/opentype.js": "^1.3.4"
   }
 }
