@@ -9,10 +9,19 @@ export const setCacheControl = (
     query: { cache_time, _vercel_no_cache },
   } = res.locals;
 
-  res.setHeader("Cache-Control", "max-age=60");
+  res.setHeader(
+    "Cache-Control",
+    `max-age=${cache_time}, stale-while-revalidate=2592000`
+  );
   if (_vercel_no_cache === undefined) {
-    res.setHeader("CDN-Cache-Control", `max-age=${cache_time}`);
-    res.setHeader("Vercel-CDN-Cache-Control", `max-age=${cache_time}`);
+    res.setHeader(
+      "CDN-Cache-Control",
+      `max-age=${cache_time}, stale-while-revalidate=2592000`
+    );
+    res.setHeader(
+      "Vercel-CDN-Cache-Control",
+      `max-age=${cache_time}, stale-while-revalidate=2592000`
+    );
   }
 
   next();
