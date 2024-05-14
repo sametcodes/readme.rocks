@@ -28,7 +28,7 @@ export const Document: React.FC<IDocumentProps> = (props) => {
         w + margin + padding
       } ${h + margin + padding}`}
       fill="none"
-      {...rest}
+      // {...rest}
       dangerouslySetInnerHTML={undefined}
     >
       <Style />

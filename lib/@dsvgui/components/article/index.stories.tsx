@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Article } from "./index";
+import { Article, IArticle } from "./index";
 import { readImageURL } from "@/lib/@dsvgui/utils";
 
 const meta: Meta<typeof Article> = {
@@ -16,7 +16,7 @@ const meta: Meta<typeof Article> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Article>;
+type Story = StoryObj<IArticle>;
 
 export const Base: Story = {
   args: {
