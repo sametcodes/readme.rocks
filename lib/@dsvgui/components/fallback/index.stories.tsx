@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Fallback } from "./index";
+import { Grid } from "../../utils/grid";
+import { Fallback, IFallback, documentPreferences } from "./index";
 
 const meta: Meta<typeof Fallback> = {
   title: "Fallback",
@@ -7,11 +8,20 @@ const meta: Meta<typeof Fallback> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Fallback>;
+type Story = StoryObj<IFallback>;
 
-export const Warning: Story = {
+export const Base: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 1,
+      ...documentPreferences,
+    },
     title: "Fallback",
     message: "This is a fallback component",
   },
+};
+
+export const WithGrid = () => {
+  return <Grid component={Fallback} stories={[Base]} />;
 };

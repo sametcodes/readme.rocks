@@ -1,4 +1,7 @@
 /** @type { import('@storybook/react').Preview } */
+
+import "react-grid-layout/css/styles.css";
+
 const preview = {
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },

@@ -1,10 +1,11 @@
-import { Document, Text } from "@/lib/@dsvgui";
-import { getTextWidth } from "@/lib/@dsvgui/utils";
+import React from "react";
+
+import { Document, getDocumentSize, Text } from "../../document";
+import { DocumentMeta } from "../../document/type";
 
 export type IFlock = {
   title?: string;
   subtitle?: string;
-  items_per_row: number;
   members: Array<{
     image: {
       value: string;
@@ -13,52 +14,54 @@ export type IFlock = {
     };
     caption: string;
   }>;
+} & DocumentMeta;
+
+export const flockDocumentPreferences = {
+  minW: 3,
+  minH: 1,
+  maxW: 8,
+  maxH: 8,
+  default: {
+    w: 4,
+    h: 2,
+  },
 };
 
 export const Flock: React.FC<IFlock> = ({
+  document,
   title,
   subtitle,
-  items_per_row,
   members,
 }) => {
-  const circleSize = 50;
+  document = document || flockDocumentPreferences.default;
+  const { height, width } = getDocumentSize(document);
+  const isCompact = document.h === 1;
+
+  title = isCompact ? "" : title;
+  subtitle = isCompact ? "" : subtitle;
+
+  const circleSize = 45;
   const circleGap = 5;
-  const numRows = Math.ceil(members.length / items_per_row);
 
   const titleFontSize = title ? 22 : 0;
   const subtitleFontSize = subtitle ? 16 : 0;
 
-  const headStart = { x: 0, y: 20 };
+  const headStart = { x: 0, y: isCompact ? 0 : 20 };
   const boxStart = {
     x: circleSize / 2,
     y: headStart.y + titleFontSize + subtitleFontSize + circleSize / 2,
   };
 
-  const titleWidth = title
-    ? getTextWidth(title.trim(), { fontSize: titleFontSize, fontWeight: 700 })
-    : 0;
-  const subtitleWidth = subtitle
-    ? getTextWidth(subtitle.trim(), {
-        fontSize: subtitleFontSize,
-        fontWeight: 500,
-      })
-    : 0;
+  const itemsPerRow = Math.floor(width / (circleSize + circleGap));
 
-  const documentWidth = Math.max(
-    titleWidth,
-    subtitleWidth,
-    (members.length > items_per_row ? items_per_row : members.length) *
-      (circleSize + circleGap)
+  members = members.slice(
+    0,
+    itemsPerRow * Math.floor((height - boxStart.y) / (circleSize + circleGap))
   );
-  const documentHeight =
-    headStart.y +
-    titleFontSize +
-    subtitleFontSize +
-    numRows * (circleSize + circleGap);
 
   const documentId = Math.random().toString(36).substr(2, 9);
   return (
-    <Document w={documentWidth} h={documentHeight}>
+    <Document w={width} h={height}>
       {title && (
         <Text x={headStart.x} y={headStart.y} option="title">
           {title.trim()}
@@ -70,8 +73,8 @@ export const Flock: React.FC<IFlock> = ({
         </Text>
       )}
       {members.map((member, index) => {
-        const row = Math.floor(index / items_per_row);
-        const col = index % items_per_row;
+        const row = Math.floor(index / itemsPerRow);
+        const col = index % itemsPerRow;
 
         return (
           <>

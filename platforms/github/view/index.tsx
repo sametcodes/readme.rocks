@@ -182,7 +182,7 @@ export const getUserCommitStreak: ViewComponent = (result, config) => {
 };
 
 export const getContributors: ViewComponent = async (result, config) => {
-  const { title, subtitle, items_per_row } = config.viewConfig as any;
+  const { title, subtitle } = config.viewConfig as any;
 
   const contributors = result.data.repository.mentionableUsers.nodes;
 
@@ -215,18 +215,11 @@ export const getContributors: ViewComponent = async (result, config) => {
     })
   );
 
-  return (
-    <Flock
-      title={title}
-      subtitle={subtitle}
-      items_per_row={items_per_row}
-      members={members}
-    />
-  );
+  return <Flock title={title} subtitle={subtitle} members={members} />;
 };
 
 export const getUserSponsorList: ViewComponent = async (result, config) => {
-  const { title, subtitle, items_per_row } = config.viewConfig as any;
+  const { title, subtitle } = config.viewConfig as any;
 
   const { nodes: sponsors } = result.data.user.sponsorshipsAsMaintainer;
 
@@ -259,12 +252,5 @@ export const getUserSponsorList: ViewComponent = async (result, config) => {
     })
   );
 
-  return (
-    <Flock
-      title={title}
-      subtitle={subtitle}
-      items_per_row={items_per_row}
-      members={members}
-    />
-  );
+  return <Flock title={title} subtitle={subtitle} members={members} />;
 };
