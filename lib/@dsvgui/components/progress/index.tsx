@@ -57,7 +57,7 @@ export const Progress: React.FC<IProgress> = ({
         <rect
           x="0"
           y={showLabels ? 45 : 30}
-          width={Math.floor((percent / 100) * width)}
+          width={Math.floor((percent / 100) * (width - metricsOffsetY * 2))}
           height={showLabels ? 18 : 12}
           rx="5"
           fill="#2DA44E"

@@ -61,6 +61,10 @@ export const wrapText: IWrapText = (inputText, options, cb) => {
   return lines.slice(0, options.maxLines).map(cb);
 };
 
+export const truncateText = (text: string, length: number) => {
+  return text.length > length ? text.slice(0, length) + "..." : text;
+};
+
 type IConvertDateToReadbleFormat = (isoTimestamp: string) => string;
 export const convertDateToReadableFormat: IConvertDateToReadbleFormat = (
   isoTimestamp
