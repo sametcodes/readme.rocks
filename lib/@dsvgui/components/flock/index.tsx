@@ -2,6 +2,7 @@ import React from "react";
 
 import { Document, getDocumentSize, Text } from "../../document";
 import { DocumentMeta } from "../../document/type";
+import { getTextWidth, truncateText } from "../../utils";
 
 export type IFlock = {
   title?: string;
@@ -53,11 +54,21 @@ export const Flock: React.FC<IFlock> = ({
   };
 
   const itemsPerRow = Math.floor(width / (circleSize + circleGap));
-
   members = members.slice(
     0,
     itemsPerRow * Math.floor((height - boxStart.y) / (circleSize + circleGap))
   );
+
+  const subtitleTextWidth =
+    subtitle &&
+    getTextWidth(subtitle, {
+      fontSize: 16,
+      fontWeight: 700,
+    });
+  const subtitleTruncated =
+    subtitle &&
+    subtitleTextWidth &&
+    truncateText(subtitle, (width / subtitleTextWidth) * (subtitle.length - 5));
 
   const documentId = Math.random().toString(36).substr(2, 9);
   return (
@@ -69,7 +80,7 @@ export const Flock: React.FC<IFlock> = ({
       )}
       {subtitle && (
         <Text x={headStart.x} y={headStart.y + 22} option="subtitle">
-          {subtitle.trim()}
+          {subtitleTruncated}
         </Text>
       )}
       {members.map((member, index) => {
