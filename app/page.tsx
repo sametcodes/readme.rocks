@@ -1,51 +1,37 @@
-import {
-  LandingBrowserRight,
-  LandingBrowserLeft,
-} from "@/components/ui/landing";
-import NextImage from "next/image";
-import Link from "next/link";
+import Browser from "@/components/layout/browser";
+import { BsEnvelope, BsLightningFill } from "react-icons/bs";
 
 export default function Index() {
   return (
     <>
-      <div className="container mx-auto w-full lg:w-3/4 px-8 lg:px-0 min-h-[700px]">
-        <div className="my-52 flex flex-col gap-5 justify-between">
-          <div>
-            <h2 className="text-5xl font-bold">
-              Rock your <em>readme.md</em>
-            </h2>
-            <p className="mt-5 font-light text-lg max-w-[550px]">
-              Have a better Readme.md for your Github profile,or repositories.
-              Manifest your work with integrating data from various platforms.
-            </p>
-          </div>
-          <Link href="/build">
-            <button className="h-11 px-5 mt-5 font-semibold rounded-lg border-purple-500 border-[1px] text-purple-500 hover:bg-gray-200  max-w-fit">
-              Use now
+      <div className=" flex flex-col w-full items-center gap-y-2">
+        <div className="flex flex-col items-center justify-evenly bg-square-pattern bg-center h-[550px] w-3/4">
+          <Browser>
+            <h1 className="text-6xl font-extrabold text-center">
+              Rock your readme.md
+            </h1>
+          </Browser>
+        </div>
+        <div className="flex flex-col items-center gap-y-8 w-3/4 mt-6">
+          <p className="w-[800px] text-2xl text-center text-zinc-500 tracking-wider font-light">
+            Have a better Readme.md for your Github profile,or repositories.
+            Manifest your work with integrating data from{" "}
+            <span className="font-bold text-indigo-600">6+</span> platforms.
+          </p>
+          <div className="w-[600px] flex flex-row relative h-10 rounded-full bg-neutral-200 bg-opacity-60 shadow-md">
+            <input
+              type="text"
+              placeholder="join our waitlist"
+              className="pl-8 w-72 bg-transparent justify-start text-[16px] font-light"
+            />
+            <button className="flex absolute -right-1 -top-2 bg-indigo-600 w-14 h-14 p-2 items-center justify-center rounded-full opacity-100">
+              <BsEnvelope size={12} className="h-8 w-8 text-stone-100" />
             </button>
-          </Link>
+          </div>
         </div>
-      </div>
-
-      <div>
-        <div className="hidden lg:block absolute h-full w-[45%] top-[30px] -right-8">
-          <NextImage
-            src="/assets/views.svg"
-            alt="Views of components"
-            fill
-            style={{ width: "100%", height: "100%" }}
-          />
-        </div>
-      </div>
-      <div className="container mx-auto w-full lg:w-3/4 my-4 px-[50px] lg:px-0 min-h-[800px] flex">
-        <LandingBrowserRight />
-      </div>
-      <div className="container mx-auto w-full lg:w-3/4 my-4 px-[50px] lg:px-0 min-h-[800px] flex">
-        <LandingBrowserLeft />
-      </div>
-      <div className="bg-gray-150 py-12">
-        <div className="container mx-auto w-full lg:w-3/4 block lg:px-0">
-          <p className="text-xl text-gray-700 text-center">readme.rocks</p>
+        <div className="text-indigo-600 uppercase font-bold flex items-center italic text-sm mt-2">
+          <BsLightningFill />
+          <p className="ml-1">coming march 2025</p>
         </div>
       </div>
     </>
