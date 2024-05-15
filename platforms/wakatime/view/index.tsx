@@ -5,6 +5,7 @@ import { Metrics, Line, BarStats, IBarStats, ILineItem } from "@/lib/@dsvgui";
 export const getAllTimeSinceToday: ViewComponent = (result, config) => {
   return (
     <Metrics
+      document={{ w: 4, h: 1 }}
       icon={SiWakatime}
       data={[{ title: "All time since today", value: result.data.text }]}
     />

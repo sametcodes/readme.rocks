@@ -1,6 +1,10 @@
-import { Document } from "@/lib/@dsvgui";
-import { getTextWidth, hexToRgb } from "@/lib/@dsvgui/utils/index";
+import React from "react";
+
+import { Document } from "../../document";
+import { hexToRgb } from "../../utils";
 import { Text } from "../../document/text";
+import { DocumentMeta } from "../../document/type";
+import { getDocumentSize } from "../../document/document";
 
 export type ILineItem = {
   leftTitle?: string;
@@ -12,18 +16,30 @@ export type ILineItem = {
   period?: "month" | "weekday" | "day";
 };
 
-type ILine = {
+export type ILine = {
   items: Array<ILineItem>;
+} & DocumentMeta;
+
+export const documentPreferences = {
+  minW: 3,
+  minH: 1,
+  maxW: 9,
+  maxH: 6,
+  default: {
+    w: 5,
+    h: 2,
+  },
 };
 
-export const Line: React.FC<ILine> = ({ items }) => {
+export const Line: React.FC<ILine> = ({ items, document }) => {
+  document = document || documentPreferences.default;
+  const { height, width } = getDocumentSize(document);
+
   const documentPadding = 40;
   const today = Date.now();
-  const pointGap = 30;
-  const rowHeight = 140;
-  const rowGap = 60;
 
-  const height = rowHeight * items.length + rowGap * (items.length - 1);
+  const rowHeight = height / items.length;
+  const rowGap = 60;
 
   function createDynamicSvgPath(
     item: ILine["items"][0],
@@ -66,41 +82,11 @@ export const Line: React.FC<ILine> = ({ items }) => {
     return path;
   }
 
-  const widths = items.map((item) => {
-    const leftTitleWidth = getTextWidth(item.leftTitle || "", {
-      fontSize: 22,
-      fontWeight: 700,
-    });
-    const leftSubtitleWidth = getTextWidth(item.leftSubtitle || "", {
-      fontSize: 16,
-      fontWeight: 500,
-    });
-    const leftTitlesWidth = Math.max(leftTitleWidth, leftSubtitleWidth);
-
-    const rightTitleWidth = getTextWidth(item.rightTitle || "", {
-      fontSize: 22,
-      fontWeight: 700,
-    });
-    const rightSubtitleWidth = getTextWidth(item.rightSubtitle || "", {
-      fontSize: 16,
-      fontWeight: 500,
-    });
-    const rightTitlesWidth = Math.max(rightTitleWidth, rightSubtitleWidth);
-
-    const totalTextWidth = leftTitlesWidth + rightTitlesWidth + 50;
-    const totalPointWidth =
-      item.points.length * pointGap < 100 ? 100 : item.points.length * pointGap;
-    const totalWidth =
-      totalPointWidth > totalTextWidth ? totalPointWidth : totalTextWidth;
-    return totalWidth + documentPadding;
-  });
-
-  const width = Math.max(...widths);
   const _items = items.map((item, index) => {
     const pathValue = createDynamicSvgPath(item, {
-      lineHeight: rowHeight,
-      lineWidth: width,
-      ratio: 0.6,
+      lineHeight: rowHeight - 40,
+      lineWidth: width - 30,
+      ratio: 0.65,
     });
 
     let labels: Array<JSX.Element> = [];
@@ -137,7 +123,7 @@ export const Line: React.FC<ILine> = ({ items }) => {
       });
     }
     return (
-      <g key={index} transform={`translate(0 ${(rowHeight + rowGap) * index})`}>
+      <g key={index} transform={`translate(0 ${rowHeight * index})`}>
         <path
           d={pathValue}
           stroke={`url(#line_gradient_${index})`}
@@ -154,15 +140,27 @@ export const Line: React.FC<ILine> = ({ items }) => {
           </Text>
         </g>
         <g id="right">
-          <Text option="title" x={(textWidth) => width - textWidth} y={15}>
+          <Text
+            option="title"
+            x={(textWidth) => width - textWidth - documentPadding}
+            y={15}
+          >
             {item.rightTitle}
           </Text>
-          <Text option="subtitle" x={(textWidth) => width - textWidth} y={34}>
+          <Text
+            option="subtitle"
+            x={(textWidth) => width - textWidth - documentPadding}
+            y={34}
+          >
             {item.rightSubtitle}
           </Text>
         </g>
+
         {item.period && (
-          <g id="Labels" transform={`translate(0 ${rowHeight + 7})`}>
+          <g
+            id="Labels"
+            transform={`translate(0 ${rowHeight + -rowGap / 2 - 10})`}
+          >
             {labels}
           </g>
         )}
@@ -189,7 +187,7 @@ export const Line: React.FC<ILine> = ({ items }) => {
           <linearGradient
             x1="0"
             y1={rowHeight}
-            x2={width}
+            x2={width - 30}
             y2={rowHeight}
             id={`line_gradient_${index}`}
             gradientUnits="userSpaceOnUse"

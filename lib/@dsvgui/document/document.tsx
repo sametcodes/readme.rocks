@@ -1,5 +1,5 @@
-import { ReactNode, SVGAttributes } from "react";
-import { Style, Container, Branding } from "@/lib/@dsvgui";
+import React, { ReactNode, SVGAttributes } from "react";
+import { Style, Container, Branding } from "..";
 import { getTextWidth } from "../utils";
 
 export type IDocumentProps = SVGAttributes<SVGElement> & {
@@ -11,13 +11,36 @@ export type IDocumentProps = SVGAttributes<SVGElement> & {
   useBranding?: boolean;
 };
 
+export const getDocumentSize = ({
+  w,
+  h,
+  margin = 10,
+  unitHeight = 90,
+  unitWidth = 90,
+}: {
+  w: number;
+  h: number;
+  margin?: number;
+  unitHeight?: number;
+  unitWidth?: number;
+}) => {
+  return {
+    width: w * unitWidth + margin * (w - 1),
+    height: h * unitHeight + margin * (h - 1),
+  };
+};
+
 export const Document: React.FC<IDocumentProps> = (props) => {
-  const { w, h, useBranding = true, ...rest } = props;
+  let { w, h } = props;
+  const { useBranding = true, ...rest } = props;
   const documentId = Math.random().toString(36).substr(2, 9);
 
   const padding = rest.padding ?? 40;
   const margin = rest.margin ?? 4;
   const brand = "readme.rocks";
+
+  w -= margin + padding;
+  h -= margin + padding;
 
   return (
     <svg

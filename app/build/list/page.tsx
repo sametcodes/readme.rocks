@@ -3,6 +3,8 @@ import { Platform, PlatformCode, PlatformQuery } from "@prisma/client";
 import { templates, samples } from "@/platforms";
 import Link from "next/link";
 
+export const dynamic = "force-static";
+
 export default async function QueryList() {
   const platforms = await prisma.platform.findMany({
     include: {

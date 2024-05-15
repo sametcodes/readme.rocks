@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Line } from "./index";
+import { Grid } from "../../utils/grid";
+import { ILine, Line, documentPreferences } from "./index";
 
 const meta: Meta<typeof Line> = {
   title: "Line",
@@ -14,18 +15,23 @@ const meta: Meta<typeof Line> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Line>;
+type Story = StoryObj<ILine>;
 
 const randomPoints = (length: number) => {
-  const points = [];
+  const points: Array<number> = [];
   for (let i = 0; i < length; i++) {
     points.push(Math.round(Math.random() * 50));
   }
   return points;
 };
 
-export const Minimal: Story = {
+export const Compact: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 1,
+      ...documentPreferences,
+    },
     items: [
       {
         leftTitle: "Line",
@@ -38,6 +44,11 @@ export const Minimal: Story = {
 
 export const Colored: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 2,
+      ...documentPreferences,
+    },
     items: [
       {
         leftTitle: "Line",
@@ -51,6 +62,11 @@ export const Colored: Story = {
 
 export const WithSecondaryTitle: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 2,
+      ...documentPreferences,
+    },
     items: [
       {
         leftTitle: "Line",
@@ -66,6 +82,11 @@ export const WithSecondaryTitle: Story = {
 
 export const WithPeriodLabels: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 2,
+      ...documentPreferences,
+    },
     items: [
       {
         leftTitle: "Line",
@@ -80,6 +101,11 @@ export const WithPeriodLabels: Story = {
 
 export const MultipleLines: Story = {
   args: {
+    document: {
+      w: 4,
+      h: 6,
+      ...documentPreferences,
+    },
     items: [
       {
         leftTitle: "Line",
@@ -110,4 +136,19 @@ export const MultipleLines: Story = {
       },
     ],
   },
+};
+
+export const WithGrid = () => {
+  return (
+    <Grid
+      component={Line}
+      stories={[
+        Compact,
+        Colored,
+        WithSecondaryTitle,
+        WithPeriodLabels,
+        MultipleLines,
+      ]}
+    />
+  );
 };

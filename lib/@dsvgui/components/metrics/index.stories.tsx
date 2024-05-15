@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-// import { text } from "stream/consumers";
-import { Metrics } from "./index";
+import { metricsDocumentPreferences, IMetrics, Metrics } from "./index";
 
-import { SiCodewars } from "react-icons/si";
+import { SiCodewars, SiGithub, SiWakatime } from "react-icons/si";
+import { Grid } from "../../utils/grid";
 
 const meta: Meta<typeof Metrics> = {
   title: "Metrics",
@@ -10,14 +10,51 @@ const meta: Meta<typeof Metrics> = {
 };
 export default meta;
 
-type Story = StoryObj<typeof Metrics>;
+type Story = StoryObj<IMetrics>;
 
 export const Base: Story = {
   args: {
+    document: {
+      w: 3,
+      h: 1,
+      ...metricsDocumentPreferences,
+    },
     icon: SiCodewars,
     data: [
-      { title: "Honor", value: 4 },
-      { title: "Rank", value: 24 },
+      { title: "Honor", value: "347" },
+      { title: "Rank", value: "5 kyu" },
     ],
   },
+};
+
+export const Multiple: Story = {
+  args: {
+    document: {
+      w: 4,
+      h: 1,
+      ...metricsDocumentPreferences,
+    },
+    icon: SiGithub,
+    data: [
+      { title: "Commits", value: 846 },
+      { title: "PRs", value: 143 },
+      { title: "Issues", value: 92 },
+    ],
+  },
+};
+
+export const Long: Story = {
+  args: {
+    document: {
+      w: 4,
+      h: 1,
+      ...metricsDocumentPreferences,
+    },
+    icon: SiWakatime,
+    data: [{ title: "All time since today", value: "997 hrs 49 mins" }],
+  },
+};
+
+export const WithGrid = () => {
+  return <Grid component={Metrics} stories={[Base, Multiple, Long]} />;
 };
