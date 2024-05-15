@@ -113,7 +113,7 @@ export const getPublicRepositoryMilestone: ViewComponent = (result, config) => {
   return (
     <Progress
       title={milestone.title}
-      percent={percentInText}
+      percent={percentInText > 100 ? 100 : percentInText}
       metrics={metrics}
     />
   );
