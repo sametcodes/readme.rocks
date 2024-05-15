@@ -28,6 +28,7 @@ const links = [
 
 export default function NavbarWithLogin({ session }: INavbarWithLogin) {
   const segment = useSelectedLayoutSegment();
+
   return (
     <div className="flex h-16 mx-auto px-8 sm:px-0 items-center justify-between border-b border-b-slate-200 py-4 dark:border-b-gray-500">
       <Link href="/" className="items-center space-x-2 md:flex">
@@ -82,6 +83,9 @@ export default function NavbarWithLogin({ session }: INavbarWithLogin) {
                     <DropdownMenuItem>{link.title}</DropdownMenuItem>
                   </Link>
                 ))}
+                <DropdownMenuItem className="text-slate-500">
+                  <Link href="/profile">Profile</Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem className="text-slate-500">
                   <Link href="/connect">Connects</Link>
                 </DropdownMenuItem>
