@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Document, Text, getDocumentSize } from "../../document";
-import { wrapText, getTextWidth } from "../../utils";
+import { wrapText, getTextWidth, truncateText } from "../../utils";
 
 import { AiOutlineCalendar, AiOutlineLike } from "react-icons/ai";
 import { BiTimeFive } from "react-icons/bi";
@@ -48,12 +48,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
   const rowHeight = height / articles.length;
   const innerPadding = 30;
   const thumbnailWidth = withImage ? 100 : 0;
-  const titleWidth = Math.max(
-    ...articles.map((article) =>
-      getTextWidth(article.meta.title, { fontSize: 16, fontWeight: 700 })
-    ),
-    width - thumbnailWidth - 45
-  );
+  const titleWidth = width - thumbnailWidth - innerPadding;
   const containerWidth = titleWidth + thumbnailWidth + innerPadding;
 
   return (
@@ -63,14 +58,17 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
           const yOffset = rowHeight * key;
           const xOffset = thumbnailWidth + 20;
 
-          const title = wrapText(
-            article.meta.title,
-            { maxLineWidth: titleWidth, fontSize: 16, fontWeight: 700 },
-            (line: string, index: number) => (
-              <Text x={0} y={index * 15} option={{ size: 16, weight: 700 }}>
-                {line}
-              </Text>
-            )
+          const titleTextWidth = getTextWidth(article.meta.title, {
+            fontSize: 16,
+            fontWeight: 700,
+          });
+          const title = (
+            <Text x={0} y={0} option={{ size: 16, weight: 700 }}>
+              {truncateText(
+                article.meta.title,
+                (titleWidth / titleTextWidth) * (article.meta.title.length - 5)
+              )}
+            </Text>
           );
 
           return (
@@ -87,7 +85,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
                 />
               )}
               <g transform={`translate(0 ${yOffset})`} key={`group_${key}`}>
-                <g transform={`translate(${xOffset} 20)`}>
+                <g transform={`translate(${xOffset} 25)`}>
                   {title}
                   {wrapText(
                     article.meta.description.replace(/\n/gm, " "),
@@ -99,7 +97,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
                     (line: string, index) => (
                       <Text
                         x={0}
-                        y={17 + title.length + index * 13}
+                        y={18 + index * 13}
                         option={{ size: 12, weight: 500 }}
                         className="subtitle"
                       >
@@ -109,7 +107,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
                   )}
                 </g>
 
-                <g transform={`translate(${xOffset} 75)`}>
+                <g transform={`translate(${xOffset} 80)`}>
                   <g transform={`translate(${15} 0)`}>
                     <AiOutlineCalendar
                       className="icon"
