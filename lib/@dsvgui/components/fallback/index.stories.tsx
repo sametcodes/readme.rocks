@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Grid } from "../../utils/grid";
+import { getGridComponents } from "../../utils";
+import { Grid } from "../grid";
 import { Fallback, IFallback, documentPreferences } from "./index";
 
 const meta: Meta<typeof Fallback> = {
@@ -22,6 +23,7 @@ export const Base: Story = {
   },
 };
 
+const rocks = getGridComponents([Base], Fallback);
 export const WithGrid = () => {
-  return <Grid component={Fallback} stories={[Base]} />;
+  return <Grid rocks={rocks} />;
 };

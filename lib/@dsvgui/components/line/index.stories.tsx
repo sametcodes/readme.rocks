@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Grid } from "../../utils/grid";
+import { Grid } from "../grid";
 import { ILine, Line, documentPreferences } from "./index";
+import { getGridComponents } from "../../utils/index";
 
 const meta: Meta<typeof Line> = {
   title: "Line",
@@ -138,17 +139,11 @@ export const MultipleLines: Story = {
   },
 };
 
+const rocks = getGridComponents(
+  [Compact, Colored, WithSecondaryTitle, WithPeriodLabels, MultipleLines],
+  Line
+);
+
 export const WithGrid = () => {
-  return (
-    <Grid
-      component={Line}
-      stories={[
-        Compact,
-        Colored,
-        WithSecondaryTitle,
-        WithPeriodLabels,
-        MultipleLines,
-      ]}
-    />
-  );
+  return <Grid rocks={rocks} />;
 };

@@ -1,30 +1,27 @@
-import { ReactRenderer } from "@storybook/react";
-import { StoryAnnotations } from "@storybook/types";
 import { useState } from "react";
 
 import GridLayout from "react-grid-layout";
-import { DocumentMeta } from "../document/type";
+import { GridItem } from "../../document/type";
 
-export const Grid = <T extends DocumentMeta>({
-  component: Component,
-  stories,
+export const Grid = <T extends {}>({
+  rocks,
 }: {
-  component: React.FC<T>;
-  stories: Array<StoryAnnotations<ReactRenderer, T, Partial<T>>>;
+  rocks: Array<GridItem<T>>;
 }) => {
-  const componentSizes: Array<GridLayout.Layout> = stories.map((story, i) => {
-    const { document } = story.args as T;
+  const componentSizes: Array<GridLayout.Layout> = rocks.map((rock, i) => {
+    const { document } = rock as GridItem<T>;
     return {
-      ...(document || { w: 4, h: 2 }),
       x: 0,
-      y: stories
+      y: rocks
         .slice(0, i)
         .reduce(
           (acc, c) =>
-            acc + ((c.args as T).document as { w: number; h: number }).h,
+            acc + ((c as GridItem<T>).document as { w: number; h: number }).h,
           0
         ),
       i: i.toString(),
+      w: (document as { w: number; h: number }).w,
+      h: (document as { w: number; h: number }).h,
     };
   }, []);
 
@@ -46,11 +43,12 @@ export const Grid = <T extends DocumentMeta>({
       layout={layout}
       onLayoutChange={onLayoutChange}
     >
-      {stories.map((story, i) => {
+      {rocks.map((rock: GridItem<T>, i) => {
         const document = layout[i];
+        const { document: _, component: Component, ...rest } = rock;
         return (
           <div key={i}>
-            <Component {...(story.args as T)} document={document} />
+            <Component {...(rest as any)} document={document} />
           </div>
         );
       })}

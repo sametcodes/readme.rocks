@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Grid } from "../../utils/grid";
+import { getGridComponents } from "../../utils";
+import { Grid } from "../grid";
 import { Calendar, calendarDocumentPreferences, ICalendar } from "./index";
 
 const meta: Meta<typeof Calendar> = {
@@ -77,6 +78,7 @@ export const WithStreak: Story = {
   },
 };
 
+const rocks = getGridComponents([Base, Compact, WithStreak], Calendar);
 export const WithGrid = () => {
-  return <Grid component={Calendar} stories={[Base, Compact, WithStreak]} />;
+  return <Grid rocks={rocks} />;
 };

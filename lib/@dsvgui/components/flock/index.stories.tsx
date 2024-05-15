@@ -3,7 +3,9 @@ import React from "react";
 import type { Meta, StoryObj } from "@storybook/react";
 import { Flock, IFlock, flockDocumentPreferences } from "./index";
 import { readImageURL } from "../../utils";
-import { Grid } from "../../utils/grid";
+import { Grid } from "../grid";
+import { getGridComponents } from "../../utils/index";
+import { encodedPlaceholder } from "../../utils/encoded";
 
 const meta: Meta<typeof Flock> = {
   title: "Flock",
@@ -19,12 +21,19 @@ const meta: Meta<typeof Flock> = {
 };
 export default meta;
 
+const imageLoader = async ({ args }: { args: IFlock }) => {
+  const images = await Promise.all(
+    args.members.map((member) => readImageURL(member.image.value))
+  );
+  return { images };
+};
+
 type Story = StoryObj<IFlock>;
 
 const produceMockImages = (n: number, width: number, height: number) => {
   return Array.from({ length: n }).map((_, key) => ({
     image: {
-      value: "https://picsum.photos/300/300",
+      value: encodedPlaceholder,
       width,
       height,
     },
@@ -41,16 +50,9 @@ export const Base: Story = {
     },
     title: "Flock",
     subtitle: "This is a flock component",
-    members: produceMockImages(16, 5, 5),
+    members: produceMockImages(200, 5, 5),
   },
-  loaders: [
-    async ({ args }) => {
-      const images = await Promise.all(
-        args.members.map((member) => readImageURL(member.image.value))
-      );
-      return { images };
-    },
-  ],
+  loaders: [imageLoader],
 };
 
 export const WithText: Story = {
@@ -62,18 +64,12 @@ export const WithText: Story = {
     },
     title: "Flock",
     subtitle: "This is a flock component",
-    members: produceMockImages(16, 5, 5),
+    members: produceMockImages(200, 5, 5),
   },
-  loaders: [
-    async ({ args }) => {
-      const images = await Promise.all(
-        args.members.map((member) => readImageURL(member.image.value))
-      );
-      return { images };
-    },
-  ],
+  loaders: [imageLoader],
 };
 
+const rocks = getGridComponents([Base, WithText], Flock);
 export const WithGrid = () => {
-  return <Grid component={Flock} stories={[Base, WithText]} />;
+  return <Grid rocks={rocks} />;
 };

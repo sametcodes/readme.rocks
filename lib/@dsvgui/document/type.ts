@@ -4,3 +4,7 @@ export type DocumentMeta = {
     h: number;
   };
 };
+
+export type GridItem<T> = {
+  component: React.FC<T>;
+} & DocumentMeta;

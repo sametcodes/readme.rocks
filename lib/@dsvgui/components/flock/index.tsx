@@ -107,7 +107,10 @@ export const Flock: React.FC<IFlock> = ({
                 width="460"
                 height="460"
                 xmlnsXlink="http://www.w3.org/1999/xlink"
-                xlinkHref={`data:image/png;base64,${member.image.value}`}
+                xlinkHref={`data:image/png;base64,${member.image.value.replace(
+                  "data:image/png;base64,",
+                  ""
+                )}`}
               />
             </defs>
           </>

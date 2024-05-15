@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Grid } from "../../utils/grid";
+import { getGridComponents } from "../../utils";
+import { Grid } from "../grid";
 import { BarStats, barstatsDocumentPreferences, IBarStats } from "./index";
 
 const meta: Meta<typeof BarStats> = {
@@ -112,6 +113,7 @@ export const Compact: Story = {
   },
 };
 
+const rocks = getGridComponents([Base, Compact], BarStats);
 export const WithGrid = () => {
-  return <Grid component={BarStats} stories={[Base, Compact]} />;
+  return <Grid rocks={rocks} />;
 };

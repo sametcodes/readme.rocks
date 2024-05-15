@@ -4,7 +4,8 @@ import { progressDocumentPreferences, IProgress, Progress } from "./index";
 import { AiOutlineCalendar } from "react-icons/ai";
 import { HiChartBar } from "react-icons/hi";
 import { VscIssues, VscGitPullRequest } from "react-icons/vsc";
-import { Grid } from "../../utils/grid";
+import { Grid } from "../grid";
+import { getGridComponents } from "../../utils";
 
 const meta: Meta<typeof Progress> = {
   title: "Progress",
@@ -68,8 +69,7 @@ export const OnlyProgress: Story = {
   },
 };
 
+const rocks = getGridComponents([Base, OnlyFirstLine, OnlyProgress], Progress);
 export const WithGrid = () => {
-  return (
-    <Grid component={Progress} stories={[Base, OnlyFirstLine, OnlyProgress]} />
-  );
+  return <Grid rocks={rocks} />;
 };

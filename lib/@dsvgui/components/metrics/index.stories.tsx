@@ -2,7 +2,8 @@ import type { Meta, StoryObj } from "@storybook/react";
 import { metricsDocumentPreferences, IMetrics, Metrics } from "./index";
 
 import { SiCodewars, SiGithub, SiWakatime } from "react-icons/si";
-import { Grid } from "../../utils/grid";
+import { Grid } from "../grid";
+import { getGridComponents } from "../../utils";
 
 const meta: Meta<typeof Metrics> = {
   title: "Metrics",
@@ -55,6 +56,7 @@ export const Long: Story = {
   },
 };
 
+const rocks = getGridComponents([Base, Multiple, Long], Metrics);
 export const WithGrid = () => {
-  return <Grid component={Metrics} stories={[Base, Multiple, Long]} />;
+  return <Grid rocks={rocks} />;
 };

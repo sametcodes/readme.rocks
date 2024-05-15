@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Grid } from "../../utils/grid";
+import { getGridComponents } from "../../utils";
+import { Grid } from "../grid";
 import { documentPreferences, Placeholder } from "./index";
 
 const meta: Meta<typeof Placeholder> = {
@@ -87,11 +88,10 @@ export const Size3x3: Story = {
   loaders: [],
 };
 
+const rocks = getGridComponents(
+  [Size1x1, Size2x1, Size1x2, Size2x2, Size3x2, Size2x3, Size3x3],
+  Placeholder
+);
 export const WithGrid = () => {
-  return (
-    <Grid
-      component={Placeholder}
-      stories={[Size1x1, Size2x1, Size1x2, Size2x2, Size3x2, Size2x3, Size3x3]}
-    />
-  );
+  return <Grid rocks={rocks} />;
 };

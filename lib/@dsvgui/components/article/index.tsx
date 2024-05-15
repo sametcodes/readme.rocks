@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Document, Text, getDocumentSize } from "../../document";
+import { Document, Text } from "../../document";
 import { wrapText, getTextWidth } from "../../utils";
 
 import { AiOutlineCalendar, AiOutlineLike } from "react-icons/ai";
@@ -8,6 +8,7 @@ import { BiTimeFive } from "react-icons/bi";
 import { IoPersonCircleOutline } from "react-icons/io5";
 
 import { DocumentMeta } from "../../document/type";
+import { getDocumentSize } from "../../document/document";
 
 export type IArticle = {
   articles: Array<{
@@ -45,7 +46,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
   const withImage = document.w > 4;
   const documentId = Math.random().toString(36).substr(2, 9);
 
-  const rowHeight = height / articles.length;
+  const rowHeight = height / articles.slice(0, document.h).length;
   const innerPadding = 30;
   const thumbnailWidth = withImage ? 100 : 0;
   const titleWidth = Math.max(
@@ -59,7 +60,7 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
   return (
     <Document w={width} h={height} padding={0} useBranding={false}>
       <g clipPath="url(#clip_borders)">
-        {articles.map((article, key: number) => {
+        {articles.slice(0, document.h).map((article, key: number) => {
           const yOffset = rowHeight * key;
           const xOffset = thumbnailWidth + 20;
 
@@ -79,9 +80,9 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
                 <line
                   key={`line_${key}`}
                   x1={thumbnailWidth}
-                  y1={yOffset}
+                  y1={yOffset - 8}
                   x2={containerWidth}
-                  y2={yOffset}
+                  y2={yOffset - 8}
                   className="divider"
                   stroke="#dddddd"
                 />
@@ -202,7 +203,10 @@ export const Article: React.FC<IArticle> = ({ articles, document }) => {
                     width={article.thumbnail.width}
                     height={500}
                     xmlnsXlink="http://www.w3.org/1999/xlink"
-                    xlinkHref={`data:image/png;base64,${article.thumbnail.value}`}
+                    xlinkHref={`data:image/png;base64,${article.thumbnail.value.replace(
+                      "data:image/png;base64,",
+                      ""
+                    )}`}
                   />
                 </defs>
               )}

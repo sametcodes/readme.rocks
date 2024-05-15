@@ -2,6 +2,9 @@ import getImageSize from "image-size";
 import opentype from "opentype.js";
 import { loadFontBuffer } from "./fonts";
 import { FontFamily, defaultFont } from "../document/fonts";
+import { StoryAnnotations } from "@storybook/types";
+import { ReactRenderer } from "@storybook/react";
+import { GridItem } from "../document/type";
 
 type IGetTextWidth = (
   inputText: string | number | null,
@@ -124,19 +127,43 @@ export function generateColorVariations(inputColor: string, step: number = 5) {
   return variations;
 }
 
+export function readImageBuffer(data: string | ArrayBuffer) {
+  let buffer: Buffer = Buffer.from("");
+
+  if (typeof data === "string") {
+    buffer = Buffer.from(data.split(",")[1], "base64");
+  }
+  if (data instanceof ArrayBuffer) {
+    buffer = Buffer.from(data);
+  }
+
+  const imageData = getImageSize(buffer);
+  return {
+    value: buffer.toString("base64"),
+    width: imageData.width || 0,
+    height: imageData.height || 0,
+  };
+}
+
 export async function readImageURL(url: string) {
+  if (url.startsWith("data:image")) {
+    return readImageBuffer(url);
+  }
+
   const response = await fetch(url, {
     referrerPolicy: "no-referrer",
     redirect: "follow",
   });
   const arrayBuffer = await response.arrayBuffer();
-
-  const buffer = Buffer.from(arrayBuffer);
-  const imageData = getImageSize(buffer);
-
-  return {
-    value: buffer.toString("base64"),
-    width: imageData.width,
-    height: imageData.height,
-  };
+  return readImageBuffer(arrayBuffer);
 }
+
+export const getGridComponents = <T>(
+  item: Array<StoryAnnotations<ReactRenderer, T, Partial<T>>>,
+  component: React.FC<T>
+) => {
+  return item.map(({ args }) => ({
+    ...args,
+    component,
+  })) as Array<GridItem<T>>;
+};

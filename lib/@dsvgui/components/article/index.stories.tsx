@@ -2,8 +2,9 @@ import React from "react";
 
 import type { Meta, StoryObj } from "@storybook/react";
 import { Article, articleDocumentPreferences, IArticle } from "./index";
-import { readImageURL } from "../../utils";
-import { Grid } from "../../utils/grid";
+import { getGridComponents, readImageURL } from "../../utils";
+import { Grid } from "../grid";
+import { encodedPlaceholder } from "../../utils/encoded";
 
 const meta: Meta<typeof Article> = {
   title: "Article",
@@ -18,6 +19,13 @@ const meta: Meta<typeof Article> = {
   },
 };
 export default meta;
+
+const imageLoader = async ({ args: { articles } }: { args: IArticle }) => {
+  const thumbnails = await Promise.all(
+    articles.map((article) => readImageURL(article.thumbnail.value))
+  );
+  return { thumbnails };
+};
 
 type Story = StoryObj<IArticle>;
 
@@ -36,10 +44,9 @@ export const Base: Story = {
           author: "sametcodes",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--uJ_UDNhq--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/h2q16fucjwb4cla0ho05.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 300,
+          height: 300,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -52,10 +59,9 @@ export const Base: Story = {
           author: "eminkokdemir",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--r3He9vYK--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fuc2yb3yi1680dgmfj25.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 300,
+          height: 300,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -68,10 +74,9 @@ export const Base: Story = {
           author: "ekurt",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--Wzj_6u7j--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/53d24e36pofszh6shj6t.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 300,
+          height: 300,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -85,10 +90,9 @@ export const Base: Story = {
           author: "aydinfz",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--_hLjVEgA--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ewoetr6z83in1o5iu5uc.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 300,
+          height: 300,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -96,14 +100,7 @@ export const Base: Story = {
       },
     ],
   },
-  loaders: [
-    async ({ args: { articles } }) => {
-      const thumbnails = await Promise.all(
-        articles.map((article) => readImageURL(article.thumbnail.value))
-      );
-      return { thumbnails };
-    },
-  ],
+  loaders: [imageLoader],
 };
 
 export const Compact: Story = {
@@ -121,10 +118,9 @@ export const Compact: Story = {
           author: "sametcodes",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--uJ_UDNhq--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/h2q16fucjwb4cla0ho05.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -137,10 +133,9 @@ export const Compact: Story = {
           author: "eminkokdemir",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--r3He9vYK--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fuc2yb3yi1680dgmfj25.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -153,10 +148,9 @@ export const Compact: Story = {
           author: "ekurt",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--Wzj_6u7j--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/53d24e36pofszh6shj6t.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -170,10 +164,9 @@ export const Compact: Story = {
           author: "aydinfz",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--_hLjVEgA--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ewoetr6z83in1o5iu5uc.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -181,14 +174,7 @@ export const Compact: Story = {
       },
     ],
   },
-  loaders: [
-    async ({ args: { articles } }) => {
-      const thumbnails = await Promise.all(
-        articles.map((article) => readImageURL(article.thumbnail.value))
-      );
-      return { thumbnails };
-    },
-  ],
+  loaders: [imageLoader],
 };
 
 export const WithoutImage: Story = {
@@ -206,10 +192,9 @@ export const WithoutImage: Story = {
           author: "sametcodes",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--uJ_UDNhq--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/h2q16fucjwb4cla0ho05.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -222,10 +207,9 @@ export const WithoutImage: Story = {
           author: "eminkokdemir",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--r3He9vYK--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/fuc2yb3yi1680dgmfj25.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -238,10 +222,9 @@ export const WithoutImage: Story = {
           author: "ekurt",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--Wzj_6u7j--/c_limit%2Cf_auto%2Cfl_progressive%2Cq_auto%2Cw_800/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/53d24e36pofszh6shj6t.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -255,10 +238,9 @@ export const WithoutImage: Story = {
           author: "aydinfz",
         },
         thumbnail: {
-          value:
-            "https://res.cloudinary.com/practicaldev/image/fetch/s--_hLjVEgA--/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/uploads/articles/ewoetr6z83in1o5iu5uc.png",
-          width: 150,
-          height: 150,
+          value: encodedPlaceholder,
+          width: 400,
+          height: 400,
         },
         publish_date: "20.03.2023",
         like_count: 3,
@@ -266,16 +248,10 @@ export const WithoutImage: Story = {
       },
     ],
   },
-  loaders: [
-    async ({ args: { articles } }) => {
-      const thumbnails = await Promise.all(
-        articles.map((article) => readImageURL(article.thumbnail.value))
-      );
-      return { thumbnails };
-    },
-  ],
+  loaders: [imageLoader],
 };
 
+const rocks = getGridComponents([Base, Compact, WithoutImage], Article);
 export const WithGrid = () => {
-  return <Grid component={Article} stories={[Base, Compact, WithoutImage]} />;
+  return <Grid rocks={rocks} />;
 };
