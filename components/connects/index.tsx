@@ -15,6 +15,7 @@ import {
 import { useRef } from "react";
 import { Platform } from "@prisma/client";
 import { IConnectionWithPlatforms } from "@/app/connect/page";
+import { cn } from "@/utils";
 
 type IConnects = {
   session: Session | null;
@@ -103,13 +104,21 @@ export const Connects: React.FC<IConnects> = ({
                       </span>
                     </div>
                     <AlertDialogTrigger
+                      disabled={connection.platform.code === "github"}
                       onClick={() =>
                         onClickDisconnect(
                           `/api/oauth/disconnect/${connection.platform.code}`
                         )
                       }
                     >
-                      <p className="text-lg">Disconnect</p>
+                      <p
+                        className={cn(
+                          connection.platform.code === "github" &&
+                            "text-slate-400"
+                        )}
+                      >
+                        Disconnect
+                      </p>
                     </AlertDialogTrigger>
                   </div>
                 </div>
