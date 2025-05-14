@@ -24,9 +24,6 @@ _All your statistics at once._
    <img width="450px" src="https://readme-rocks.vercel.app/api/view/64a70675d1e3cba955dc7df9" />
 </a>
 
-## Line stats
-![](https://readme-rocks.vercel.app/api/view/6440669e4c5d605274994a4b)
-
 ## Calendar and streaks
 
 ![](https://readme-rocks.vercel.app/api/view?queryConfig%5Busername%5D=_aka5h&viewConfig%5Btitle%5D=LeetCode%20submissions&viewConfig%5Bsubtitle%5D=Last%205%20months&viewConfig%5BweekCount%5D=20&viewConfig%5BboxColor%5D=%2340c463&viewConfig%5BshowMonthLabels%5D=true&viewConfig%5BshowStreak%5D=true&id=64415382192eb283354af5a1)
@@ -34,7 +31,6 @@ _All your statistics at once._
 
 ## Your latest `daily.dev` and `dev.to` articles
 
-<img src="https://readme-rocks.vercel.app/api/view?queryConfig%5Busername%5D=honeypot&queryConfig%5Bcount%5D=3&id=641cd30dbe50187858f7d61a" />
 <img src="https://readme-rocks.vercel.app/api/view?queryConfig%5Busername%5D=isaacdlyman&queryConfig%5Bcount%5D=2&id=641c6e78c50c62ccdb646278" />
 
 ## Contributors
